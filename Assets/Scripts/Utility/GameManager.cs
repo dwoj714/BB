@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		launcherBase = GameObject.Find("Base").GetComponent<BaseController>();
-		launcher = GameObject.Find("Launcher").GetComponent<LauncherController>();
+		launcher = GameObject.Find("Main Launcher").GetComponent<LauncherController>();
 		spawner = GameObject.Find("Spawner").GetComponent<Spawner>();
 		camController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 		mouseManager = GetComponent<MouseInputManager>();
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
 		spawner.enabled = true;
 		PurgeGameplayObjects();
 		launcherBase.Restart();
-		mouseManager.controlledObject = "Launcher";
+		mouseManager.ControlledObject = "Launcher";
 	}
 
 	public void EndGame()
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
 		gameOverButtons.SetActive(true); 
 		launcherBase.enabled = false;
 		spawner.enabled = false;
-		mouseManager.controlledObject = null;
+		mouseManager.ControlledObject = null;
 		launcher.CancelShot();
 	}
 

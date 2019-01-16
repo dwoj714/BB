@@ -6,6 +6,7 @@ public class CollisionBorder : MonoBehaviour
 {
 	public PhysicsMaterial2D material;
 	public bool top, bottom, left, right = true;
+	public float extention = 1;
 	public float colThickness = 4f;
 	public float zPosition = 0f;
 	private Vector2 screenSize;

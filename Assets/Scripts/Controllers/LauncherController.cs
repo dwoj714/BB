@@ -5,40 +5,45 @@ using UnityEngine;
 public class LauncherController : MonoBehaviour
 {
 	[HideInInspector]
-	public Vector2 mouseDrag;
+	private Vector2 drag;
 
 	public float maxDragLength = 5;
-	[Range(0,.99f)]
-	public float minimumPower;
+	public float minDragLength = 0.25f;
 
 	private float charge;
 
-	//Used to tell projectiles what the base collider is
-	public CircleCollider2D baseCollider;
+	//Can't just call it 'base' :/
+	public BaseController baseCon;
 
 	//Projectile to be copied
-	public AmmoType ammo;
+	[SerializeField]
+	private AmmoType ammo;
 
 	//Holds a reference to a copy of ammo, to be manipulated;
 	private AmmoType shot;
 
-	public float maxEnergy = 100;
-	public float rechargeSpeed = 5;
-	public float rechargeDelay = .33f;
-	[HideInInspector]
-	public float energy;		//Holds energy amount
-	private float delayTimer;	//Counts down until energy can recharge after being used;
+
+
+	public Vector2 Drag
+	{
+		get
+		{
+			return drag;
+		}
+
+		set
+		{
+			drag = value;
+		}
+	}
 
 	private void Start()
 	{
-		baseCollider = GameObject.Find("Base").GetComponent<CircleCollider2D>();
-		energy = maxEnergy;
+
 	}
 
 	void Update()
 	{
-		ProcessEnergy();
-
 		//If the mouse is down, increase charge by deltaTime while it's less than chargeTime
 		if (shot && charge < shot.chargeTime)
 		{
@@ -58,28 +63,25 @@ public class LauncherController : MonoBehaviour
 
 	public void ReadyShot()
 	{
-		if (energy - ammo.energyCost >= 0)
+		//If the required energy can be spent...
+		if (baseCon.SpendEnergy(Ammo.energyCost))
 		{
-			//Reduce energy and pause the recharge of energy briefly
-			energy -= ammo.energyCost;
-			delayTimer = 0;
-
 			//create a copy of ammo, position it at the center of the launcher
-			shot = Instantiate(ammo, transform.position, Quaternion.identity);
-			shot.launcherCollider = baseCollider;
+			shot = Instantiate(Ammo, transform.position, Quaternion.identity);
+			shot.launcherCollider = baseCon.col;
 		}
 	}
 
 	public void AimShot()
 	{
-		shot.rb.MovePosition((Vector2)transform.position + (mouseDrag * ChargePercentage()) / (maxDragLength + shot.AdjustedRadius * maxDragLength));
+		shot.rb.MovePosition((Vector2)transform.position + Pull/ maxDragLength);
 	}
 
 	public void LaunchShot()
 	{
-		if (ShotPower() >= minimumPower && shot)
+		if (shot && Drag.sqrMagnitude >= Mathf.Pow(minDragLength, 2))
 		{
-			shot.Launch(-mouseDrag, ShotPower());
+			shot.Launch(-Pull, PullPercentage);
 		}
 		else
 		{
@@ -96,45 +98,23 @@ public class LauncherController : MonoBehaviour
 		if (shot)
 		{
 			Destroy(shot.gameObject);
+			baseCon.energy += shot.energyCost;
 			shot = null;
 			charge = 0;
 		}
 	}
 
-	//Handle energy calculations per update
-	private void ProcessEnergy()
+	public float ChargePercentage
 	{
-		if (energy <= 0)
+		get
 		{
-			OnEnergyDeplete();
+			return charge / Ammo.chargeTime;
 		}
-
-		//If the recharge time is expired, increase energy  if it's below max
-		if (delayTimer >= rechargeDelay)
-		{
-			if (energy < maxEnergy)
-			{
-				energy += rechargeSpeed * Time.deltaTime;
-			}
-			else if (energy > maxEnergy)
-			{
-				energy = maxEnergy;
-			}
-		}
-		else if (delayTimer < rechargeSpeed)
-		{
-			delayTimer += Time.deltaTime;
-		}
-	}
-
-	public float ChargePercentage()
-	{
-		return charge / ammo.chargeTime;
 	}
 
 	public float ShotPower()
 	{
-		return (mouseDrag / maxDragLength * ChargePercentage()).magnitude;
+		return (Drag / maxDragLength * ChargePercentage).magnitude;
 	}
 
 	public bool Armed()
@@ -142,8 +122,34 @@ public class LauncherController : MonoBehaviour
 		return shot;
 	}
 
-	private void OnEnergyDeplete()
+	//Returns the drag value set by the input manager clamped to what the launcher allows for (bound by max length and current charge)
+	public Vector2 Pull
 	{
+		get
+		{
+			return Vector2.ClampMagnitude(drag, maxDragLength * ChargePercentage);
+		}
+	}
 
+	public float PullPercentage
+	{
+		get
+		{
+			return Pull.magnitude / maxDragLength;
+		}
+	}
+
+	public AmmoType Ammo
+	{
+		get
+		{
+			return ammo;
+		}
+
+		set
+		{
+			ammo = value;
+
+		}
 	}
 }

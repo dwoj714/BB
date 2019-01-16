@@ -4,48 +4,111 @@ using UnityEngine;
 
 public class MouseInputManager : MonoBehaviour {
 
-	public string controlledObject;
+	[SerializeField]
+	private string controlledObject;
+	private bool inputPause = false;
 	public LauncherController launcher;
-	private Vector3 clickPos;
+	private PointAbility ability;
+	private Vector2 clickPos;
+
+	private bool releasedLastFrame = false;
+
+	public IGController indicator;
+
+	public PointAbility Ability
+	{
+		get
+		{
+			return ability;
+		}
+
+		set
+		{
+			ability = value;
+		}
+	}
+
+	public string ControlledObject
+	{
+		get
+		{
+			return controlledObject;
+		}
+
+		set
+		{
+			//When inputPause is set true, inputs are ignored for the first frame after doing so to avoid issues with button releases
+			inputPause = true;
+			controlledObject = value;
+		}
+	}
 
 	void Update ()
 	{
-		//Probably replace this string with an int later
-		if(controlledObject == "Launcher")
+		if (!inputPause)
 		{
-			ManageLauncher();
+			if (controlledObject == "Launcher")
+			{
+				ManageLauncher();
+			}
+
+			if (controlledObject == "Ability")
+			{
+				ManageAbility();
+			}
+		}
+		else inputPause = false;
+
+	}
+
+	void ManageAbility()
+	{
+		if (Input.GetMouseButtonUp(0))
+		{
+			Ability.Activate(MouseWorldPosition());
+			Ability.Disarm(this);
+			indicator.ActivateAbilityFX();
+		}
+		if (Input.GetMouseButton(0))
+		{
+			indicator.transform.position = (Vector2)MouseWorldPosition();
+			indicator.abilityFX.Visible = true;
 		}
 	}
 
 	void ManageLauncher()
 	{
-		//If the mouse is being held down...
-		if (Input.GetMouseButton(0))
-		{
-			launcher.mouseDrag = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - clickPos);
-			//Clamp the magnitude of mouseDrag to maxDragLength
-			launcher.mouseDrag = Vector2.ClampMagnitude(launcher.mouseDrag, launcher.maxDragLength * launcher.ChargePercentage());
-
-			if (launcher.Armed())
-			{
-				//Debug.DrawRay(launcher.transform.position, -launcher.mouseDrag.normalized * 20, Color.black);
-				Debug.DrawRay(launcher.transform.position, -launcher.mouseDrag.normalized * launcher.maxDragLength, Color.red);
-				Debug.DrawRay(launcher.transform.position, -launcher.mouseDrag, Color.green);
-			}
-		}
-
 		//When the mouse is clicked...
 		if (Input.GetMouseButtonDown(0))
 		{
-			launcher.ReadyShot();
-			clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			clickPos = MouseWorldPosition();
+			indicator.transform.position = (Vector2)clickPos;
+		}
+
+		//If the mouse is being held down...
+		if (Input.GetMouseButton(0))
+		{
+			launcher.Drag = (MouseWorldPosition() - clickPos);
+
+			if (!launcher.Armed() && launcher.Drag.magnitude >= launcher.minDragLength)
+			{
+				indicator.ChargeFieldVisible = true;
+				launcher.ReadyShot();
+			}
 		}
 
 		//When the mouse is released...
 		if (Input.GetMouseButtonUp(0))
 		{
 			launcher.LaunchShot();
-			launcher.mouseDrag = Vector2.zero;
+			launcher.Drag = Vector2.zero;
+			indicator.ChargeFieldVisible = false;
 		}
 	}
+
+	public static Vector2 MouseWorldPosition()
+	{
+		return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+	}
+
 }

@@ -7,7 +7,7 @@ public class CircleController : MonoBehaviour {
 	public float fallSpeed = 3;
 	public float speedingDrag = 2;
 
-	private float gravity, drag;
+	private float gravity;
 
 	Rigidbody2D rb;
 
@@ -16,7 +16,6 @@ public class CircleController : MonoBehaviour {
 	{
 		rb = GetComponent<Rigidbody2D>();
 		gravity = rb.gravityScale;
-		drag = rb.drag;
 	}
 	
 	void FixedUpdate ()

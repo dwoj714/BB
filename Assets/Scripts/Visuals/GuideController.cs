@@ -40,7 +40,7 @@ public class GuideController : MonoBehaviour
 
 		if (launcher.Armed())
 		{
-			Aim(-launcher.mouseDrag, launcher.mouseDrag.magnitude / launcher.maxDragLength);
+			Aim(-launcher.Drag, launcher.PullPercentage);
 		}
 
 		if (armedLastFrame && !launcher.Armed())

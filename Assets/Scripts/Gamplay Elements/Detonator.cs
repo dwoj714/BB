@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Detonator : MonoBehaviour {
 
-	public GameObject effect;
+	public GameObject VFX;
+
+	private ExplosionParameters defaultParameters;
 
 	public float minPushForce, maxPushForce;
 	public float minExplosionDMG, maxExplosionDMG;
@@ -16,6 +18,20 @@ public class Detonator : MonoBehaviour {
 	public LayerMask explosionMask;
 
 	float fuseTimer;
+
+	public struct ExplosionParameters
+	{
+		public float minPush, maxPush, minDMG, maxDMG, radius;
+
+		public ExplosionParameters(float rad, float minP, float maxP, float minD, float maxD)
+		{
+			minPush = minP;
+			maxPush = maxP;
+			minDMG = minD;
+			maxDMG = maxD;
+			radius = rad;
+		}
+	}
 
 	//When this is true, the fuse is shortened via deltaTime
 	public bool sparked;
@@ -30,6 +46,8 @@ public class Detonator : MonoBehaviour {
 		fuseTimer = fuse;
 		circle = GetComponent<PhysCircle>();
 		explosionMask = LayerMask.GetMask("Everything");
+
+		defaultParameters = new ExplosionParameters(explosionRadius, minPushForce, maxPushForce, minExplosionDMG, maxExplosionDMG);
 	}
 
 	void Update()
@@ -110,9 +128,9 @@ public class Detonator : MonoBehaviour {
 			}
 		}
 		
-		if (effect)
+		if (VFX)
 		{
-			ExplosionInstance fx = Instantiate(effect, transform.position, Quaternion.identity).GetComponent<ExplosionInstance>();
+			ExplosionInstance fx = Instantiate(VFX, transform.position, Quaternion.identity).GetComponent<ExplosionInstance>();
 			if (fx)
 			{
 				fx.SetRadius(explosionRadius);
@@ -121,6 +139,11 @@ public class Detonator : MonoBehaviour {
 			}
 		}
 		SendMessage("OnExplosion");
+	}
+
+	public void ExplosionOverride(float radius, float minPush, float maxPush, float minDMG, float maxDMG)
+	{
+		ExplosionParameters oldParams = new ExplosionParameters(explosionRadius, minPushForce, maxPushForce, minExplosionDMG, maxExplosionDMG);
 	}
 
 	void OnDrawGizmos()

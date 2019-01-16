@@ -29,6 +29,6 @@ public class Spawner : MonoBehaviour {
 	{
 		Vector3 pos = transform.position;
 		pos.x = transform.position.x + (Random.value -0.5f) * transform.localScale.x;
-		Instantiate(pool.getObject(), pos, Quaternion.identity);
+		Instantiate(pool.GetObject(), pos, Quaternion.identity);
 	}
 }

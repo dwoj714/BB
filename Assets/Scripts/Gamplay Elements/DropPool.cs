@@ -7,10 +7,8 @@ public class DropPool : MonoBehaviour
 	//Use these until you find something more elegant...  :(
 	public GameObject[] objects;
 	public float[] chances;
-	[HideInInspector]
-	public int[] dropCount;
 
-	public GameObject getObject()
+	public GameObject GetObject()
 	{
 		float chanceTotal = 0;
 
@@ -40,9 +38,9 @@ public class DropPool : MonoBehaviour
 	}
 
 	//Use getCircle to get a random PhysCircle, instantiate a clone of it (If it exists) and return a reference to it
-	public GameObject spawnRandom(Transform parent)
+	public GameObject SpawnRandom(Transform parent)
 	{
-		GameObject newCircle = getObject();
+		GameObject newCircle = GetObject();
 
 		if (newCircle)
 		{

@@ -50,7 +50,18 @@ public class BombController : PhysCircle
 		//Drop an item from the loot pool if the gameObject has a loot pool attached
 		if (loot)
 		{
-			loot.spawnRandom(transform);
+			GameObject drop = loot.SpawnRandom(transform);
+			Rigidbody2D dropRB = null;
+
+			if (drop)
+			{
+				dropRB = drop.GetComponent<Rigidbody2D>();
+			}
+
+			if (dropRB)
+			{
+				dropRB.velocity = this.rb.velocity;
+			}
 		}
 		Destroy(this.gameObject);
 	}

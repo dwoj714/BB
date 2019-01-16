@@ -54,8 +54,6 @@
 
 			v2f vert(appdata v)
 			{
-				float _time = (_Time[1] - _startTime) * _timeScale;
-
 				v2f o;
 
 				o.vertex = UnityObjectToClipPos(v.vertex);
