@@ -76,7 +76,7 @@ public class HealthBar : MonoBehaviour {
 			if (health < 1)
 			{
 				health = 0;
-				SendMessage("onHealthDeplete");
+				SendMessage("OnHealthDeplete");
 			}
 		}
 

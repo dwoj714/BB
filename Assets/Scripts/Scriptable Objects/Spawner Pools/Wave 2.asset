@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4ccf857c004c6d43aced56e0715e0f4, type: 3}
+  m_Name: Wave 2
+  m_EditorClassIdentifier: 
+  objects:
+  - {fileID: 1100593929700946, guid: 32b0de6b4e2f5d34ba23ba76e8675d84, type: 2}
+  - {fileID: 1721890422170212, guid: 338bc32573a3c6c468153b1dd1a0fab2, type: 2}
+  chances: 0200000002000000
+  timer: 0
+  depleteChances: 1

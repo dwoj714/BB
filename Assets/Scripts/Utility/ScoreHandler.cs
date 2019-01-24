@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ScoreHandler : MonoBehaviour {
 
-	public GameManager manager;
+	public static GameManager manager;
 	public int pointValue = 10;
 
 	// Use this for initialization
@@ -14,6 +14,7 @@ public class ScoreHandler : MonoBehaviour {
 		if (!manager)
 		{
 			manager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+			Debug.Log("ScoreHandler Game Manager assigned");
 		}
 
 	}

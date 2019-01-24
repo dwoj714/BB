@@ -35,7 +35,7 @@ public class IGController : MonoBehaviour {
 	{
 		if (launcher.Armed())
 		{
-			point.transform.localPosition = launcher.Pull;
+			point.transform.localPosition = launcher.Pull / (2 * launcher.maxDragLength);
 			fSprite.material.SetFloat("_charge", launcher.ChargePercentage);
 			fSprite.material.SetFloat("_drag", launcher.PullPercentage);
 		}

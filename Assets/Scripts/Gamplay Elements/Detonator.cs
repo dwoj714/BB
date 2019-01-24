@@ -141,10 +141,10 @@ public class Detonator : MonoBehaviour {
 		SendMessage("OnExplosion");
 	}
 
-	public void ExplosionOverride(float radius, float minPush, float maxPush, float minDMG, float maxDMG)
+	/*public void ExplosionOverride(float radius, float minPush, float maxPush, float minDMG, float maxDMG)
 	{
 		ExplosionParameters oldParams = new ExplosionParameters(explosionRadius, minPushForce, maxPushForce, minExplosionDMG, maxExplosionDMG);
-	}
+	}*/
 
 	void OnDrawGizmos()
 	{

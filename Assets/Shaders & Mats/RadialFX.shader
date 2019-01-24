@@ -1,4 +1,4 @@
-﻿Shader "Unlit/ExplosionFX"
+﻿Shader "Unlit/RadialFX"
 {
 	Properties
 	{

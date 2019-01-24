@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
 	public float transitionSpeed = 1;
 	private float defaultTransitionSpeed;
 
-	int framecount = 0;
+	//int framecount = 0;
 
 	CollisionBorder border;
 
@@ -51,7 +51,6 @@ public class CameraController : MonoBehaviour
 	{
 		if (moving)
 		{
-			framecount++;
 			transform.position = Vector3.Lerp(transform.position, targetPosition, transitionSpeed);
 			cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetSize, transitionSpeed);
 
@@ -73,12 +72,6 @@ public class CameraController : MonoBehaviour
 	{
 		CamPreset target = presets[name];
 		SetDestination(target.position, target.size);
-
-		if(name == "Game")
-		{
-			manager.StartGame();
-		}
-
 	}
 
 	public void SetDestination(Vector3 position, float size)
@@ -100,10 +93,6 @@ public class CameraController : MonoBehaviour
 
 		targetPosition = position;
 		targetSize = size;
-
-		framecount = 0;
-
-		//transitionSpeed = defaultTransitionSpeed;
 	}
 
 	public void SetDestination(Vector3 position, float size, float speed)

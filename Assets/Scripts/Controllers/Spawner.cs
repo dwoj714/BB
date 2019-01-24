@@ -6,29 +6,65 @@ public class Spawner : MonoBehaviour {
 
 	public float frequency;
 
-	DropPool pool;
+	public bool useChain;
+	[SerializeField]
+	private DropChain chain;
+	[SerializeField]
+	private DropPool pool;
+
     float clock;
 
-	void Start()
+	public DropChain Chain
 	{
-		pool = GetComponent<DropPool>();
+		get
+		{
+			return chain;
+		}
+
+		set
+		{
+			useChain = true;
+			chain = value;
+		}
+	}
+	public DropPool Pool
+	{
+		get
+		{
+			return pool;
+		}
+
+		set
+		{
+			useChain = false;
+			pool = value;
+		}
 	}
 
-    void FixedUpdate () {
+	void FixedUpdate () {
 
 		clock -= Time.deltaTime;
 
 		if(clock < 0)
 		{
-			OnClockTimeout();
+			SpawnObj();
 			clock = frequency;
 		}
 	}
 
-	void OnClockTimeout()
+	void SpawnObj()
 	{
 		Vector3 pos = transform.position;
 		pos.x = transform.position.x + (Random.value -0.5f) * transform.localScale.x;
-		Instantiate(pool.GetObject(), pos, Quaternion.identity);
+
+		if (useChain)
+		{
+			chain.SpawnRandom(pos);
+		}
+		else
+		{
+			pool.SpawnRandom(pos);
+		}
+
 	}
 }

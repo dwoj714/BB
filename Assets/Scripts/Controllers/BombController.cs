@@ -12,7 +12,7 @@ public class BombController : PhysCircle
 	[HideInInspector]
 	public float gravity;
 	Detonator detonator;
-	DropPool loot;
+	public DropPool loot;
 
 	protected override void Awake()
 	{
@@ -20,7 +20,6 @@ public class BombController : PhysCircle
 		rb = GetComponent<Rigidbody2D>();
 		detonator = GetComponent<Detonator>();
 		gravity = rb.gravityScale;
-		loot = GetComponent<DropPool>();
 	}
 
 	protected override void FixedUpdate()
@@ -39,7 +38,7 @@ public class BombController : PhysCircle
 		}
 	}
 
-	public void onHealthDeplete()
+	public void OnHealthDeplete()
 	{
 		fallSpeed = 0;
 		detonator.sparked = true;
@@ -50,7 +49,7 @@ public class BombController : PhysCircle
 		//Drop an item from the loot pool if the gameObject has a loot pool attached
 		if (loot)
 		{
-			GameObject drop = loot.SpawnRandom(transform);
+			GameObject drop = loot.SpawnRandom(transform.position);
 			Rigidbody2D dropRB = null;
 
 			if (drop)

@@ -49,7 +49,7 @@ public class CollisionBorder : MonoBehaviour
 			valPair.Value.parent = transform; //Make the object a child of whatever object this script is on (preferably the camera)
 
 			if (valPair.Key == "Left" || valPair.Key == "Right") //Scale the object to the width and height of the screen, using the world-space values calculated earlier
-				valPair.Value.localScale = new Vector3(colThickness, screenSize.y * 2, colThickness);
+				valPair.Value.localScale = new Vector3(colThickness, screenSize.y * 20, colThickness);
 			else
 				valPair.Value.localScale = new Vector3(screenSize.x * 2, colThickness, colThickness);
 		}
