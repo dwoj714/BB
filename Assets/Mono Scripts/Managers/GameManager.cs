@@ -4,8 +4,6 @@ using UnityEngine.UI;
 [System.Serializable]
 public class GameManager : MonoBehaviour
 {
-
-	LauncherController launcher;
 	BaseController launcherBase;
 	Spawner spawner;
 	CameraController camController;
@@ -23,7 +21,6 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		launcherBase = GameObject.Find("Base").GetComponent<BaseController>();
-		launcher = GameObject.Find("Main Launcher").GetComponent<LauncherController>();
 		spawner = GameObject.Find("Spawner").GetComponent<Spawner>();
 		camController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 		mouseManager = GetComponent<InputManager>();
@@ -31,7 +28,6 @@ public class GameManager : MonoBehaviour
 
 		inGameMenu.SetActive(false);
 		launcherBase.enabled = false;
-		launcher.enabled = false;
 		spawner.enabled = false;
 		gameOverMenu.SetActive(false);
 		mainMenu.SetActive(true);
@@ -53,7 +49,7 @@ public class GameManager : MonoBehaviour
 		{
 			StartGame((IRandomList)obj);
 		}
-		catch (InvalidCastException e)
+		catch (InvalidCastException)
 		{
 			Debug.Log("Invalid object sent to StartGame(ScriptableObject)");
 		}
@@ -91,12 +87,10 @@ public class GameManager : MonoBehaviour
 		gameOverMenu.SetActive(false);
 		mainMenu.SetActive(false);
 
-		launcher.enabled = true;
 		launcherBase.enabled = true;
 		spawner.enabled = true;
 		PurgeGameplayObjects();
 		launcherBase.Restart();
-		mouseManager.ControlledObject = "Launcher";
 
 		camController.SetDestination("Game");
 	}
@@ -105,12 +99,10 @@ public class GameManager : MonoBehaviour
 	{
 		Debug.Log("EndGame()");
 		gameInProgress = false;
-		launcher.enabled = true;
 		gameOverMenu.SetActive(true); 
 		launcherBase.enabled = false;
 		spawner.enabled = false;
-		mouseManager.ControlledObject = null;
-		launcher.CancelShot();
+		//mouseManager.reciever = null;
 		launcherBase.charges = 0;
 	}
 
@@ -124,6 +116,7 @@ public class GameManager : MonoBehaviour
 	{
 		Debug.Log("GoToMenu()");
 		gameOverMenu.SetActive(false);
+		inGameMenu.SetActive(false);
 		mainMenu.SetActive(true);
 		camController.SetDestination("Menu");
 	}

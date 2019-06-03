@@ -24,7 +24,7 @@ public class HealthBarVisualizer : Visualizer {
 		}
 		else
 		{
-			transform.localScale = new Vector3(source.getHealth() / source.maxHealth * initialScaleX, transform.localScale.y, transform.localScale.z);
+			transform.localScale = new Vector3(source.Health / source.maxHealth * initialScaleX, transform.localScale.y, transform.localScale.z);
 		}
 	}
 }

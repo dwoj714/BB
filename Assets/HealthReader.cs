@@ -17,6 +17,6 @@ public class HealthReader : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-		text.text = "" + Mathf.Ceil(hb.getHealth());
+		text.text = "" + Mathf.Ceil(hb.Health);
     }
 }

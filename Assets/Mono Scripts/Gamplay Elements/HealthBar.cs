@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class HealthBar : MonoBehaviour {
 
-	private float lateDamage;
-
 	protected float health;
 	public float maxHealth;
 
@@ -17,14 +15,14 @@ public class HealthBar : MonoBehaviour {
 
 	private float counter;
 
-	SpriteRenderer spr;
+	IHealable healthTarget;
 
 	protected virtual void Start()
 	{
 		health = maxHealth;
 		shield = maxShield;
 
-		spr = GetComponent<SpriteRenderer>();
+		healthTarget = GetComponent<BombController>();
 	}
 
 	protected virtual void Update()
@@ -63,33 +61,23 @@ public class HealthBar : MonoBehaviour {
 			shield -= dmg;
 			if (shield < 0)
 			{
-				health += shield;
 				shield = 0;
 			}
 		}
 		else
 		{
-			if (health >= 1)
+			if (health > 0)
 			{
 				health -= dmg;
+				if(healthTarget != null) healthTarget.OnTakeDamage(dmg);
 			}
-			if (health < 1)
+			if (health <= 0)
 			{
 				health = 0;
-				SendMessage("OnHealthDeplete");
+				if (healthTarget != null) healthTarget.OnHealthDeplete();
 			}
 		}
-
-		if (spr)
-		{
-			spr.material.SetFloat("_health", health / maxHealth);
-		}
 	}
-
-	//Instead of taking damage instantly, store the damage amount and take the damage in the next frame update.
-	//This should make explosion chains look like chain reactions
-	//nope. Added a fuse. Maybe i'll keep this
-
 
 	public void Heal(float healing)
 	{
@@ -100,16 +88,16 @@ public class HealthBar : MonoBehaviour {
 			{
 				health = maxHealth;
 			}
-			if (spr)
-			{
-				spr.material.SetFloat("_health", health / maxHealth);
-			}
+			if (healthTarget != null) healthTarget.OnHeal(healing);
 		}
 	}
 
-	public float getHealth()
+	public float Health
 	{
-		return health;
+		get
+		{
+			return health;
+		}
 	}
 
 	public float getShield()

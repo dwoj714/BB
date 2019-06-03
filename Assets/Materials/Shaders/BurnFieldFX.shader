@@ -77,7 +77,7 @@
 						//The pixel's distance from the center
 						float grad = sqrt((i.uv.r - 0.5f)*(i.uv.r - 0.5f) * 4 + (i.uv.g - 0.5f)*(i.uv.g - 0.5f) * 4);
 
-						float flicker = (1 + sin(_time * 30 * (_time / _loop)) / 48.5);
+						float flicker = (1 + sin(_time * 40 * (_time / _loop)) / 30);
 
 						//Controls when the flare's size decreses
 						grad = 1 - grad / saturate(1.618 * _loop * sin((_time / _loop) * 3.142f)) * flicker;

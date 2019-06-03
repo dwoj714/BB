@@ -15,7 +15,6 @@ public abstract class StatusEffect : Buff
 	{
 		get
 		{
-			Debug.Log(name + " Sending HasTickEffect");
 			return hasTickEffect;
 		}
 	}

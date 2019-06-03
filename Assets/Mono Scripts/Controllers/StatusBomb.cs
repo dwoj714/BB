@@ -29,16 +29,18 @@ public class StatusBomb : BombController {
 		base.Start();
 		FX.SetRadius(radius);
 		chargeID = Shader.PropertyToID("_charge");
+		timer = Time.time - delay * Mathf.Floor(Time.time / delay);
+		Debug.Log(Time.time +" - " + delay + " * floor(" + Time.time + " / " + delay + ") = " + timer);
 	}
 
 	void Update ()
 	{
-		if(timerEnabled && hb.getHealth() > 0)
+		if(timerEnabled && hb.Health > 0)
 		{
-			timer -= Time.deltaTime;
+			timer += Time.deltaTime;
 		}
 		
-		if(timer <= 0)
+		if(timer >= delay)
 		{
 			Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius);
 
@@ -51,11 +53,11 @@ public class StatusBomb : BombController {
 
 			FX.ActivateFX();
 
-			timer = delay;
+			timer = 0;
 
 			//Debug.Log(gameObject.name + " applied " + effect.name + " to " + count + " objects");
 		}
-		FX.mat.SetFloat(chargeID, 1 - (timer / delay));
+		FX.mat.SetFloat(chargeID, timer / delay);
 	}
 
 }

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1322118742003886}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 6, z: 1}
+  m_LocalScale: {x: 7.5, y: 7.5, z: 1}
   m_Children: []
   m_Father: {fileID: 4309987333507452}
   m_RootOrder: 1
@@ -127,7 +127,7 @@ Transform:
   m_GameObject: {fileID: 1421079546083430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children:
   - {fileID: 4488732633601870}
   - {fileID: 4197660361225538}
@@ -152,9 +152,13 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   pointValue: 10
-  fallSpeed: 0.8
+  comboMult: 1
   gravity: 0
+  detonator: {fileID: 0}
   loot: {fileID: 0}
+  text: {fileID: 0}
+  spr: {fileID: 0}
+  fallSpeed: 0.8
   broadRadius: 0.5
   effect: {fileID: 11400000, guid: 9efa30bd8e85b9241af1a8ff303a3c56, type: 2}
   FX: {fileID: 114391258043959108}
@@ -221,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   VFX: {fileID: 1527323029432444, guid: f89d8dab37cb98349b829a79c798926c, type: 3}
+  incrementer: {fileID: 0}
   minPushForce: 10
   maxPushForce: 20
   minExplosionDMG: 0
@@ -475,7 +480,6 @@ GameObject:
   - component: {fileID: 7385738398585545936}
   - component: {fileID: 6325381425263348039}
   - component: {fileID: 324482797287358150}
-  - component: {fileID: 1833849914286010783}
   m_Layer: 11
   m_Name: Text
   m_TagString: Untagged
@@ -544,16 +548,3 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 100
---- !u!114 &1833849914286010783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4802180724856343590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6dfe0e200c184f4ebe0846ccc8d4b85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hb: {fileID: 114192698115263290}

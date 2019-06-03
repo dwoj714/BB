@@ -4,64 +4,39 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
 
-	[SerializeField]
-	private string controlledObject;
 	private bool inputPause = false;
-	public LauncherController launcher;
-	private PointAbility ability;
-	private Vector2 dragStart;
+
+	public IInputReciever reciever;
 
 	private bool releasedLastFrame = false;
 
-	public IGController indicator;
-
-	public PointAbility Ability
+	private void Start()
 	{
-		get
-		{
-			return ability;
-		}
-
-		set
-		{
-			ability = value;
-		}
-	}
-
-	public string ControlledObject
-	{
-		get
-		{
-			return controlledObject;
-		}
-
-		set
-		{
-			//When inputPause is set true, inputs are ignored for the first frame after doing so to avoid issues with button releases
-			inputPause = true;
-			controlledObject = value;
-		}
+		reciever = GameObject.Find("2-Type Launcher").GetComponent<LauncherController>();
 	}
 
 	void Update ()
 	{
 		if (!inputPause)
 		{
-			if (controlledObject == "Launcher")
+			if (Input.GetMouseButtonDown(0))
 			{
-				ManageLauncher();
+				reciever.OnInputStart(MouseWorldPosition);
 			}
-
-			if (controlledObject == "Ability")
+			if (Input.GetMouseButton(0))
 			{
-				ManageAbility();
+				reciever.OnInputHeld(MouseWorldPosition);
+			}
+			if (Input.GetMouseButtonUp(0))
+			{
+				reciever.OnInputReleased(MouseWorldPosition);
 			}
 		}
 		else inputPause = false;
 
 	}
 
-	void ManageAbility()
+	/*void ManageAbility()
 	{
 		if (Input.GetMouseButtonUp(0))
 		{
@@ -79,9 +54,9 @@ public class InputManager : MonoBehaviour {
 			indicator.abilityFX.transform.position = MouseWorldPosition;
 			indicator.abilityFX.Visible = true;
 		}
-	}
+	}*/
 
-	void ManageLauncher()
+	/*void ManageLauncher()
 	{
 		//When the mouse is clicked...
 		if (Input.GetMouseButtonDown(0))
@@ -142,7 +117,7 @@ public class InputManager : MonoBehaviour {
 
 		}
 
-	}
+	}*/
 
 	public static Vector2 MouseWorldPosition
 	{

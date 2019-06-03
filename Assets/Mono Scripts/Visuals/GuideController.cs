@@ -61,7 +61,7 @@ public class GuideController : MonoBehaviour
 		float length = (maxLength - minLength) * power + minLength;
 
 		Vector2 pos = direction.normalized * length;
-		tip.transform.localPosition = Vector2.LerpUnclamped(tip.transform.localPosition, pos, speed);
+		tip.transform.localPosition = Vector2.Lerp(tip.transform.localPosition, pos, speed);
 		line.SetPosition(0, tip.transform.localPosition);
 		tip.transform.eulerAngles = new Vector3(0, 0, Vector2.SignedAngle(Vector2.up, tip.transform.localPosition));
 

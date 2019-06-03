@@ -6,6 +6,9 @@ public class Detonator : MonoBehaviour {
 
 	public GameObject VFX;
 
+	[HideInInspector]
+	public ComboIncrement incrementer;
+
 	private ExplosionParameters defaultParameters;
 
 	public float minPushForce, maxPushForce;
@@ -46,6 +49,7 @@ public class Detonator : MonoBehaviour {
 		fuseTimer = fuse;
 		circle = GetComponent<PhysCircle>();
 		explosionMask = LayerMask.GetMask("Everything");
+		incrementer = ScriptableObject.CreateInstance<ComboIncrement>();
 
 		defaultParameters = new ExplosionParameters(explosionRadius, minPushForce, maxPushForce, minExplosionDMG, maxExplosionDMG);
 	}
@@ -122,6 +126,10 @@ public class Detonator : MonoBehaviour {
 					if (hitHb)
 					{
 						damage = (adjustedRadius - dst) / adjustedRadius * (dmgRange) + minExplosionDMG;
+						if(hitHb.Health >= 1 && damage > hitHb.Health)
+						{
+							incrementer.ApplyEffect(hitHb.gameObject);
+						}
 						hitHb.TakeDamage(damage, gameObject);
 					}
 				}
@@ -135,7 +143,6 @@ public class Detonator : MonoBehaviour {
 			{
 				fx.SetRadius(explosionRadius);
 				fx.Detonate();
-				//Debug.Log("")
 			}
 		}
 		SendMessage("OnExplosion");

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LauncherController : MonoBehaviour
+public class LauncherController : EnergyUser, IInputReciever
 {
-	[HideInInspector]
-	private Vector2 drag;
+
+	public IGController indicator;
+
+	Vector2 clickPos, dragPos;
 
 	public float maxDragLength = 5;
 	public float minDragLength = 0.25f;
@@ -14,7 +16,6 @@ public class LauncherController : MonoBehaviour
 
 	private float chargeTime;
 
-	//Can't just call it 'base' :/
 	public BaseController baseCon;
 
 	//Projectile to be copied
@@ -28,17 +29,20 @@ public class LauncherController : MonoBehaviour
 	{
 		get
 		{
-			return drag;
-		}
-
-		set
-		{
-			drag = value;
+			return dragPos - clickPos;
 		}
 	}
 
-	void Update()
+	void Awake()
 	{
+		indicator.launcher = this;
+		InitEnergy();
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
 		if(Input.GetMouseButton(0) && ChargePercentage != 1)
 		{
 			chargeTime += Time.deltaTime;
@@ -66,16 +70,41 @@ public class LauncherController : MonoBehaviour
 		if (shot) AimShot();
 	}
 
+	public void OnInputStart(Vector2 position)
+	{  
+		clickPos = position;
+		indicator.field.transform.position = position;
+	}
+
+	public void OnInputHeld(Vector2 position)
+	{
+		dragPos = position;
+
+		if (!Armed() && Drag.magnitude >= minDragLength)
+		{
+			indicator.ChargeFieldVisible = true;
+			ReadyShot();
+		}
+	}
+
+	public void OnInputReleased(Vector2 position)
+	{
+		if (Armed())
+		{
+			LaunchShot();
+			indicator.ChargeFieldVisible = false;
+		}
+	}
+
 	public void ReadyShot()
 	{
 		//If the required energy can be spent...
-		if (baseCon.SpendEnergy(Ammo.energyCost))
+		if (!Armed() && SpendEnergy(Ammo.energyCost))
 		{
 			//create a copy of ammo, position it at the center of the launcher
 			shot = Instantiate(Ammo, transform.position, Quaternion.identity).GetComponent<AmmoType>();
 			shot.launcherCollider = baseCon.col;
 		}
-		
 	}
 
 	public void AimShot()
@@ -104,7 +133,7 @@ public class LauncherController : MonoBehaviour
 		if (shot)
 		{
 			Destroy(shot.gameObject);
-			baseCon.energy += shot.energyCost;
+			energy += shot.energyCost;
 			shot = null;
 			charge = 0;
 		}
@@ -133,7 +162,7 @@ public class LauncherController : MonoBehaviour
 	{
 		get
 		{
-			return Vector2.ClampMagnitude(drag, maxDragLength * ChargePercentage);
+			return Vector2.ClampMagnitude(Drag, maxDragLength * ChargePercentage);
 		}
 	}
 
@@ -158,4 +187,5 @@ public class LauncherController : MonoBehaviour
 
 		}
 	}
+
 }

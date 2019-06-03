@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnergyVisualizer : Visualizer
 {
-	public BaseController source;
+	public EnergyUser source;
 
 	protected override void Update()
 	{

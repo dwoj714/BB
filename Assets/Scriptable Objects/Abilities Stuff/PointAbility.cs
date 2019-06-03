@@ -19,14 +19,16 @@ public abstract class PointAbility : Ability
 
 	public void Arm(InputManager inputManager)
 	{
-		inputManager.ControlledObject = "Ability";
-		inputManager.Ability = this;
+		Debug.Log("PointAbility Arm()");
+		//inputManager.ControlledObject = "Ability";
+		//inputManager.Ability = this;
 		armed = true;
 	}
 
 	public void Disarm(InputManager inputManager)
 	{
-		inputManager.ControlledObject = "Launcher";
+		Debug.Log("PointAbility Disarm()");
+		//inputManager.ControlledObject = "Launcher";
 		armed = false;
 	}
 }

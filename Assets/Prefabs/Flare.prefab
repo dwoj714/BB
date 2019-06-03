@@ -62,8 +62,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da92f1a4a543dad448c2ae3417a3acef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dpsMin: 10
-  dpsMax: 35
+  dpsMin: 1
+  dpsMax: 40
   parentCircle: {fileID: 58090401456260030}
 --- !u!212 &212219234028525590
 SpriteRenderer:
@@ -202,7 +202,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 5322ea13d69bcbf4eb9a472b3b575049, type: 3}
-  m_Color: {r: 1, g: 0.7380184, b: 0.48584908, a: 0.84313726}
+  m_Color: {r: 1, g: 0.50375754, b: 0.2688679, a: 0.84313726}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -10,7 +10,8 @@ public class IGController : MonoBehaviour {
 	public LauncherController launcher;
 
 	public GameObject field;
-	public GameObject point;
+	[SerializeField]
+	private GameObject point;
 
 	[Header("Ability Stuff")]
 	public VFXController abilityFX;
@@ -20,7 +21,7 @@ public class IGController : MonoBehaviour {
 	private bool armedLastFrame = false;
 	private Vector3 lastPos;
 
-	private void Awake()
+	private void Start()
 	{
 		fSprite = field.GetComponent<SpriteRenderer>();
 		pSprite = point.GetComponent<SpriteRenderer>();
