@@ -7,7 +7,9 @@ public class GameManager : MonoBehaviour
 	BaseController launcherBase;
 	Spawner spawner;
 	CameraController camController;
-	InputManager mouseManager;
+	InputManager inputManager;
+	WeaponManager weaponManager;
+
 	IRandomList lastSpawnPool;
 	public GameObject gameOverMenu, mainMenu, inGameMenu;
 	public Text scoreText;
@@ -23,7 +25,8 @@ public class GameManager : MonoBehaviour
 		launcherBase = GameObject.Find("Base").GetComponent<BaseController>();
 		spawner = GameObject.Find("Spawner").GetComponent<Spawner>();
 		camController = GameObject.Find("Main Camera").GetComponent<CameraController>();
-		mouseManager = GetComponent<InputManager>();
+		inputManager = GetComponent<InputManager>();
+		weaponManager = GetComponent<WeaponManager>();
 		scoreText.text = score.ToString();
 
 		inGameMenu.SetActive(false);
@@ -41,10 +44,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	//For use with buttons loading drop pools.chains
+	//For use with buttons loading drop pools/chains
 	public void StartGame(ScriptableObject obj)
 	{
-		//Surprised I can do this
 		try
 		{
 			StartGame((IRandomList)obj);
@@ -62,6 +64,9 @@ public class GameManager : MonoBehaviour
 
 	public void StartGame(IRandomList randList)
 	{
+
+		BroadcastMessage("OnGameStart", SendMessageOptions.DontRequireReceiver);
+
 		lastSpawnPool = randList;
 
 		if (randList.GetType() == typeof(DropPool))
@@ -102,7 +107,6 @@ public class GameManager : MonoBehaviour
 		gameOverMenu.SetActive(true); 
 		launcherBase.enabled = false;
 		spawner.enabled = false;
-		//mouseManager.reciever = null;
 		launcherBase.charges = 0;
 	}
 
@@ -119,6 +123,14 @@ public class GameManager : MonoBehaviour
 		inGameMenu.SetActive(false);
 		mainMenu.SetActive(true);
 		camController.SetDestination("Menu");
+	}
+
+	public void GoToLoadout()
+	{
+		mainMenu.SetActive(false);
+		camController.SetDestination("Loadout");
+
+
 	}
 
 	public void PurgeGameplayObjects()

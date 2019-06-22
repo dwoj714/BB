@@ -27,9 +27,6 @@ public class CameraController : MonoBehaviour
 	float targetSize;
 
 	public float transitionSpeed = 1;
-	private float defaultTransitionSpeed;
-
-	//int framecount = 0;
 
 	CollisionBorder border;
 
@@ -38,13 +35,12 @@ public class CameraController : MonoBehaviour
 	{
 		cam = GetComponent<Camera>();
 		manager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-		defaultTransitionSpeed = transitionSpeed;
 
 		presets.Add("Menu", new CamPreset(transform.position, cam.orthographicSize));
-		presets.Add("Game", new CamPreset(new Vector3(0,22,-100), 8));
+		presets.Add("Game", new CamPreset(new Vector3(0,21.8f,-100), 8));
+		presets.Add("Loadout", new CamPreset(new Vector3(0, 18, -100), 8));
 
 		border = GetComponent<CollisionBorder>();
-
 	}
 
 	void Update()
@@ -54,7 +50,7 @@ public class CameraController : MonoBehaviour
 			transform.position = Vector3.Lerp(transform.position, targetPosition, transitionSpeed);
 			cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetSize, transitionSpeed);
 
-			if (Mathf.Approximately(cam.orthographicSize, targetSize))
+			if (Mathf.Approximately((transform.position - targetPosition).sqrMagnitude, 0))
 			{
 				moving = false;
 				cam.orthographicSize = targetSize;

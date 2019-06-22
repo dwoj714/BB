@@ -9,44 +9,38 @@ public class IGController : MonoBehaviour {
 
 	public LauncherController launcher;
 
-	public GameObject field;
-	[SerializeField]
-	private GameObject point;
+	//[Header("Ability Stuff")]
+	//public VFXController abilityFX;
 
-	[Header("Ability Stuff")]
-	public VFXController abilityFX;
-
-	private SpriteRenderer fSprite, pSprite, aSprite;
-
+	public SpriteRenderer fSprite, pSprite;//, aSprite;
 	private bool armedLastFrame = false;
 	private Vector3 lastPos;
 
 	private void Start()
 	{
-		fSprite = field.GetComponent<SpriteRenderer>();
-		pSprite = point.GetComponent<SpriteRenderer>();
-		aSprite = abilityFX.GetComponent<SpriteRenderer>();
-		field.transform.localScale = (Vector3.right + Vector3.up) * launcher.maxDragLength * 2;
+		//aSprite = abilityFX.GetComponent<SpriteRenderer>();
+		fSprite.transform.localScale = (Vector3.right + Vector3.up) * launcher.maxDragLength * 2;
 
 		ChargeFieldVisible = false;
-		abilityFX.Visible = false;
+		//abilityFX.Visible = false;
 	}
 
 	private void Update ()
 	{
-		if (launcher.Armed())
+		if (launcher &&  launcher.Armed())
 		{
-			point.transform.localPosition = launcher.Pull / (2 * launcher.maxDragLength);
+			pSprite.transform.localPosition = launcher.Pull / (2 * launcher.maxDragLength);
 			fSprite.material.SetFloat("_charge", launcher.ChargePercentage);
 			fSprite.material.SetFloat("_drag", launcher.PullPercentage);
 		}
 	}
 
-	public void ActivateAbilityFX()
+	/*public void ActivateAbilityFX()
 	{
 		abilityFX.ActivateFX();
-	}
+	}*/
 
+	//sets if the sprites that make up the charge field are visible
 	public bool ChargeFieldVisible
 	{
 		get
@@ -60,7 +54,7 @@ public class IGController : MonoBehaviour {
 
 			if (value)
 			{
-				point.transform.localPosition = launcher.Pull;
+				pSprite.transform.localPosition = launcher.Pull;
 				fSprite.material.SetFloat("_charge", launcher.ChargePercentage);
 				fSprite.material.SetFloat("_drag", launcher.PullPercentage);
 			}

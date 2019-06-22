@@ -10,14 +10,9 @@ public class InputManager : MonoBehaviour {
 
 	private bool releasedLastFrame = false;
 
-	private void Start()
-	{
-		reciever = GameObject.Find("2-Type Launcher").GetComponent<LauncherController>();
-	}
-
 	void Update ()
 	{
-		if (!inputPause)
+		if (GameManager.gameInProgress && !inputPause)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{

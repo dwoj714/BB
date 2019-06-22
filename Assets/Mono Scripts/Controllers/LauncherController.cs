@@ -16,7 +16,7 @@ public class LauncherController : EnergyUser, IInputReciever
 
 	private float chargeTime;
 
-	public BaseController baseCon;
+	public CircleCollider2D collider;
 
 	//Projectile to be copied
 	[SerializeField]
@@ -36,6 +36,7 @@ public class LauncherController : EnergyUser, IInputReciever
 	void Awake()
 	{
 		indicator.launcher = this;
+		indicator.ChargeFieldVisible = false;
 		InitEnergy();
 	}
 
@@ -65,6 +66,11 @@ public class LauncherController : EnergyUser, IInputReciever
 		}
 	}
 
+	void OnGameStart()
+	{
+		energy = maxEnergy;
+	}
+
 	void FixedUpdate()
 	{
 		if (shot) AimShot();
@@ -73,7 +79,7 @@ public class LauncherController : EnergyUser, IInputReciever
 	public void OnInputStart(Vector2 position)
 	{  
 		clickPos = position;
-		indicator.field.transform.position = position;
+		indicator.fSprite.transform.position = position;
 	}
 
 	public void OnInputHeld(Vector2 position)
@@ -92,8 +98,8 @@ public class LauncherController : EnergyUser, IInputReciever
 		if (Armed())
 		{
 			LaunchShot();
-			indicator.ChargeFieldVisible = false;
 		}
+		indicator.ChargeFieldVisible = false;
 	}
 
 	public void ReadyShot()
@@ -103,7 +109,7 @@ public class LauncherController : EnergyUser, IInputReciever
 		{
 			//create a copy of ammo, position it at the center of the launcher
 			shot = Instantiate(Ammo, transform.position, Quaternion.identity).GetComponent<AmmoType>();
-			shot.launcherCollider = baseCon.col;
+			shot.launcherCollider = collider;
 		}
 	}
 

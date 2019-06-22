@@ -12,6 +12,8 @@ public class VFXController : MonoBehaviour
 	private float timer = 0;
 	private Color pColor;
 
+	public Transform targetTransform;
+
 	// Use this for initialization
 	void Awake()
 	{
