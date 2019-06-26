@@ -9,7 +9,7 @@ public class WeaponManager : MonoBehaviour
 	public Vector3 leftPos, middlePos, rightPos;
 
 	//Holds weapons and their positions
-	private Dictionary<Vector3, IInputReciever> slots = new Dictionary<Vector3, IInputReciever>();
+	private Dictionary<IInputReciever, Vector3> slots;
 
 	public float swapTime = 0.5f;
 	private bool swapping, swappingLeft = false;
@@ -22,8 +22,11 @@ public class WeaponManager : MonoBehaviour
 	
 	void Start()
 	{
+		slots.Add(weapon1, leftPos);
+		slots.Add(weapon2, middlePos);
+		slots.Add(weapon3, rightPos);
+
 		inputMan = GameObject.Find("Game Manager").GetComponent<InputManager>();
-	
 		baseCol = GameObject.Find("Base").GetComponent<CircleCollider2D>();
 		SetRecievers();
 	}
@@ -42,7 +45,7 @@ public class WeaponManager : MonoBehaviour
 		SetWeaponSlot(obj2, 2);
 		SetWeaponSlot(obj3, 3);
 
-		inputMan.reciever = slots[leftPos];
+		inputMan.reciever = weapon2;
 	}
 
 	public void SetWeaponSlot(GameObject obj, int i)
@@ -64,7 +67,6 @@ public class WeaponManager : MonoBehaviour
 
 		if (recv != null)
 		{
-			Debug.Log("ZXCVBNM");
 			switch (i)
 			{
 				case 1:
@@ -72,10 +74,8 @@ public class WeaponManager : MonoBehaviour
 					{
 						Destroy(instance1);
 					}
-
-					slots[leftPos] = recv;
-
 					instance1 = instance;
+					//instance1 = instance;
 					weapon1 = recv;
 					break;
 				case 2:
@@ -83,19 +83,18 @@ public class WeaponManager : MonoBehaviour
 					{
 						Destroy(instance2);
 					}
-
-					slots[middlePos] = recv;
-
 					instance2 = instance;
+					instance2 = instance;
+					weapon2 = recv;
 					break;
 				case 3:
 					if (instance3)
 					{
 						Destroy(instance3);
 					}
-
-					slots[rightPos] = recv;
 					instance3 = instance;
+					instance3 = instance;
+					weapon3 = recv;
 					break;
 				default:
 					Debug.Log("SetWeaponSlot: Invalid slot index");
