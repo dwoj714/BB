@@ -30,7 +30,7 @@ public class StatusBomb : BombController {
 		FX.SetRadius(radius);
 		chargeID = Shader.PropertyToID("_charge");
 		timer = Time.time - delay * Mathf.Floor(Time.time / delay);
-		Debug.Log(Time.time +" - " + delay + " * floor(" + Time.time + " / " + delay + ") = " + timer);
+		//Debug.Log(Time.time +" - " + delay + " * floor(" + Time.time + " / " + delay + ") = " + timer);
 	}
 
 	void Update ()

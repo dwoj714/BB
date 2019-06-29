@@ -26,6 +26,24 @@ public class InputManager : MonoBehaviour {
 			{
 				reciever.OnInputReleased(MouseWorldPosition);
 			}
+
+			if (Input.touchCount > 0)
+				switch (Input.GetTouch(0).phase)
+				{
+					case TouchPhase.Began:
+						reciever.OnInputStart(TouchWorldPosition);
+						break;
+
+					case TouchPhase.Moved:
+						reciever.OnInputHeld(TouchWorldPosition);
+						break;
+
+					case TouchPhase.Ended:
+						reciever.OnInputReleased(TouchWorldPosition);
+						break;
+
+				}
+
 		}
 		else inputPause = false;
 

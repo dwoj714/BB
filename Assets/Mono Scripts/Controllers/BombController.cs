@@ -126,7 +126,7 @@ public class BombController : PhysCircle, IHealable
 		}
 
 		manager.AddScore(pointValue * comboMult);
-		Debug.Log("Adding 10 * " + comboMult + "To score.");
+		//Debug.Log("Adding 10 * " + comboMult + "To score.");
 
 		Destroy(this.gameObject);
 	}

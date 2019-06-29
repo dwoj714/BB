@@ -4,161 +4,100 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-	public GameObject obj1, obj2, obj3;
-	private GameObject instance1, instance2, instance3;
-	public Vector3 leftPos, middlePos, rightPos;
+	[Header("Weapon prefabs")]
+	public List<GameObject> prefabs = new List<GameObject>();
 
-	//Holds weapons and their positions
-	private Dictionary<Vector3, IInputReciever> slots = new Dictionary<Vector3, IInputReciever>();
-
-	public float swapTime = 0.5f;
-	private bool swapping, swappingLeft = false;
-	private float swapTimer = 0;
+	public Transform[] slots = new Transform[3];
 
 	InputManager inputMan;
 	CircleCollider2D baseCol;
 
-	public IInputReciever weapon1, weapon2, weapon3;
+	private IInputReciever[] weapons = new IInputReciever[3];
 	
 	void Start()
 	{
 		inputMan = GameObject.Find("Game Manager").GetComponent<InputManager>();
-	
 		baseCol = GameObject.Find("Base").GetComponent<CircleCollider2D>();
-		SetRecievers();
-	}
 
-	void Update()
-	{
-		if (swapping)
+		//instantiate up to 3 game objects from the start of the prefab list, assigning input recievers from the instances
+		for(int i = 0; i < 3; i++)
 		{
-			
-		}
-	}
-
-	void OnGameStart()
-	{
-		SetWeaponSlot(obj1, 1);
-		SetWeaponSlot(obj2, 2);
-		SetWeaponSlot(obj3, 3);
-
-		inputMan.reciever = slots[leftPos];
-	}
-
-	public void SetWeaponSlot(GameObject obj, int i)
-	{
-		Vector3 pos = (i == 1 ? leftPos : (i == 2 ? middlePos : rightPos));
-		GameObject instance = Instantiate(obj, pos, Quaternion.identity);
-
-		IInputReciever recv = instance.GetComponent<IInputReciever>();
-
-		try
-		{
-			LauncherController maybeLauncher = (LauncherController)recv;
-			maybeLauncher.collider = baseCol;
-		}
-		catch (InvalidCastException)
-		{
-			Debug.Log("Non-launcher caught by SetWeaponSlot");
-		}
-
-		if (recv != null)
-		{
-			Debug.Log("ZXCVBNM");
-			switch (i)
+			if (prefabs[i])
 			{
-				case 1:
-					if (instance1)
-					{
-						Destroy(instance1);
-					}
-
-					slots[leftPos] = recv;
-
-					instance1 = instance;
-					weapon1 = recv;
-					break;
-				case 2:
-					if (instance2)
-					{
-						Destroy(instance2);
-					}
-
-					slots[middlePos] = recv;
-
-					instance2 = instance;
-					break;
-				case 3:
-					if (instance3)
-					{
-						Destroy(instance3);
-					}
-
-					slots[rightPos] = recv;
-					instance3 = instance;
-					break;
-				default:
-					Debug.Log("SetWeaponSlot: Invalid slot index");
-					break;
+				Debug.Log("Instance ID of prefab[" + i + "]: " + prefabs[i].GetInstanceID());
+				//weapons[i] = Instantiate(prefabs[i], slots[i]).GetComponent<IInputReciever>();
+				SetWeaponSlot(prefabs[i], i, true);
 			}
 		}
-		else
+
+		if (weapons[1] != null)
 		{
-			Destroy(instance);
-			Debug.Log("SetWeaponSlot: No input reciever found on given GameObject");
-		}
-	}
-
-	public void SetRecievers()
-	{
-		if(instance1) weapon1 = instance1.GetComponent<IInputReciever>();
-		if(instance2) weapon2 = instance2.GetComponent<IInputReciever>();
-		if(instance3) weapon3 = instance3.GetComponent<IInputReciever>();
-	}
-
-	//swaps middle and left weapon slot of leftSlot is true, swaps middle and right weapon slot otherwise
-	public void BeginSwap(bool leftSlot)
-	{
-		if (swapping) return;
-		swapping = true;
-		swappingLeft = leftSlot;
-
-
-
-		//Want to keep references within recievers constant
-		/*
-		IInputReciever holder = weapon2;
-
-		if (leftSlot)
-		{
-			weapon2 = weapon1;
-			weapon1 = holder;
+			inputMan.reciever = weapons[1];
 		}
 		else
 		{
-			weapon2 = weapon3;
-			weapon3 = holder;
+			inputMan.reciever = weapons[0];
 		}
-
-		inputMan.reciever = weapon2;
-		*/
 	}
 
-	[ExecuteInEditMode]
-	private void OnDrawGizmos()
+	public void SetWeaponSlot(GameObject pf, int i, bool isPrefab = false)
 	{
-		float scale = 0.5f;
+		GameObject obj = Instantiate(pf, slots[i]);
 
-		Gizmos.color = Color.blue;
+		//attempt to get an input reciever from the object
+		IInputReciever recv = obj.GetComponent<IInputReciever>();
+		if (recv != null)
+		{
+			//if (isPrefab)
+			//{
+				//obj = Instantiate(pf, slots[i]);
+				obj.transform.localPosition = Vector3.up * 15;
+			//}
 
-		Gizmos.DrawLine(leftPos + Vector3.left * scale, leftPos + Vector3.right * scale);
-		Gizmos.DrawLine(leftPos + Vector3.up * scale, leftPos + Vector3.down * scale);
+			//If there's already an object in the slot, destroy it
+			if (weapons[i] != null)
+			{
+				Destroy(((MonoBehaviour)recv).gameObject);
+			}
 
-		Gizmos.DrawLine(middlePos + Vector3.left * scale, middlePos + Vector3.right * scale);
-		Gizmos.DrawLine(middlePos + Vector3.up * scale, middlePos + Vector3.down * scale);
+			weapons[i] = recv;
 
-		Gizmos.DrawLine(rightPos + Vector3.left * scale, rightPos + Vector3.right* scale);
-		Gizmos.DrawLine(rightPos + Vector3.up * scale, rightPos + Vector3.down * scale);
+			//if the reciever is a launcher controller, set its collider accordingly
+			try
+			{
+				LauncherController launcher = (LauncherController)recv;
+				launcher.collider = baseCol;
+			}
+			catch (InvalidCastException)
+			{
+				Debug.Log("Non-launcher caught in SetWeaponSlot");
+			}
+
+		}
+		else
+		{
+			Debug.LogError("No Input reciever found on object " + obj);
+		}
 	}
 
+	public void Swap(bool left)
+	{
+		IInputReciever a = weapons[0];
+		IInputReciever b = weapons[1];
+		IInputReciever c = weapons[2];
+
+		if (left)
+		{
+			weapons[0] = c;
+			weapons[1] = a;
+			weapons[2] = b;
+		}
+		else
+		{
+			weapons[0] = b;
+			weapons[1] = c;
+			weapons[2] = a;
+		}
+		inputMan.reciever = weapons[1];
+	}
 }
