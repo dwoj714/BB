@@ -66,11 +66,6 @@ public class LauncherController : EnergyUser, IInputReciever
 		}
 	}
 
-	void OnGameStart()
-	{
-		energy = maxEnergy;
-	}
-
 	void FixedUpdate()
 	{
 		if (shot) AimShot();
@@ -190,7 +185,6 @@ public class LauncherController : EnergyUser, IInputReciever
 		set
 		{
 			ammo = value;
-
 		}
 	}
 

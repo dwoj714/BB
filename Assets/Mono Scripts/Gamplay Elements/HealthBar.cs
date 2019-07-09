@@ -79,6 +79,11 @@ public class HealthBar : MonoBehaviour {
 		}
 	}
 
+	public void FullHeal()
+	{
+		health = maxHealth;
+	}
+
 	public void Heal(float healing)
 	{
 		if (health > 0)

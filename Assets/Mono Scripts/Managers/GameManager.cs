@@ -64,8 +64,9 @@ public class GameManager : MonoBehaviour
 
 	public void StartGame(IRandomList randList)
 	{
-
 		BroadcastMessage("OnGameStart", SendMessageOptions.DontRequireReceiver);
+
+		spawner.OnGameStart();
 
 		lastSpawnPool = randList;
 

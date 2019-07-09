@@ -49,6 +49,7 @@ MonoBehaviour:
   timeScale: 1
   duration: Infinity
   targetTransform: {fileID: 0}
+  parentScaleCompensation: 1
 --- !u!212 &212172534623217924
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -155,7 +156,7 @@ MonoBehaviour:
   maxPushForce: 50
   minExplosionDMG: 0
   maxExplosionDMG: 0
-  explosionRadius: 2.8
+  explosionRadius: 2.5
   fuse: 0.5
   useMask: 0
   explosionMask:
@@ -191,7 +192,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 3.3
+  m_Mass: 5
   m_LinearDrag: 0.8
   m_AngularDrag: 1
   m_GravityScale: 0.2

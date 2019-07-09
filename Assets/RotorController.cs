@@ -14,6 +14,8 @@ public class RotorController : MonoBehaviour
 
 	private float amountMoved = 12;
 
+	private bool cycling, cyclingLeft = false;
+
 	private void Start()
 	{
 		rotors[0].SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, spread));
@@ -87,18 +89,34 @@ public class RotorController : MonoBehaviour
 
 		} while (amountMoved < spread);
 
+		cycling = false;
+
 	}
 
-	public void CycleLeft()
+	public bool CycleLeft()
 	{
-		StopAllCoroutines();
-		StartCoroutine(CycleStep(true));
+		if (!(cycling && cyclingLeft))
+		{
+			StopAllCoroutines();
+			cycling = true;
+			cyclingLeft = true;
+			StartCoroutine(CycleStep(true));
+			return true;
+		}
+		return false;
 	}
 
-	public void CycleRight()
+	public bool CycleRight()
 	{
-		StopAllCoroutines();
-		StartCoroutine(CycleStep(false));
+		if (!(cycling && !cyclingLeft))
+		{
+			StopAllCoroutines();
+			cycling = true;
+			cyclingLeft = false;
+			StartCoroutine(CycleStep(false));
+			return true;
+		}
+		return false;
 	}
 
 

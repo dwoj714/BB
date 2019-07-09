@@ -128,7 +128,7 @@ Rigidbody2D:
   m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &58942356820694612
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -157,13 +157,13 @@ TrailRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_MotionVectors: 0
+  m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -183,7 +183,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Time: 0.06
+  m_Time: 0.08
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -191,19 +191,19 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.0022735596
-        value: 0.49650538
-        inSlope: -0.15324943
-        outSlope: -0.15324943
+        time: 0
+        value: 0.47117126
+        inSlope: -0.1840091
+        outSlope: -0.1840091
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.99088836
+        outWeight: 1
       - serializedVersion: 3
         time: 1
-        value: 0.34999755
-        inSlope: -0.15535307
-        outSlope: -0.15535307
+        value: 0.2893176
+        inSlope: -0.19041213
+        outSlope: -0.19041213
         tangentMode: 0
         weightedMode: 0
         inWeight: 1
@@ -213,7 +213,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0, a: 1}
+      key0: {r: 1, g: 0, b: 0, a: 0.40392157}
       key1: {r: 1, g: 0, b: 0, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -230,7 +230,7 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
+      atime1: 64957
       atime2: 0
       atime3: 0
       atime4: 0
@@ -240,7 +240,7 @@ TrailRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 12
+    numCornerVertices: 0
     numCapVertices: 12
     alignment: 0
     textureMode: 0

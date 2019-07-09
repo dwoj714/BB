@@ -14,7 +14,8 @@ public class BombController : PhysCircle, IHealable
 	public int pointValue = 10;
 	public int comboMult = 1;
 
-	public static float massMult = 1.5f;
+	public static float massMod = 1;
+	public static float healthMod = 1;
 
 	[HideInInspector]
 	public float gravity;
@@ -42,7 +43,11 @@ public class BombController : PhysCircle, IHealable
 	{
 		base.Awake();
 		rb = GetComponent<Rigidbody2D>();
-		rb.mass *= massMult;
+
+		rb.mass *= massMod;
+		hb.maxHealth *= healthMod;
+		hb.FullHeal();
+
 		detonator = GetComponent<Detonator>();
 		spr = GetComponent<SpriteRenderer>();
 		text = GetComponentInChildren<Text>();

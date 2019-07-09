@@ -97,4 +97,4 @@ MonoBehaviour:
   selfDestruct: 1
   trigger: 0
   timeScale: 3.33
-  outerEdge: 1
+  outerEdge: 1.618

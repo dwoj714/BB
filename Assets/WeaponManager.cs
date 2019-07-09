@@ -9,6 +9,8 @@ public class WeaponManager : MonoBehaviour
 
 	public Transform[] slots = new Transform[3];
 
+	public RotorController rotorController;
+
 	InputManager inputMan;
 	CircleCollider2D baseCol;
 
@@ -40,6 +42,14 @@ public class WeaponManager : MonoBehaviour
 		}
 	}
 
+	void OnGameStart()
+	{
+		foreach(EnergyUser weapon in weapons)
+		{
+			weapon.energy = weapon.maxEnergy;
+		}
+	}
+
 	public void SetWeaponSlot(GameObject pf, int i, bool isPrefab = false)
 	{
 		GameObject obj = Instantiate(pf, slots[i]);
@@ -48,11 +58,7 @@ public class WeaponManager : MonoBehaviour
 		IInputReciever recv = obj.GetComponent<IInputReciever>();
 		if (recv != null)
 		{
-			//if (isPrefab)
-			//{
-				//obj = Instantiate(pf, slots[i]);
-				obj.transform.localPosition = Vector3.up * 15;
-			//}
+			obj.transform.localPosition = Vector3.up * 15;
 
 			//If there's already an object in the slot, destroy it
 			if (weapons[i] != null)
@@ -82,22 +88,37 @@ public class WeaponManager : MonoBehaviour
 
 	public void Swap(bool left)
 	{
-		IInputReciever a = weapons[0];
-		IInputReciever b = weapons[1];
-		IInputReciever c = weapons[2];
+		bool canSwap = false;
 
 		if (left)
 		{
-			weapons[0] = c;
-			weapons[1] = a;
-			weapons[2] = b;
+			canSwap = rotorController.CycleLeft();
 		}
 		else
 		{
-			weapons[0] = b;
-			weapons[1] = c;
-			weapons[2] = a;
+			canSwap = rotorController.CycleRight();
 		}
-		inputMan.reciever = weapons[1];
+
+		if(canSwap)
+		{
+
+			IInputReciever a = weapons[0];
+			IInputReciever b = weapons[1];
+			IInputReciever c = weapons[2];
+
+			if (left)
+			{
+				weapons[0] = c;
+				weapons[1] = a;
+				weapons[2] = b;
+			}
+			else
+			{
+				weapons[0] = b;
+				weapons[1] = c;
+				weapons[2] = a;
+			}
+			inputMan.reciever = weapons[1];
+		}
 	}
 }

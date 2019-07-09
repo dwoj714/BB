@@ -6,6 +6,16 @@ public class Spawner : MonoBehaviour {
 
 	public float delay;
 
+	private int spawnCount = 0;
+
+	public int SpawnCount
+	{
+		get
+		{
+			return spawnCount;
+		}
+	}
+
 	public bool useChain;
 	[SerializeField]
 	private DropChain chain;
@@ -46,9 +56,10 @@ public class Spawner : MonoBehaviour {
 		}
 	}
 
-	private void Start()
+	public void OnGameStart()
 	{
-		clock = delay;
+		spawnCount = 0;
+		clock = delay/4;
 	}
 
 	void Update () {
@@ -64,6 +75,8 @@ public class Spawner : MonoBehaviour {
 
 	void SpawnObj()
 	{
+		spawnCount++;
+
 		Vector3 pos = transform.position;
 		pos.x = transform.position.x + (Random.value -0.5f) * transform.localScale.x;
 

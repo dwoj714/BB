@@ -13,6 +13,7 @@ public class VFXController : MonoBehaviour
 	private Color pColor;
 
 	public Transform targetTransform;
+	public bool parentScaleCompensation = true;
 
 	// Use this for initialization
 	void Awake()
@@ -62,7 +63,7 @@ public class VFXController : MonoBehaviour
 
 	public void SetRadius(float radius)
 	{
-		transform.localScale = Vector2.up * radius * 2 + Vector2.right * radius * 2;
+		transform.localScale = (Vector2.up + Vector2.right) * radius * 2 * (1 / transform.parent.lossyScale.x);
 	}
 
 	public bool Visible

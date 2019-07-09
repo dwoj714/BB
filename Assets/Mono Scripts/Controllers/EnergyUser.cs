@@ -67,4 +67,14 @@ public abstract class EnergyUser : MonoBehaviour
 		}
 		else return false;
 	}
+
+
+
+	public float EnergyPercentage
+	{
+		get
+		{
+			return energy / maxEnergy;
+		}
+	}
 }
