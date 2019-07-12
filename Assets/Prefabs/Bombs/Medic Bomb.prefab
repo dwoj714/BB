@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 5184456224714618679}
   - component: {fileID: 9090444000939164759}
   - component: {fileID: 7264693221671793044}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Medic Bomb
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ MonoBehaviour:
   broadRadius: 0.5
   effect: {fileID: 11400000, guid: 9efa30bd8e85b9241af1a8ff303a3c56, type: 2}
   FX: {fileID: 114391258043959108}
-  radius: 2.5
+  radius: 2.25
   delay: 2.2
 --- !u!114 &9090444000939164759
 MonoBehaviour:

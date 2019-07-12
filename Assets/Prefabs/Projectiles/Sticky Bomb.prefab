@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 2291657793121445892}
   - component: {fileID: 2268059238857250123}
   - component: {fileID: 5778496501228796847}
-  - component: {fileID: 5600112419719498309}
   m_Layer: 10
   m_Name: Sticky Bomb
   m_TagString: Projectile
@@ -33,7 +32,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 8364496051586931202}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -103,12 +103,12 @@ MonoBehaviour:
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
   chargeTime: 1
-  energyCost: 2.15
+  energyCost: 15
   maxSpeed: 20
   minSpeed: 8
   vfx: {fileID: 0}
   lifespan: Infinity
-  bounces: 3
+  bounces: 3000000
   hasFixedSpeed: 0
   detonator: {fileID: 0}
 --- !u!58 &2283941518873556214
@@ -147,7 +147,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &2268059238857250123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,24 +183,55 @@ RelativeJoint2D:
   m_GameObject: {fileID: 2268059238857250122}
   m_Enabled: 1
   serializedVersion: 4
-  m_EnableCollision: 1
+  m_EnableCollision: 0
   m_ConnectedRigidBody: {fileID: 0}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_MaxForce: 10000
-  m_MaxTorque: 10000
+  m_MaxTorque: 1000000
   m_CorrectionScale: 0.3
   m_AutoConfigureOffset: 1
   m_LinearOffset: {x: 0, y: 0}
   m_AngularOffset: 0
---- !u!96 &5600112419719498309
+--- !u!1 &6536353655280931029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8364496051586931202}
+  - component: {fileID: 2052282937392932480}
+  m_Layer: 10
+  m_Name: Trail
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8364496051586931202
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6536353655280931029}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2266155632787598352}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!96 &2052282937392932480
 TrailRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2268059238857250122}
+  m_GameObject: {fileID: 6536353655280931029}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1

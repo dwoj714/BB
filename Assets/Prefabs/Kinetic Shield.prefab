@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6347943448301126552}
   - component: {fileID: 6387675026004289206}
   - component: {fileID: 2721322799304795737}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Kinetic Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,7 +207,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 8be6341e1ce3f4cec9902bc34f72d20a, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0

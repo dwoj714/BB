@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 1720825758138407340}
   - component: {fileID: 4008968399648129768}
   - component: {fileID: 5840920370176812055}
-  m_Layer: 11
-  m_Name: Shield Bearer
+  m_Layer: 12
+  m_Name: Shield Bomb
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6117e37d92d3844cb10d08a8142fb55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: -0.8}
+  offset: {x: 0, y: -0.75}
   shieldPrefab: {fileID: 6347943448301126548, guid: c8458d8359ce4484eb1e2b1f6f7766c2,
     type: 3}
 --- !u!1 &3022458120637929586

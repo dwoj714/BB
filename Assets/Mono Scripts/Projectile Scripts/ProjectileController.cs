@@ -28,7 +28,7 @@ public class ProjectileController : AmmoType
 	protected override void Awake()
 	{
 		base.Awake();
-		gameObject.layer = 10;
+		if(gameObject.layer != 11) gameObject.layer = 10;
 		lifeTimer = lifespan;
 	}
 
@@ -68,7 +68,7 @@ public class ProjectileController : AmmoType
 			rb.velocity = rb.velocity.normalized * fixedSpeed;
 		}
 
-		if (!escaped && col.Distance(launcherCollider).distance > 0)
+		if (gameObject.layer != 11 && !escaped && col.Distance(launcherCollider).distance > 0)
 		{
 			escaped = true;
 			gameObject.layer = 9;

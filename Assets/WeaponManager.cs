@@ -101,6 +101,7 @@ public class WeaponManager : MonoBehaviour
 
 		if(canSwap)
 		{
+			weapons[1].OnInputCancel();
 
 			IInputReciever a = weapons[0];
 			IInputReciever b = weapons[1];

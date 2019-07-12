@@ -40,7 +40,7 @@ public class PhysCircle : MonoBehaviour
 	{
 		get
 		{
-			float greaterScale = transform.lossyScale.x > transform.lossyScale.y ? transform.lossyScale.z : transform.lossyScale.y;
+			float greaterScale = transform.lossyScale.x > transform.lossyScale.y ? transform.lossyScale.x : transform.lossyScale.y;
 			return col.radius * greaterScale;
 		}
 	}

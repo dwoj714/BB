@@ -97,6 +97,12 @@ public class LauncherController : EnergyUser, IInputReciever
 		indicator.ChargeFieldVisible = false;
 	}
 
+	public void OnInputCancel()
+	{
+		CancelShot();
+		OnInputReleased(Vector2.zero);
+	}
+
 	public void ReadyShot()
 	{
 		//If the required energy can be spent...

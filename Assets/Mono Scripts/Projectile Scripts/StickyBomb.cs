@@ -23,14 +23,23 @@ public class StickyBomb : ExplosiveProjectile
 	{
 		base.OnCollisionEnter2D(hit);
 
-		Rigidbody2D hitRb = hit.collider.GetComponent<Rigidbody2D>();
-		if (hitRb)
+		if(joint.connectedBody != null && hit.gameObject.layer == 12)
 		{
-			joint.connectedBody = hitRb;
+			BombController bomb = hit.collider.GetComponent<BombController>();
+			if (bomb)
+			{
+				joint.connectedBody = bomb.rb;
+				joint.enabled = true;
+			}
+			joint.linearOffset = joint.linearOffset.normalized * bomb.AdjustedRadius;
 		}
 
-		joint.enabled = true;
 		detonator.sparked = true;
+	}
+
+	private void OnDestroy()
+	{
+		Debug.Log(name + " what");
 	}
 
 	void OnExplosion()

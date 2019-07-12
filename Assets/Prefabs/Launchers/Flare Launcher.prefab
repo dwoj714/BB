@@ -97,8 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxEnergy: 100
-  rechargeRate: 5
-  rechargeDelay: 0.33
+  rechargeRate: 20
+  rechargeDelay: 0.6
   energy: 0
   indicator: {fileID: 7521479577167225360}
   maxDragLength: 2.5

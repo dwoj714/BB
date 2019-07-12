@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75faab82bd3415c47a22db17e119255d, type: 3}
-  m_Name: 25 Health Bonus
+  m_Name: 15 Health Bonus
   m_EditorClassIdentifier: 
   pulseEffect: {fileID: 0}
-  healAmount: 25
+  healAmount: 15
