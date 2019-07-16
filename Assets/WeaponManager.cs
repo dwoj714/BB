@@ -26,8 +26,6 @@ public class WeaponManager : MonoBehaviour
 		{
 			if (prefabs[i])
 			{
-				Debug.Log("Instance ID of prefab[" + i + "]: " + prefabs[i].GetInstanceID());
-				//weapons[i] = Instantiate(prefabs[i], slots[i]).GetComponent<IInputReciever>();
 				SetWeaponSlot(prefabs[i], i, true);
 			}
 		}

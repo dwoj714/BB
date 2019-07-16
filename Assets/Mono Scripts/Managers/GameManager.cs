@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviour
 	WeaponManager weaponManager;
 
 	IRandomList lastSpawnPool;
-	public GameObject gameOverMenu, mainMenu, inGameMenu;
+
+	[SerializeField] private GameObject gameOverMenu, mainMenu, inGameMenu;
 	public Text scoreText;
 	
 

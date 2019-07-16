@@ -6,6 +6,11 @@
 		_startTime("Start time", float) = 0
 		_timeScale("Time scale", float) = 1
 		_color("Color", Color) = (1,1,1,1)
+
+		_core("Core FX color", Color) = (1,1,0,1)
+		_depth("Core radius", Range(0, 1)) = 0.25
+		_thing("Frequency thingy", float) = 1
+
 		_glow("Glow Color", Color) = (1,1,1,0.25)
 		_dist("Glow Distance", Range(0,1)) = 0.1
 		_angle("Impact Angle", float) = 3.14
@@ -46,6 +51,9 @@
 			float _startTime;
 			float _timeScale;
 			float4 _color;
+			float4 _core;
+			float _thing;
+			float _depth;
 			float4 _glow;
 			float _dist;
 			float _angle;
@@ -74,10 +82,7 @@
 
 				//Should be the pixel's distance from the center
 				float grad = sqrt((i.uv.r - 0.5f)*(i.uv.r - 0.5f) * 4 + (i.uv.g - 0.5f)*(i.uv.g - 0.5f) * 4);
-				
-				float cosine = cos(_angle);
-				float sine = sin(_angle);
-				
+
 				float x = (i.uv.r - 0.5) * 2;
 				float y = (i.uv.g - 0.5) * 2;
 
@@ -86,23 +91,21 @@
 					col = lerp(_glow, _color, saturate(_time * _acc));
 				}
 
+				//code for the core FX (visible during weapon selection)
 
-				/*(if (((x < cosine + .2 && x > cosine - .2) && (y < sine + .2 && y > sine - .2)) && grad > 1-_dist)
+				float4 coreCol = _core;
+				coreCol.a *= sin( 16.18 / pow (pow(x,4) * (cos(6.28 + _thing * (x * y))/2 + .5), pow(y,4)) + _Time[1]);
+				//coreCol.a *= sin(16.18 / pow(pow(x, 4) * (cos(_thing * (x * y)) / 2 + .5), pow(y, 4)) + _Time[1]);
+				if (grad < _depth)
 				{
-					col = _glow;
-				}*/
-
-				/*
-
-
-				//_dist = 1-_dist;
-
-				if (grad > 1- _dist && _time < 1)
-				{
-					col = col +  _glow * ((grad - (1-_dist))) * _time * _timeScale;
-					col.a = 1;
+					col = coreCol;
 				}
-				*/
+				else
+				{
+					float share = saturate((grad - _depth) * 6);
+					col = (1 - share) * saturate(coreCol) + share * col;
+				}
+
 				return col;
 			}
 		ENDCG

@@ -16,35 +16,42 @@ public class StickyBomb : ExplosiveProjectile
 	void Start()
 	{
 		joint.enabled = false;
-		joint.connectedBody = GameObject.Find("World Rigidbody").GetComponent<Rigidbody2D>();
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		if (gameObject.layer == 11 && !joint.connectedBody)
+		{
+			gameObject.layer = 9;
+		}
+		Debug.Log(joint.connectedBody);
+
 	}
 
 	protected override void OnCollisionEnter2D(Collision2D hit)
 	{
 		base.OnCollisionEnter2D(hit);
 
-		if(joint.connectedBody != null && hit.gameObject.layer == 12)
+		//if we're not connected to something already, and we just hit a bomb...
+		if(!joint.connectedBody && hit.gameObject.layer == 12)
 		{
 			BombController bomb = hit.collider.GetComponent<BombController>();
 			if (bomb)
 			{
 				joint.connectedBody = bomb.rb;
 				joint.enabled = true;
+				joint.linearOffset = joint.linearOffset.normalized * bomb.AdjustedRadius;
+				gameObject.layer = 11;
 			}
-			joint.linearOffset = joint.linearOffset.normalized * bomb.AdjustedRadius;
 		}
-
 		detonator.sparked = true;
-	}
-
-	private void OnDestroy()
-	{
-		Debug.Log(name + " what");
 	}
 
 	void OnExplosion()
 	{
-		GameObject.Destroy(this.gameObject);
+		Destroy(this.gameObject);
 	}
 
 }

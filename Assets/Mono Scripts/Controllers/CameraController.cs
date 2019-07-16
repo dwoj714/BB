@@ -6,6 +6,11 @@ public class CameraController : MonoBehaviour
 {
 	GameManager manager;
 
+	public float shakeIntensity;
+	public float shakeLimit = 0.1f;
+
+	[SerializeField] private Material shaker;
+
 	public struct CamPreset
 	{
 		public float size;
@@ -38,7 +43,7 @@ public class CameraController : MonoBehaviour
 
 		presets.Add("Menu", new CamPreset(transform.position, cam.orthographicSize));
 		presets.Add("Game", new CamPreset(new Vector3(0,21.8f,-100), 8));
-		presets.Add("Loadout", new CamPreset(new Vector3(0, 18, -100), 8));
+		presets.Add("Loadout", new CamPreset(new Vector3(0, 11, -100), 8));
 
 		border = GetComponent<CollisionBorder>();
 	}
@@ -57,6 +62,11 @@ public class CameraController : MonoBehaviour
 				OnDestinationReached();
 			}
 		}
+
+		if (shakeIntensity > shakeLimit) shakeIntensity = shakeLimit;
+
+		shakeIntensity = Mathf.Lerp(shakeIntensity, 0, 0.2f);
+
 	}
 
 	void OnDestinationReached()
@@ -100,4 +110,11 @@ public class CameraController : MonoBehaviour
 
 		transitionSpeed = speed;
 	}
+
+	private void OnRenderImage(RenderTexture source, RenderTexture destination)
+	{
+		shaker.SetFloat("_mag", shakeIntensity);
+		Graphics.Blit(source, destination, shaker);
+	}
+
 }

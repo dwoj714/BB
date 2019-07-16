@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6117e37d92d3844cb10d08a8142fb55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: -0.75}
+  offset: {x: 0, y: -0.6}
   shieldPrefab: {fileID: 6347943448301126548, guid: c8458d8359ce4484eb1e2b1f6f7766c2,
     type: 3}
 --- !u!1 &3022458120637929586

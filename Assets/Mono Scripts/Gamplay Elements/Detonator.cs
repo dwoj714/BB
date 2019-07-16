@@ -9,12 +9,14 @@ public class Detonator : MonoBehaviour {
 	[HideInInspector]
 	public ComboIncrement incrementer;
 
-	private ExplosionParameters defaultParameters;
+	//private ExplosionParameters defaultParameters;
 
 	public float minPushForce, maxPushForce;
 	public float minExplosionDMG, maxExplosionDMG;
 	public float explosionRadius;
 	public float fuse = .5f;
+
+	CameraController cam;
 
 	public bool useMask = false;
 
@@ -22,7 +24,7 @@ public class Detonator : MonoBehaviour {
 
 	float fuseTimer;
 
-	public struct ExplosionParameters
+	/*public struct ExplosionParameters
 	{
 		public float minPush, maxPush, minDMG, maxDMG, radius;
 
@@ -34,7 +36,7 @@ public class Detonator : MonoBehaviour {
 			maxDMG = maxD;
 			radius = rad;
 		}
-	}
+	}*/
 
 	//When this is true, the fuse is shortened via deltaTime
 	public bool sparked;
@@ -48,10 +50,11 @@ public class Detonator : MonoBehaviour {
 	{
 		fuseTimer = fuse;
 		circle = GetComponent<PhysCircle>();
-		explosionMask = LayerMask.GetMask("Everything");
 		incrementer = ScriptableObject.CreateInstance<ComboIncrement>();
 
-		defaultParameters = new ExplosionParameters(explosionRadius, minPushForce, maxPushForce, minExplosionDMG, maxExplosionDMG);
+		cam = Camera.main.GetComponent<CameraController>();
+
+		//defaultParameters = new ExplosionParameters(explosionRadius, minPushForce, maxPushForce, minExplosionDMG, maxExplosionDMG);
 	}
 
 	void Update()
@@ -77,6 +80,8 @@ public class Detonator : MonoBehaviour {
 
 	public void Explode()
 	{
+		cam.shakeIntensity += Mathf.Log(Mathf.Sqrt(explosionRadius), 50)/2;
+
 		//When exploding, check for colliders within the blast radius
 		Collider2D[] results;
 		if (useMask)

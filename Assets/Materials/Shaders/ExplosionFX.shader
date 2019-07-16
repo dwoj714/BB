@@ -83,7 +83,10 @@
 				if(col.a >= _outer + 1.618 - _time*1.618)
 				{
 					if(_timeScale>0)
+					{
 						col = _bg;
+						col.a *= saturate(1 - _time * _time);
+					}
 				}
 
 				return col;

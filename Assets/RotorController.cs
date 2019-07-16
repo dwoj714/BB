@@ -31,8 +31,6 @@ public class RotorController : MonoBehaviour
 
 	IEnumerator CycleStep(bool left)
 	{
-		Debug.Log(slots[0] + ", " + slots[1] + ", " + slots[2]);
-
 		amountMoved = spread - amountMoved;
 
 		float rotaionStep;

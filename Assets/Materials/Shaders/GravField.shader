@@ -74,7 +74,7 @@
 
 				//col.a *= ((grad + _time) % _freq) / grad;
 				//col.a *= pow((_freq - (grad + _time) % _freq + .1f) / grad, 1);
-				col.a *= (_freq - (grad + _time) % _freq + .1f) / saturate(5 * grad);
+				col.a *= (_freq - (grad + _time) % _freq + .1f) / (grad + (grad/2));
 
 				return col;
 			}
