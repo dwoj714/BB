@@ -458,7 +458,6 @@ GameObject:
   - component: {fileID: 6504262224847996185}
   - component: {fileID: 6504262224847996186}
   - component: {fileID: 6504262224847996187}
-  - component: {fileID: 6504262224847996191}
   m_Layer: 0
   m_Name: Splitslug Launcher
   m_TagString: Untagged
@@ -552,22 +551,6 @@ MonoBehaviour:
   minDragLength: 0.25
   collider: {fileID: 0}
   ammo: {fileID: 114915006262516896, guid: 744739dc5c9488e458c5c70d83902821, type: 3}
---- !u!58 &6504262224847996191
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6504262224847996132}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!1001 &5630996388395151633
 PrefabInstance:
   m_ObjectHideFlags: 0

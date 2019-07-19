@@ -8,26 +8,39 @@ public class RotorController : MonoBehaviour
 	public float swapTime = 1;
 	public Transform[] rotors = new Transform[3];
 
-	private readonly int[] slots = { 0, 1, 2 };
+	[SerializeField] private int[] slots;
+
+	public int[] Slots
+	{
+		get
+		{
+			return slots;
+		}
+	}
 
 	private Quaternion quatAlloc;
 
-	private float amountMoved = 12;
+	private float amountMoved;
 
 	private bool cycling, cyclingLeft = false;
 
 	private void Start()
 	{
-		rotors[0].SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, spread));
-		rotors[1].SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
-		rotors[2].SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, -spread));
-	}
+		int mid = rotors.Length / 2;
+		for(int i = 0; i < rotors.Length; i++)
+		{
+			rotors[i].SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, (mid - i ) * spread));
+		}
 
-	// Update is called once per frame
-	void Update()
-    {
- 
-    }
+		slots = new int[rotors.Length];
+		for(int i = 0; i < slots.Length; i++)
+		{
+			slots[i] = i;
+		}
+
+		amountMoved = spread;
+
+	}
 
 	IEnumerator CycleStep(bool left)
 	{
@@ -47,26 +60,30 @@ public class RotorController : MonoBehaviour
 			if(!halfway && amountMoved / spread > 0.5f)
 			{
 				halfway = true;
-				int idx = left ? 2 : 0;
+				int idx = left ? rotors.Length - 1 : 0;
 
 				//Move the offscreen rotor to the opposite side
-				rotors[slots[idx]].Rotate(Vector3.forward, 3f * spread * (left ? 1 : -1));
+				rotors[slots[idx]].Rotate(Vector3.forward, rotors.Length * spread * (left ? 1 : -1));
 
-				//set the order accordingly
-				int a = slots[0];
-				int b = slots[1];
-				int c = slots[2];
+				int[] temp = (int[]) slots.Clone();
+
 				if (left)
 				{
-					slots[0] = c;
-					slots[1] = a;
-					slots[2] = b;
+					for(int i = 1; i < slots.Length; i++)
+					{
+						slots[i] = temp[i - 1];
+					}
+					slots[0] = temp[slots.Length - 1];
+
 				}
 				else
 				{
-					slots[0] = b;
-					slots[1] = c;
-					slots[2] = a;
+					for(int i=0;i<slots.Length - 1; i++)
+					{
+						slots[i] = temp[i + 1];
+					}
+					slots[slots.Length - 1] = temp[0];
+
 				}
 			}
 
@@ -117,9 +134,25 @@ public class RotorController : MonoBehaviour
 		return false;
 	}
 
+	public void CycleLeftButton()
+	{
+		if (!cycling)
+		{
+			CycleLeft();
+		}
+	}
 
-	[ExecuteInEditMode]
-	private void OnDrawGizmos()
+	public void CycleRightButton()
+	{
+		if (!cycling)
+		{
+			CycleRight();
+		}
+	}
+
+
+	//[ExecuteInEditMode]
+	/*private void OnDrawGizmos()
 	{
 		float scale = 0.5f;
 		Gizmos.color = Color.blue;
@@ -139,5 +172,5 @@ public class RotorController : MonoBehaviour
 			Vector3[] positions = { rotors[0].up * 15, rotors[1].up * 15, rotors[2].up * 15 };
 			return positions;
 		}
-	}
+	}*/
 }

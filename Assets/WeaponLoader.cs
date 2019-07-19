@@ -4,29 +4,40 @@ using UnityEngine;
 
 public class WeaponLoader : MonoBehaviour
 {
-
-	public GameObject weaponObj;
-	public WeaponManager manager;
+	RotorController rotor;
+	WeaponManager manager;
 
     // Start is called before the first frame update
     void Start()
     {
 		manager = GameObject.Find("Game Manager").GetComponent<WeaponManager>();
+		rotor = GameObject.Find("Weapon Wheel Rotor").GetComponent<RotorController>();
     }
 
-	public void Equip1()
+	public void EquipLeft()
 	{
-		manager.SetWeaponSlot(weaponObj, 1);
+		Debug.Log("Equipping prefab from slot " + PrefabIndex);
+		manager.SetWeaponSlot(manager.prefabs[PrefabIndex], WeaponManager.LeftIdx);
 	}
 
-	public void Equip2()
+	public void EquipMid()
 	{
-		manager.SetWeaponSlot(weaponObj, 2);
+		Debug.Log("Equipping prefab from slot " + PrefabIndex);
+		manager.SetWeaponSlot(manager.prefabs[PrefabIndex], WeaponManager.MiddleIdx);
 	}
 
-	public void Equip3()
+	public void EquipRight()
 	{
-		manager.SetWeaponSlot(weaponObj, 3);
+		Debug.Log("Equipping prefab from slot " + PrefabIndex);
+		manager.SetWeaponSlot(manager.prefabs[PrefabIndex], WeaponManager.RightIdx);
+	}
+
+	private int PrefabIndex
+	{
+		get
+		{
+			return rotor.Slots[rotor.Slots.Length / 2];
+		}
 	}
 
 }

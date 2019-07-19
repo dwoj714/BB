@@ -101,11 +101,11 @@ MonoBehaviour:
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
   chargeTime: 2
-  energyCost: 75
+  energyCost: 100
   maxSpeed: 10
   minSpeed: 4
   vfx: {fileID: 0}
-  lifespan: Infinity
+  lifespan: 20
   bounces: 5000
   hasFixedSpeed: 0
 --- !u!50 &1344252239080468775

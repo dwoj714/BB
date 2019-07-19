@@ -103,7 +103,7 @@ MonoBehaviour:
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
   chargeTime: 1
-  energyCost: 15
+  energyCost: 16.66
   maxSpeed: 20
   minSpeed: 8
   vfx: {fileID: 0}
@@ -167,7 +167,7 @@ MonoBehaviour:
   minExplosionDMG: 0
   maxExplosionDMG: 0
   explosionRadius: 1.2
-  fuse: 1.2
+  fuse: 1.1
   useMask: 1
   explosionMask:
     serializedVersion: 2

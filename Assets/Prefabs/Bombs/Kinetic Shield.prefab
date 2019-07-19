@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6347943448301126552}
   - component: {fileID: 6387675026004289206}
   - component: {fileID: 2721322799304795737}
-  m_Layer: 12
+  m_Layer: 13
   m_Name: Kinetic Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: dfb8e9eee5ea3c247a911eb580de0fde, type: 3}
-  m_Color: {r: 0, g: 0.832947, b: 1, a: 0.6431373}
+  m_Color: {r: 0, g: 0.832947, b: 1, a: 0.37254903}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

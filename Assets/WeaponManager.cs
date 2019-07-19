@@ -7,7 +7,7 @@ public class WeaponManager : MonoBehaviour
 	[Header("Weapon prefabs")]
 	public List<GameObject> prefabs = new List<GameObject>();
 
-	public Transform[] slots = new Transform[3];
+	[SerializeField] private Transform[] slots = new Transform[3];
 
 	public RotorController rotorController;
 
@@ -15,6 +15,7 @@ public class WeaponManager : MonoBehaviour
 	CircleCollider2D baseCol;
 
 	private IInputReciever[] weapons = new IInputReciever[3];
+	private static int activeWeapon = 1;
 	
 	void Start()
 	{
@@ -46,6 +47,9 @@ public class WeaponManager : MonoBehaviour
 		{
 			weapon.energy = weapon.maxEnergy;
 		}
+
+		inputMan.reciever = weapons[MiddleIdx];
+
 	}
 
 	public void SetWeaponSlot(GameObject pf, int i, bool isPrefab = false)
@@ -61,7 +65,8 @@ public class WeaponManager : MonoBehaviour
 			//If there's already an object in the slot, destroy it
 			if (weapons[i] != null)
 			{
-				Destroy(((MonoBehaviour)recv).gameObject);
+				//Destroy(((MonoBehaviour)recv).gameObject);
+				Destroy(((MonoBehaviour)weapons[i]).gameObject);
 			}
 
 			weapons[i] = recv;
@@ -99,25 +104,62 @@ public class WeaponManager : MonoBehaviour
 
 		if(canSwap)
 		{
-			weapons[1].OnInputCancel();
 
-			IInputReciever a = weapons[0];
-			IInputReciever b = weapons[1];
-			IInputReciever c = weapons[2];
-
-			if (left)
+			switch (activeWeapon)
 			{
-				weapons[0] = c;
-				weapons[1] = a;
-				weapons[2] = b;
+				case 0:
+					activeWeapon = left ? 2 : activeWeapon + 1;
+					break;
+
+				case 1:
+					activeWeapon += left ? -1 : 1;
+					break;
+
+				case 2:
+					activeWeapon = left ? activeWeapon - 1 : 0;
+					break;
+			}
+
+			inputMan.reciever = weapons[activeWeapon];
+		}
+	}
+
+	public static int MiddleIdx
+	{
+		get
+		{
+			return activeWeapon;
+		}
+	}
+
+	public static int LeftIdx
+	{
+		get
+		{
+			if(activeWeapon == 0)
+			{
+				return 2;
 			}
 			else
 			{
-				weapons[0] = b;
-				weapons[1] = c;
-				weapons[2] = a;
+				return activeWeapon - 1;
 			}
-			inputMan.reciever = weapons[1];
 		}
 	}
+
+	public static int RightIdx
+	{
+		get
+		{
+			if (activeWeapon == 2)
+			{
+				return 0;
+			}
+			else
+			{
+				return activeWeapon + 1;
+			}
+		}
+	}
+
 }

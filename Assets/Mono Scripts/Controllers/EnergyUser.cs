@@ -59,7 +59,7 @@ public abstract class EnergyUser : MonoBehaviour
 	//Returns false if the given energy cannot be spent
 	public bool SpendEnergy(float cost)
 	{
-		if (cost < energy)
+		if (cost <= energy)
 		{
 			energy -= cost;
 			delayTimer = 0;

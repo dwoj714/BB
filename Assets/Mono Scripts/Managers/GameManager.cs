@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
 	IRandomList lastSpawnPool;
 
-	[SerializeField] private GameObject gameOverMenu, mainMenu, inGameMenu;
+	[SerializeField] private GameObject gameOverMenu, mainMenu, inGameMenu, loadoutMenu, swapButtons;
 	public Text scoreText;
 	
 
@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
 		spawner.enabled = false;
 		gameOverMenu.SetActive(false);
 		mainMenu.SetActive(true);
+		swapButtons.SetActive(false);
+		loadoutMenu.SetActive(false);
 	}
 
 	private void Update()
@@ -66,9 +68,7 @@ public class GameManager : MonoBehaviour
 	public void StartGame(IRandomList randList)
 	{
 		BroadcastMessage("OnGameStart", SendMessageOptions.DontRequireReceiver);
-
 		spawner.OnGameStart();
-
 		lastSpawnPool = randList;
 
 		if (randList.GetType() == typeof(DropPool))
@@ -93,7 +93,8 @@ public class GameManager : MonoBehaviour
 		scoreText.text = score.ToString();
 		gameOverMenu.SetActive(false);
 		mainMenu.SetActive(false);
-
+		swapButtons.SetActive(true);
+		loadoutMenu.SetActive(false);
 		launcherBase.enabled = true;
 		spawner.enabled = true;
 		PurgeGameplayObjects();
@@ -109,6 +110,7 @@ public class GameManager : MonoBehaviour
 		gameOverMenu.SetActive(true); 
 		launcherBase.enabled = false;
 		spawner.enabled = false;
+		swapButtons.SetActive(false);
 		launcherBase.charges = 0;
 	}
 
@@ -123,7 +125,9 @@ public class GameManager : MonoBehaviour
 		Debug.Log("GoToMenu()");
 		gameOverMenu.SetActive(false);
 		inGameMenu.SetActive(false);
+		loadoutMenu.SetActive(false);
 		mainMenu.SetActive(true);
+		PurgeGameplayObjects();
 		camController.SetDestination("Menu");
 	}
 
@@ -131,8 +135,8 @@ public class GameManager : MonoBehaviour
 	{
 		mainMenu.SetActive(false);
 		camController.SetDestination("Loadout");
-
-
+		swapButtons.SetActive(false);
+		loadoutMenu.SetActive(true);
 	}
 
 	public void PurgeGameplayObjects()
