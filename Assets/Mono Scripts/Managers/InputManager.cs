@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour {
 
 	void Update ()
 	{
-		if (GameManager.gameInProgress && !inputPause)
+		if (GameManager.gameInProgress && !inputPause && !GameManager.paused)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{

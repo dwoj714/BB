@@ -91,6 +91,8 @@ public class WeaponManager : MonoBehaviour
 
 	public void Swap(bool left)
 	{
+		inputMan.reciever.OnInputCancel();
+
 		bool canSwap = false;
 
 		if (left)

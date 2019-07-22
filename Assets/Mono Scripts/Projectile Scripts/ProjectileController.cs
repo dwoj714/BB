@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileController : AmmoType
+public class ProjectileController : Launchable
 {
 	//The launcher uses a percentage to determine actual speed. 
 	//0% results in minSpeed, 100% results in maxSpeed

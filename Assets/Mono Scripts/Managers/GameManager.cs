@@ -4,6 +4,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public class GameManager : MonoBehaviour
 {
+
 	BaseController launcherBase;
 	Spawner spawner;
 	CameraController camController;
@@ -12,14 +13,16 @@ public class GameManager : MonoBehaviour
 
 	IRandomList lastSpawnPool;
 
-	[SerializeField] private GameObject gameOverMenu, mainMenu, inGameMenu, loadoutMenu, swapButtons;
+	[SerializeField] private GameObject gameOverMenu, mainMenu, inGameMenu, pauseMenu, loadoutMenu, swapButtons;
 	public Text scoreText;
-	
+
+	//used to restore altered time when pausing/unpausing game.
+	private float storedTimeScale;
 
 	[HideInInspector]
-	public int score = 0;
+	public static int score = 0;
 
-	public static bool gameInProgress = false;
+	public static bool gameInProgress, paused = false;
 
 	private void Start()
 	{
@@ -30,13 +33,14 @@ public class GameManager : MonoBehaviour
 		weaponManager = GetComponent<WeaponManager>();
 		scoreText.text = score.ToString();
 
+		mainMenu.SetActive(true);
 		inGameMenu.SetActive(false);
 		launcherBase.enabled = false;
 		spawner.enabled = false;
 		gameOverMenu.SetActive(false);
-		mainMenu.SetActive(true);
 		swapButtons.SetActive(false);
 		loadoutMenu.SetActive(false);
+		pauseMenu.SetActive(false);
 	}
 
 	private void Update()
@@ -103,6 +107,34 @@ public class GameManager : MonoBehaviour
 		camController.SetDestination("Game");
 	}
 
+	public void PauseGame()
+	{
+		storedTimeScale = Time.timeScale;
+		Time.timeScale = 0;
+
+		pauseMenu.SetActive(true);
+		paused = true;
+	}
+
+	public void ResumeGame()
+	{
+		Time.timeScale = storedTimeScale;
+		pauseMenu.SetActive(false);
+		paused = false;
+	}
+
+	public void TogglePaused()
+	{
+		if (paused)
+		{
+			ResumeGame();
+		}
+		else
+		{
+			PauseGame();
+		}
+	}
+
 	public void EndGame()
 	{
 		Debug.Log("EndGame()");
@@ -154,8 +186,11 @@ public class GameManager : MonoBehaviour
 	
 	public void AddScore(int points)
 	{
-		score += points;
-		scoreText.text = score.ToString();
+		if (gameInProgress)
+		{
+			score += points;
+			scoreText.text = score.ToString();
+		}
 	}
 
 	public void OnBombDestroy()

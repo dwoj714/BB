@@ -9,7 +9,7 @@
 
 		_core("Core FX color", Color) = (1,1,0,1)
 		_depth("Core radius", Range(0, 1)) = 0.25
-		_thing("Frequency thingy", float) = 1
+		//_thing("Frequency thingy", float) = 1
 
 		_glow("Glow Color", Color) = (1,1,1,0.25)
 		_dist("Glow Distance", Range(0,1)) = 0.1
@@ -94,17 +94,17 @@
 				//code for the core FX (visible during weapon selection)
 
 				float4 coreCol = _core;
-				coreCol.a *= sin( 16.18 / pow (pow(x,4) * (cos(6.28 + _thing * (x * y))/2 + .5), pow(y,4)) + _Time[1]);
+				//coreCol.a *= sin( 16.18 / pow (pow(x,4) * (cos(6.28 + _thing * (x * y))/2 + .5), pow(y,4)) + _Time[1]);
 				//coreCol.a *= sin(16.18 / pow(pow(x, 4) * (cos(_thing * (x * y)) / 2 + .5), pow(y, 4)) + _Time[1]);
 				if (grad < _depth)
 				{
 					col = coreCol;
 				}
-				else
+				/*else
 				{
 					float share = saturate((grad - _depth) * 6);
 					col = (1 - share) * saturate(coreCol) + share * col;
-				}
+				}*/
 
 				return col;
 			}

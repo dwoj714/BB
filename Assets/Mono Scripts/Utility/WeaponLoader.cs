@@ -36,7 +36,8 @@ public class WeaponLoader : MonoBehaviour
 	{
 		get
 		{
-			return rotor.Slots[rotor.Slots.Length / 2];
+			return rotor.MedianIdx;
+			//return rotor.Slots[rotor.Slots.Length / 2];
 		}
 	}
 

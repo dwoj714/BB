@@ -8,10 +8,10 @@ public abstract class EnergyUser : MonoBehaviour
 	[Header("Energy Pool")]
 	public float maxEnergy = 100;
 	public float rechargeRate = 5;
-	public float rechargeDelay = .33f;
+	protected bool recharging = true;
 	[HideInInspector]
 	public float energy;        //Holds energy amount
-	private float delayTimer;   //Counts down until energy can recharge after being used;
+	protected float delayTimer;   //Counts down until energy can recharge after being used;
 
     // Update is called once per frame
     protected virtual void Update()
@@ -32,8 +32,8 @@ public abstract class EnergyUser : MonoBehaviour
 			OnEnergyDeplete();
 		}
 
-		//If the recharge time is expired, increase energy  if it's below max
-		if (delayTimer >= rechargeDelay)
+		//If the recharge time is expired, increase energy if it's below max
+		if (delayTimer <= 0 && recharging)
 		{
 			if (energy < maxEnergy)
 			{
@@ -44,9 +44,9 @@ public abstract class EnergyUser : MonoBehaviour
 				energy = maxEnergy;
 			}
 		}
-		else if (delayTimer < rechargeRate)
+		else if (delayTimer > 0)
 		{
-			delayTimer += Time.deltaTime;
+			delayTimer -= Time.deltaTime;
 		}
 	}
 

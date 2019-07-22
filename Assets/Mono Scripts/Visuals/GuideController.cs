@@ -33,24 +33,24 @@ public class GuideController : MonoBehaviour
 
 	private void Update()
 	{
-		if (!armedLastFrame && launcher.Armed())
+		if (!armedLastFrame && launcher.Armed)
 		{
 			SetVisible(true);
 		}
 
-		if (launcher.Armed())
+		if (launcher.Armed)
 		{
 			Aim(-launcher.Drag, launcher.PullPercentage);
 		}
 
-		if (armedLastFrame && !launcher.Armed())
+		if (armedLastFrame && !launcher.Armed)
 		{
 			SetVisible(false);
 			line.SetPosition(0, Vector3.zero);
 			tipObj.transform.localPosition = Vector2.zero;
 		}
 
-		armedLastFrame = launcher.Armed();
+		armedLastFrame = launcher.Armed;
 	}
 
 	//Power should be between 0 and 1

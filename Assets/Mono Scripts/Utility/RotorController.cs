@@ -18,11 +18,17 @@ public class RotorController : MonoBehaviour
 		}
 	}
 
-	private Quaternion quatAlloc;
-
 	private float amountMoved;
 
 	private bool cycling, cyclingLeft = false;
+
+	public int MedianIdx
+	{
+		get
+		{
+			return slots[slots.Length / 2];
+		}
+	}
 
 	private void Start()
 	{

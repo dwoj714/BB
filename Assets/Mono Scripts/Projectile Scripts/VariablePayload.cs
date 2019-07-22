@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VariablePayload : AmmoType
+public class VariablePayload : Launchable
 {
 	[Range(0, 1)]
 	public float transitionPower = 0.5f;
 
 	//Projectile Type to launch when power is below transitionPower
-	public AmmoType lowPowerAmmo;
+	public Launchable lowPowerAmmo;
 
 	//Projectile type to launch when power is above transitionPower
-	public AmmoType highPowerAmmo;
+	public Launchable highPowerAmmo;
 
 	public override void Launch(Vector2 direction, float power)
 	{
 		//Debug.Log("Base Power: " + power + (power < transitionPower));
 		if(power < transitionPower)
 		{
-			AmmoType shot = Instantiate(lowPowerAmmo, transform.position, Quaternion.identity);
+			Launchable shot = Instantiate(lowPowerAmmo, transform.position, Quaternion.identity);
 
 			shot.launcherCollider = launcherCollider;
 
@@ -29,7 +29,7 @@ public class VariablePayload : AmmoType
 		}
 		else
 		{
-			AmmoType shot = Instantiate(highPowerAmmo, transform.position, Quaternion.identity);
+			Launchable shot = Instantiate(highPowerAmmo, transform.position, Quaternion.identity);
 
 			shot.launcherCollider = launcherCollider;
 

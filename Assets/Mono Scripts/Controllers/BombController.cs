@@ -16,6 +16,7 @@ public class BombController : PhysCircle, IHealable
 
 	public static float massMod = 1;
 	public static float healthMod = 1;
+	public static bool showHealth = false;
 
 	[HideInInspector]
 	public float gravity;
@@ -52,6 +53,11 @@ public class BombController : PhysCircle, IHealable
 		spr = GetComponent<SpriteRenderer>();
 		text = GetComponentInChildren<Text>();
 		gravity = rb.gravityScale;
+
+		if (!showHealth)
+		{
+			text.enabled = false;
+		}
 	}
 
 	protected virtual void Start()

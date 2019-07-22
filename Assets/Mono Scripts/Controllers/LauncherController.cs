@@ -5,25 +5,27 @@ using UnityEngine;
 public class LauncherController : EnergyUser, IInputReciever
 {
 
+	public float shotCost;
+
+	[Header("Aiming")]
+
+	private float charge = 0;
+	public float chargeTime = 1;
+	
+	private Vector2 clickPos, dragPos;
+	public static float maxDragLength = 2.5f;
+	public static float minDragLength = 0.15f;
+
 	public IGController indicator;
 
-	Vector2 clickPos, dragPos;
-
-	public float maxDragLength = 5;
-	public float minDragLength = 0.25f;
-
-	private float charge;
-
-	private float chargeTime;
-
-	public CircleCollider2D collider;
+	new public CircleCollider2D collider;
 
 	//Projectile to be copied
 	[SerializeField]
-	private AmmoType ammo;
+	private Launchable ammo;
 
 	//Holds a reference to a copy of ammo, to be manipulated;
-	private AmmoType shot;
+	private Launchable shot;
 
 	public Vector2 Drag
 	{
@@ -40,35 +42,9 @@ public class LauncherController : EnergyUser, IInputReciever
 		InitEnergy();
 	}
 
-	protected override void Update()
-	{
-		base.Update();
-
-		if(Input.GetMouseButton(0) && ChargePercentage != 1)
-		{
-			chargeTime += Time.deltaTime;
-		}
-		if(Input.GetMouseButtonUp(0))
-		{
-			//Debug.Log("Time for charge: "+chargeTime);
-			chargeTime = 0;
-		}
-
-		//If the mouse is down, increase charge by deltaTime while it's less than chargeTime
-		if (shot && charge < shot.chargeTime)
-		{
-			charge += Time.deltaTime;
-
-			if (charge > shot.chargeTime)
-			{
-				charge = shot.chargeTime;
-			}
-		}
-	}
-
 	void FixedUpdate()
 	{
-		if (shot) AimShot();
+		if (Armed) AimShot();
 	}
 
 	public void OnInputStart(Vector2 position)
@@ -81,16 +57,30 @@ public class LauncherController : EnergyUser, IInputReciever
 	{
 		dragPos = position;
 
-		if (!Armed() && Drag.magnitude >= minDragLength)
+		//If the input is dragged far enough, make the charge field visible and attempt to ready a shot. 
+		if (!Armed && Drag.magnitude >= minDragLength)
 		{
 			indicator.ChargeFieldVisible = true;
 			ReadyShot();
+		}
+		//If the launcher is armed, charge the shot until it's fully charged.
+		else if (Armed)
+		{
+			if (charge < chargeTime)
+			{
+				charge += Time.deltaTime;
+
+				if(charge > chargeTime)
+				{
+					charge = chargeTime;
+				}
+			}
 		}
 	}
 
 	public void OnInputReleased(Vector2 position)
 	{
-		if (Armed())
+		if (Armed)
 		{
 			LaunchShot();
 		}
@@ -100,37 +90,43 @@ public class LauncherController : EnergyUser, IInputReciever
 	public void OnInputCancel()
 	{
 		CancelShot();
+		recharging = true;
 		OnInputReleased(Vector2.zero);
+		indicator.ChargeFieldVisible = false;
 	}
 
-	public void ReadyShot()
+	private void ReadyShot()
 	{
 		//If the required energy can be spent...
-		if (!Armed() && SpendEnergy(Ammo.energyCost))
+		if (!Armed && SpendEnergy(shotCost))
 		{
 			//create a copy of ammo, position it at the center of the launcher
-			shot = Instantiate(Ammo, transform.position, Quaternion.identity).GetComponent<AmmoType>();
+			shot = Instantiate(Ammo, transform.position, Quaternion.identity).GetComponent<Launchable>();
 			shot.launcherCollider = collider;
+			recharging = false;
+			delayTimer = chargeTime;
 		}
 	}
 
-	public void AimShot()
+	private void AimShot()
 	{
 		shot.rb.MovePosition((Vector2)transform.position + Pull/ maxDragLength);
 	}
 
-	public void LaunchShot()
+	private void LaunchShot()
 	{
 		if (shot && Drag.sqrMagnitude >= Mathf.Pow(minDragLength, 2))
 		{
+			//launch the shot, re-enable energy recharge
 			shot.Launch(-Pull, PullPercentage);
+			recharging = true;
 		}
 		else
 		{
 			CancelShot();
 		}
-		//ComboCounter cc = shot.gameObject.AddComponent<ComboCounter>();
 
+		//clear the shot variable, reset charge variable
 		shot = null;
 		charge = 0;
 	}
@@ -139,10 +135,15 @@ public class LauncherController : EnergyUser, IInputReciever
 	{
 		if (shot)
 		{
+			//Destroy the shot object, refund the energy, and reset charge.
 			Destroy(shot.gameObject);
-			energy += shot.energyCost;
+			energy += shotCost;
 			shot = null;
 			charge = 0;
+
+			//immediately resume recharging energy
+			recharging = true;
+			delayTimer = 0;
 		}
 	}
 
@@ -150,7 +151,7 @@ public class LauncherController : EnergyUser, IInputReciever
 	{
 		get
 		{
-			return charge / Ammo.chargeTime;
+			return charge / chargeTime;
 		}
 	}
 
@@ -159,9 +160,12 @@ public class LauncherController : EnergyUser, IInputReciever
 		return (Drag / maxDragLength * ChargePercentage).magnitude;
 	}
 
-	public bool Armed()
+	public bool Armed
 	{
-		return shot;
+		get
+		{
+			return shot;
+		}
 	}
 
 	//Returns the drag value set by the input manager clamped to what the launcher allows for (bound by max length and current charge)
@@ -181,7 +185,7 @@ public class LauncherController : EnergyUser, IInputReciever
 		}
 	}
 
-	public AmmoType Ammo
+	public Launchable Ammo
 	{
 		get
 		{

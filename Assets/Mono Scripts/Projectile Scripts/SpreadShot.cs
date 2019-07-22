@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpreadShot : AmmoType
+public class SpreadShot : Launchable
 {
 	public int shotCount = 5;
-	public AmmoType projectileType;
+	public Launchable projectileType;
 	public float minSpreadDegrees, maxSpreadDegrees = 45;
 
 	//Launches [shotcount] projectiles in an arc [spreadDegrees] degrees wide
 	public override void Launch(Vector2 direction, float power)
 	{
 		direction.Normalize();
-		AmmoType shot;
+		Launchable shot;
 
 		//Degrees of shot spreading between min and max spread degrees based on power
 		float spreadDegrees = (maxSpreadDegrees - minSpreadDegrees) * power + minSpreadDegrees;

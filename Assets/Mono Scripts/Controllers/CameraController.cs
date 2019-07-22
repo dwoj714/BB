@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	GameManager manager;
-
 	public float shakeIntensity;
 	public float shakeLimit = 0.1f;
 
+	public static bool screenShakeEnabled = true;
+
 	[SerializeField] private Material shaker;
+
+	private int nameID;
 
 	public struct CamPreset
 	{
@@ -39,11 +41,11 @@ public class CameraController : MonoBehaviour
 	void Start()
 	{
 		cam = GetComponent<Camera>();
-		manager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-
 		presets.Add("Menu", new CamPreset(transform.position, cam.orthographicSize));
 		presets.Add("Game", new CamPreset(new Vector3(0,21.8f,-100), 8));
-		presets.Add("Loadout", new CamPreset(new Vector3(0, 11, -100), 8));
+		presets.Add("Loadout", new CamPreset(new Vector3(0, 10, -100), 8));
+
+		nameID = shaker.GetInt("_mag");
 
 		border = GetComponent<CollisionBorder>();
 	}
@@ -113,8 +115,18 @@ public class CameraController : MonoBehaviour
 
 	private void OnRenderImage(RenderTexture source, RenderTexture destination)
 	{
-		shaker.SetFloat("_mag", shakeIntensity);
+
+		if (screenShakeEnabled)
+		{
+			shaker.SetFloat("_mag", shakeIntensity);
+		}
+		else
+		{
+			shaker.SetFloat("_mag", 0);
+		}
+
 		Graphics.Blit(source, destination, shaker);
+
 	}
 
 }

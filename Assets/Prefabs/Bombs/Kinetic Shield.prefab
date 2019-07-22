@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2721322799304795737}
   m_Layer: 13
   m_Name: Kinetic Shield
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

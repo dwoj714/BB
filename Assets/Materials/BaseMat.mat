@@ -74,7 +74,7 @@ Material:
     - _ZWrite: 1
     - _acc: 1
     - _angle: 0
-    - _depth: 0.496
+    - _depth: 0.639
     - _dist: 0.007
     - _startTime: -50
     - _thing: 1000
@@ -83,5 +83,5 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _color: {r: 0.9019608, g: 0.49411765, b: 0.15686275, a: 1}
-    - _core: {r: 1, g: 0.3137255, b: 0, a: 1}
+    - _core: {r: 1, g: 0.3137255, b: 0, a: 0}
     - _glow: {r: 1, g: 0, b: 0, a: 1}

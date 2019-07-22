@@ -26,8 +26,6 @@ public class StickyBomb : ExplosiveProjectile
 		{
 			gameObject.layer = 9;
 		}
-		Debug.Log(joint.connectedBody);
-
 	}
 
 	protected override void OnCollisionEnter2D(Collision2D hit)

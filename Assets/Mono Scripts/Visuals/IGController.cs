@@ -19,7 +19,7 @@ public class IGController : MonoBehaviour {
 	private void Start()
 	{
 		//aSprite = abilityFX.GetComponent<SpriteRenderer>();
-		fSprite.transform.localScale = (Vector3.right + Vector3.up) * launcher.maxDragLength * 2;
+		fSprite.transform.localScale = (Vector3.right + Vector3.up) * LauncherController.maxDragLength * 2;
 
 		ChargeFieldVisible = false;
 		//abilityFX.Visible = false;
@@ -27,18 +27,13 @@ public class IGController : MonoBehaviour {
 
 	private void Update ()
 	{
-		if (launcher &&  launcher.Armed())
+		if (launcher &&  launcher.Armed)
 		{
-			pSprite.transform.localPosition = launcher.Pull / (2 * launcher.maxDragLength);
+			pSprite.transform.localPosition = launcher.Pull / (2 * LauncherController.maxDragLength);
 			fSprite.material.SetFloat("_charge", launcher.ChargePercentage);
 			fSprite.material.SetFloat("_drag", launcher.PullPercentage);
 		}
 	}
-
-	/*public void ActivateAbilityFX()
-	{
-		abilityFX.ActivateFX();
-	}*/
 
 	//sets if the sprites that make up the charge field are visible
 	public bool ChargeFieldVisible

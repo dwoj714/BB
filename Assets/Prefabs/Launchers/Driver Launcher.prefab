@@ -435,11 +435,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxEnergy: 100
   rechargeRate: 8
-  rechargeDelay: 0.33
+  rechargeDelay: 2.2
   energy: 0
+  shotCost: 100
+  chargeTime: 2.2
   indicator: {fileID: 1482812690401069627}
-  maxDragLength: 2.5
-  minDragLength: 0.25
   collider: {fileID: 0}
   ammo: {fileID: 1408930457002131127, guid: bd4fb525e98761d41ae0213f61b31db8, type: 3}
 --- !u!1 &3886167607895754861
