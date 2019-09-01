@@ -9,20 +9,17 @@ public class IGController : MonoBehaviour {
 
 	public LauncherController launcher;
 
-	//[Header("Ability Stuff")]
-	//public VFXController abilityFX;
-
-	public SpriteRenderer fSprite, pSprite;//, aSprite;
-	private bool armedLastFrame = false;
+	public SpriteRenderer fSprite, pSprite;
+	public LineRenderer line;
 	private Vector3 lastPos;
 
 	private void Start()
 	{
-		//aSprite = abilityFX.GetComponent<SpriteRenderer>();
-		fSprite.transform.localScale = (Vector3.right + Vector3.up) * LauncherController.maxDragLength * 2;
-
+		ConfigSize();
 		ChargeFieldVisible = false;
-		//abilityFX.Visible = false;
+		line = fSprite.GetComponent<LineRenderer>();
+		line.useWorldSpace = false;
+		line.SetPosition(0, Vector3.zero);
 	}
 
 	private void Update ()
@@ -30,6 +27,10 @@ public class IGController : MonoBehaviour {
 		if (launcher &&  launcher.Armed)
 		{
 			pSprite.transform.localPosition = launcher.Pull / (2 * LauncherController.maxDragLength);
+			pSprite.transform.rotation = Quaternion.Euler(Vector3.forward * Vector2.SignedAngle(Vector2.up, -launcher.Pull));
+
+			line.SetPosition(1, pSprite.transform.localPosition);
+
 			fSprite.material.SetFloat("_charge", launcher.ChargePercentage);
 			fSprite.material.SetFloat("_drag", launcher.PullPercentage);
 		}
@@ -45,14 +46,21 @@ public class IGController : MonoBehaviour {
 
 		set
 		{
-			fSprite.enabled = pSprite.enabled = value;
+			fSprite.enabled = pSprite.enabled = line.enabled = value;
 
 			if (value)
 			{
 				pSprite.transform.localPosition = launcher.Pull;
+				line.SetPosition(1, pSprite.transform.localPosition);
 				fSprite.material.SetFloat("_charge", launcher.ChargePercentage);
 				fSprite.material.SetFloat("_drag", launcher.PullPercentage);
 			}
 		}
 	}
+
+	public void ConfigSize()
+	{
+		fSprite.transform.localScale = (Vector3.right + Vector3.up) * LauncherController.maxDragLength * 2;
+	}
+
 }

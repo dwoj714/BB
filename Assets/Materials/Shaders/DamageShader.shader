@@ -12,8 +12,7 @@
 		_trans ("Shake Transition Percentage", Range(0,1)) = .5
 		_shakeInt("Max Shake Intensity", Range(0,250)) = 10
 		_shakeVar("Min Shake Intensity", Range(-250,250)) = 30
-
-		//_maxVibrance ("Maximize Vibrance", Boolean) = 0
+		_startTime("Start time", float) = 0
 	}
 	SubShader
 	{
@@ -57,6 +56,7 @@
 			float _trans;
 			float _shakeInt;
 			float _shakeVar;
+			float _startTime;
 			
 			v2f vert (appdata v)
 			{
@@ -65,12 +65,13 @@
 
 				if(_health <= _trans)
 				{
-					float4 tex1 = tex2Dlod(_noise, float4(abs(sin(_Time[1])), 0, 0, 0));
-					float4 tex2 = tex2Dlod(_noise, float4(0, abs(cos(_Time[1])), 0, 0));
+					float _time = (_Time[1] - _startTime);
+
+					float4 tex1 = tex2Dlod(_noise, float4(abs(sin(_time)), 0, 0, 0));
+					float4 tex2 = tex2Dlod(_noise, float4(0, abs(cos(_time)), 0, 0));
 
 					float intDamp = (1000 - _shakeInt);//Intensity Damping
 					float2 offset = float2(tex1.r - 0.5f,tex2.r - 0.5f) * ( (_shakeInt/1000 - _shakeVar/1000) * (1 - _health) + _shakeVar/1000);
-				  //float2 offset = float2(tex1.r - 0.5f,tex2.r - 0.5f)/(300 - (270 * (1 - _health)));
 
 					o.vertex.r += offset.r;
 					o.vertex.g += offset.g;
@@ -83,13 +84,16 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				// sample the texture
-				//fixed4 col = tex2D(_MainTex, i.uv);
+				float _time = (_Time[1] - _startTime);
 
 				float4 _deltaColor = _color1 - _color2;
-				fixed4 col = _color2 + _deltaColor * _health;
+
+				//_health = sqrt(_health);
+				float newHealth = sqrt(_health * sqrt(_health));
+
+				fixed4 col = _color2 + _deltaColor * newHealth;
 				
-				if (_health <= 0 && floor(_Time[1] * _flicker) % 2==0)
+				if (newHealth <= 0 && floor(_time * _flicker) % 2==0)
 				{
 					col = _flash;
 				}

@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
 {
-	[SerializeField] int[] increaseChances = { 1, 1, 1, 1};
+	[SerializeField] private int[] increaseChances = { 1, 1, 1, 1};
 
 	public float interval = 15;
-	private float timer = 0;
+	public static float Timer
+	{
+		get
+		{
+			return timer;
+		}
+	}
+	private static float timer = 0;
 
-	private void Update()
+	[SerializeField] private ProgressIndicatorController progressBar;
+
+	public void Update()
 	{
 		if (GameManager.gameInProgress)
 		{
@@ -22,7 +31,7 @@ public class DifficultyManager : MonoBehaviour
 		}
 	}
 
-	void IncreaseDifficulty()
+	private void IncreaseDifficulty()
 	{
 		int max = 0;
 		foreach (int q in increaseChances)
@@ -50,7 +59,7 @@ public class DifficultyManager : MonoBehaviour
 		}
 	}
 
-	void IncreaseDifficulty(int i)
+	private void IncreaseDifficulty(int i)
 	{
 		switch (i)
 		{
@@ -70,14 +79,15 @@ public class DifficultyManager : MonoBehaviour
 		}
 	}
 
-	void OnGameStart()
+	private void OnGameEnd()
 	{
 		timer = 0;
 		BombController.healthMod = 1;
 		BombController.massMod = 1;
+		progressBar.ResetProgress();
 	}
 
-	float WaveProgress
+	public float WaveProgress
 	{
 		get
 		{

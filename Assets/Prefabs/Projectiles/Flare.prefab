@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 114524795415073118}
   - component: {fileID: 212219234028525590}
   - component: {fileID: 2608670989810727571}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: BurnField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,15 +232,19 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  chargeTime: 0.9
-  energyCost: 33
   maxSpeed: 20
   minSpeed: 6
-  vfx: {fileID: 2608670989810727571}
-  lifespan: 5
-  bounces: 50000
   hasFixedSpeed: 0
-  effect: {fileID: 11400000, guid: 38c39978dfd3cb54d9f82dca924dfd27, type: 2}
+  lifespanMode: 0
+  lifespan: 5
+  vfx: {fileID: 2608670989810727571}
+  deathFX: {fileID: 7367973196773050917, guid: 50fec837209f75540ae8fa7ee9379ef8, type: 3}
+  massBonus: 0.15
+  maxSpeedBonus: 0.25
+  minSpeedBonus: 0.25
+  fixedSpeed: 0
+  effects:
+  - {fileID: 11400000, guid: 38c39978dfd3cb54d9f82dca924dfd27, type: 2}
 --- !u!58 &58090401456260030
 CircleCollider2D:
   m_ObjectHideFlags: 0

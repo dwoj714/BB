@@ -69,12 +69,13 @@ public class HealthBar : MonoBehaviour {
 			if (health > 0)
 			{
 				health -= dmg;
-				if(healthTarget != null) healthTarget.OnTakeDamage(dmg);
-			}
-			if (health <= 0)
-			{
-				health = 0;
-				if (healthTarget != null) healthTarget.OnHealthDeplete();
+				if (healthTarget != null) healthTarget.OnTakeDamage(dmg);
+
+				if (health <= 0)
+				{
+					health = 0;
+					if (healthTarget != null) healthTarget.OnHealthDeplete();
+				}
 			}
 		}
 	}

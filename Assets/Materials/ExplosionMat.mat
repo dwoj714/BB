@@ -72,14 +72,15 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
+    - _bgScale: 0.25
     - _flip: 0
     - _outer: 1.618
     - _radius: 1
-    - _startTime: 20.366604
+    - _startTime: 0
     - _timeScale: 3.5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _bg: {r: 1, g: 0.2784314, b: 0.27450982, a: 0.27450982}
+    - _bg: {r: 1, g: 0.27450982, b: 0.27450982, a: 0.27450982}
     - _color: {r: 1, g: 0, b: 0, a: 1}
     - _colorew: {r: 1, g: 1, b: 1, a: 1}

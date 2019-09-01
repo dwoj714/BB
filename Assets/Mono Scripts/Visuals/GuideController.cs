@@ -4,12 +4,23 @@ using UnityEngine;
 
 public class GuideController : MonoBehaviour
 {
-
 	[Header("Visuals")]
 	public float maxLength = 2;
 	public float minLength = 0;
 	public float maxWidth, minWidth = 0.2f;
 	public float speed = 0.5f;
+	public bool colorTransition = false;
+	public float transitionPoint = 0.875f;
+	public Color mainColor, altColor;
+	
+	public int OrderInLayer
+	{
+		set
+		{
+			line.sortingOrder = value;
+			tip.sortingOrder = value;
+		}
+	}
 
 	[Header("References")]
 	public GameObject lineObj;
@@ -27,7 +38,7 @@ public class GuideController : MonoBehaviour
 		line = lineObj.GetComponent<LineRenderer>();
 		tip = tipObj.GetComponent<SpriteRenderer>();
 		baseScale = tip.transform.localScale;
-
+		SetColor(mainColor);
 		SetVisible(false);
 	}
 
@@ -40,7 +51,7 @@ public class GuideController : MonoBehaviour
 
 		if (launcher.Armed)
 		{
-			Aim(-launcher.Drag, launcher.PullPercentage);
+			Aim(-launcher.Pull, launcher.PullPercentage);
 		}
 
 		if (armedLastFrame && !launcher.Armed)
@@ -49,7 +60,6 @@ public class GuideController : MonoBehaviour
 			line.SetPosition(0, Vector3.zero);
 			tipObj.transform.localPosition = Vector2.zero;
 		}
-
 		armedLastFrame = launcher.Armed;
 	}
 
@@ -70,14 +80,15 @@ public class GuideController : MonoBehaviour
 		Vector3 warp = Vector3.up * ((maxWidth - minWidth) * power + minWidth) + Vector3.right * ((maxWidth - minWidth) * (1 - power) + minWidth);
 		tip.transform.localScale = baseScale.normalized/4 + warp.normalized/4;
 
-		if(power >= 0.9f)
-		{
-			SetColor(Color.red);
-		}
-		else
-		{
-			SetColor(Color.yellow);
-		}
+		if(colorTransition)
+			if(power >= transitionPoint)
+			{
+				SetColor(altColor);
+			}
+			else
+			{
+				SetColor(mainColor);
+			}
 
 	}
 

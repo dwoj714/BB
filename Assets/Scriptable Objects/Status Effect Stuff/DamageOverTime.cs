@@ -10,9 +10,8 @@ public class DamageOverTime : StatusEffect
 
 	private BombController targetBomb;
 
-	private float dmgtotal, totaltime = 0;
-
 	public float DPS;
+	public ParticleSystem particleFX;
 
 	public override string EffectType
 	{
@@ -44,7 +43,14 @@ public class DamageOverTime : StatusEffect
 			copy.duration = duration;
 			copy.DPS = DPS;
 
-			RegisterEffect(copy, target);
+			if(RegisterEffect(copy, target))
+			{
+				copy.particleFX = Instantiate(particleFX, target.transform);
+				copy.particleFX.transform.localPosition = Vector3.zero;
+				ParticleSystem.ShapeModule module = copy.particleFX.shape;
+				module.radius = targetBomb.AdjustedRadius;
+			}
+
 			return true;
 		}
 		else return false;
@@ -53,15 +59,13 @@ public class DamageOverTime : StatusEffect
 	//Apply DPS every tick
 	public override void TickEffect(float delta)
 	{
-		dmgtotal += DPS * delta;
-		totaltime += delta;
 		targetBomb.hb.TakeDamage(DPS * delta, null);
 	}
 
 	//This effect doesn't make changes that need to be reverted, so do nothing here
 	public override void RemoveEffect(GameObject target)
 	{
-
+		particleFX.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 	}
 
 }

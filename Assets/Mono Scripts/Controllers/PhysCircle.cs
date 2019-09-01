@@ -22,6 +22,12 @@ public class PhysCircle : MonoBehaviour
 	[HideInInspector]
 	public HealthBar hb;
 
+	public static GameObject hitFX;
+	private ParticleSystem.MainModule particleModule;
+
+	protected Vector2 lastCollisionNormal = Vector2.zero;
+	protected Vector3 lastCollisionPoint = Vector3.zero;
+
 	protected virtual void Awake()
 	{
 		col = GetComponent<CircleCollider2D>();
@@ -47,33 +53,18 @@ public class PhysCircle : MonoBehaviour
 
 	protected virtual void OnCollisionEnter2D(Collision2D hit)
 	{
-		//The PhysCircle we just collided with
-		ProcessCollision(hit.collider.gameObject);
+		lastCollisionNormal = hit.GetContact(0).normal;
+		lastCollisionPoint = hit.GetContact(0).point;
 
-		/*ContactPoint2D[] points = new ContactPoint2D[6];
-
-		int count = col.GetContacts(points);
-
-		//Debug.Log(name + " Contact count: " + count);
-
-		for(int i=0; i < count; i++)
-		{
-			if(points[i].collider != hit.collider)
-			{
-				//May need to pass a VPM "Override" calculated from the predicted velocity after the collision
-				ProcessCollision(points[i].collider.gameObject);
-				Debug.Log(gameObject.name + " Extra collision processed: " + points[i].collider.name);
-			}
-		}*/
-
+		ProcessCollision(hit.collider.gameObject, hit.GetContact(0).point);
 	}
 
-	void ProcessCollision(GameObject hitObj)
+	void ProcessCollision(GameObject hitObj, Vector3 point)
 	{
 		PhysCircle hitCircle = hitObj.GetComponent<PhysCircle>();
 
 		//If hitCircle exists
-		if (hitCircle && !hitCircle.rb.isKinematic /*&& !hitCircle.hitList.Contains(this)*/)
+		if (hitCircle && !hitCircle.rb.isKinematic)
 		{
 			//Represents the position of hitCircle relative to this physcircle
 			Vector2 relativePosition = hitCircle.rb.position - rb.position;
@@ -84,17 +75,17 @@ public class PhysCircle : MonoBehaviour
 			//Add this circle and its VPM to the hit PhysCircles hit registry
 			hitCircle.hitRegistry.Add(this, VPM);
 
-			//Debug.Log(name + " collision with " + hitCircle.name + ". Registry size of " + name +": " + hitRegistry.Count);
-
 			//If we have the other circle in our hit registry, use the VPM associated with it
 			//to deal collision damage to both PhysCircles' health bars; whichever ones have them
 			if (hitRegistry.ContainsKey(hitCircle))
 			{
 				float massTotal = rb.mass + hitCircle.rb.mass;
-				float collisionVPM = VPM + hitRegistry[hitCircle];
+
+				//the VPM of the other physCircle
+				float hitVPM = hitRegistry[hitCircle];
 
 				//The objects' combined masses times their combined VPMs
-				float baseDamage = Mathf.Abs(collisionVPM);
+				float baseDamage = Mathf.Abs(hitVPM + VPM);
 
 				//Deal damage to any existing health bars
 				if (baseDamage > 1)
@@ -107,34 +98,40 @@ public class PhysCircle : MonoBehaviour
 					{
 						hitCircle.hb.TakeDamage(globalDamageMultiplier * baseDamage * (rb.mass / massTotal), gameObject);
 					}
+
+					//Give spawned particles intensity reflecting the speed of each mass
+					float i1 = Mathf.Log(rb.mass, 4) * Mathf.Abs(VPM);
+					float i2 = Mathf.Log(hitCircle.rb.mass, 4) * Mathf.Abs(hitVPM);
+					SpawnCollisionParticles(i1 + i2);
 				}
 				hitRegistry.Remove(hitCircle);
 			}
 		}
 		else //If the collision is with terrain (or any other non-PhysCircle collider)
 		{
-			if (hb)
+
+			float VPM = oldVelocity.magnitude * Mathf.Cos(Mathf.Deg2Rad * Vector2.Angle(lastCollisionNormal, oldVelocity));
+			float baseDamage = Mathf.Abs(VPM) * globalDamageMultiplier;
+			if (baseDamage > 1)
 			{
-				ContactPoint2D[] points = new ContactPoint2D[1]; 
-
-				col.GetContacts(points);
-
-				Vector2 normal = points[0].normal;
-				float VPM = oldVelocity.magnitude * Mathf.Cos(Mathf.Deg2Rad * Vector2.Angle(normal, oldVelocity));
-
-				float baseDamage = Mathf.Abs(VPM) * globalDamageMultiplier;// * rb.mass;
-
-				if (baseDamage > 1)
+				if (hb)
+				{
 					hb.TakeDamage(baseDamage, gameObject);
+				}
+				SpawnCollisionParticles(Mathf.Log(rb.mass, 4) * Mathf.Abs(VPM));
 			}
 		}
 	}
 
-	/*protected void OnCollisionExit2D(Collision2D hit)
+	private void SpawnCollisionParticles(float intensity)
 	{
-		PhysCircle hitCircle = hit.gameObject.GetComponent<PhysCircle>();
+		//calculate the angle to spawn the particles with
+		float zAngle = Vector2.SignedAngle(Vector2.up, lastCollisionNormal);
 
-
-	}*/
+		//spawn the particles object, keep a reference to the ParticleSystem
+		particleModule = Instantiate(hitFX, lastCollisionPoint, Quaternion.Euler(0, 0, zAngle)).GetComponent<ParticleSystem>().main;
+	
+		particleModule.startSpeed = intensity;
+	}
 
 }

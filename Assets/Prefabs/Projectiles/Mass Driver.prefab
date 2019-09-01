@@ -100,14 +100,17 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  chargeTime: 2
-  energyCost: 100
   maxSpeed: 10
   minSpeed: 4
-  vfx: {fileID: 0}
-  lifespan: 20
-  bounces: 5000
   hasFixedSpeed: 0
+  lifespanMode: 0
+  lifespan: 20
+  vfx: {fileID: 0}
+  deathFX: {fileID: 2756038530175877105, guid: c5934165eddbd664d9ee50422d022139, type: 3}
+  massBonus: 0.15
+  maxSpeedBonus: 0.25
+  minSpeedBonus: 0.25
+  fixedSpeed: 0
 --- !u!50 &1344252239080468775
 Rigidbody2D:
   serializedVersion: 4

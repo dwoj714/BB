@@ -17,19 +17,28 @@ public class WeaponLoader : MonoBehaviour
 	public void EquipLeft()
 	{
 		Debug.Log("Equipping prefab from slot " + PrefabIndex);
-		manager.SetWeaponSlot(manager.prefabs[PrefabIndex], WeaponManager.LeftIdx);
+		manager.SetWeaponSlot(PrefabIndex, WeaponManager.LeftIdx);
+
+		PlayerPrefs.SetInt("Left Weapon", PrefabIndex);
+		PlayerPrefs.Save();
 	}
 
 	public void EquipMid()
 	{
 		Debug.Log("Equipping prefab from slot " + PrefabIndex);
-		manager.SetWeaponSlot(manager.prefabs[PrefabIndex], WeaponManager.MiddleIdx);
+		manager.SetWeaponSlot(PrefabIndex, WeaponManager.MiddleIdx);
+
+		PlayerPrefs.SetInt("Mid Weapon", PrefabIndex);
+		PlayerPrefs.Save();
 	}
 
 	public void EquipRight()
 	{
 		Debug.Log("Equipping prefab from slot " + PrefabIndex);
-		manager.SetWeaponSlot(manager.prefabs[PrefabIndex], WeaponManager.RightIdx);
+		manager.SetWeaponSlot(PrefabIndex, WeaponManager.RightIdx);
+
+		PlayerPrefs.SetInt("Right Weapon", PrefabIndex);
+		PlayerPrefs.Save();
 	}
 
 	private int PrefabIndex
@@ -37,7 +46,6 @@ public class WeaponLoader : MonoBehaviour
 		get
 		{
 			return rotor.MedianIdx;
-			//return rotor.Slots[rotor.Slots.Length / 2];
 		}
 	}
 

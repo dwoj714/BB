@@ -2,14 +2,19 @@
 {
 	Properties
 	{
-		_MainTex("Texture", 2D) = "white" {}
+		_MainTex("Main Texture", 2D) = "" {}
+		_CrackTex("Crack Texture", 2D) = "white" {}
 		_startTime("Start time", float) = 0
 		_timeScale("Time scale", float) = 1
 		_color("Color", Color) = (1,1,1,1)
 
+		_level("Crack level", Range(0,1)) = 1
+		_crack("Crack color", Color) = (1,1,1,1)
+		_tile("Crack tiling", float) = 1
+
 		_core("Core FX color", Color) = (1,1,0,1)
 		_depth("Core radius", Range(0, 1)) = 0.25
-		//_thing("Frequency thingy", float) = 1
+		_blur("Core edge fade", Range(0,1)) = 0
 
 		_glow("Glow Color", Color) = (1,1,1,0.25)
 		_dist("Glow Distance", Range(0,1)) = 0.1
@@ -47,6 +52,7 @@
 			};
 
 			sampler2D _MainTex;
+			sampler2D _CrackTex;
 
 			float _startTime;
 			float _timeScale;
@@ -58,6 +64,11 @@
 			float _dist;
 			float _angle;
 			float _acc;
+			float _blur;
+			float _tile;
+
+			float _level;
+			float4 _crack;
 
 			float4 _MainTex_ST;
 
@@ -91,6 +102,15 @@
 					col = lerp(_glow, _color, saturate(_time * _acc));
 				}
 
+				if (_level > 0)
+				{
+					fixed4 texCol = tex2D(_CrackTex, (i.uv * _tile) - floor(i.uv * _tile));
+					if (texCol.r > 1 - _level)
+					{
+						col =  _crack * grad + _color * (1 - grad);
+					}
+				}
+
 				//code for the core FX (visible during weapon selection)
 
 				float4 coreCol = _core;
@@ -98,15 +118,13 @@
 				//coreCol.a *= sin(16.18 / pow(pow(x, 4) * (cos(_thing * (x * y)) / 2 + .5), pow(y, 4)) + _Time[1]);
 				if (grad < _depth)
 				{
-					col = coreCol;
+					return coreCol;
 				}
-				/*else
+				else
 				{
-					float share = saturate((grad - _depth) * 6);
-					col = (1 - share) * saturate(coreCol) + share * col;
-				}*/
-
-				return col;
+					float share = saturate((grad - _depth) * (100 / (1 + 20 * _blur)));
+					return (1 - share) * saturate(coreCol) + share * col;
+				}
 			}
 		ENDCG
 		}

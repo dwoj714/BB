@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4963291904483368}
   - component: {fileID: 212042163030576176}
-  - component: {fileID: 114129046930815136}
+  - component: {fileID: 1759166197397787182}
+  - component: {fileID: 5101364338914610332}
   - component: {fileID: 50267911146346318}
   - component: {fileID: 58742831350052088}
   m_Layer: 10
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &114129046930815136
+--- !u!114 &1759166197397787182
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,7 +93,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1400387367144846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcd8a904bdcd4f44da8cf381e8adfa86, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e3fd8bc2dd669c45b3d9eda494971ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   col: {fileID: 0}
@@ -100,14 +101,46 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  chargeTime: 1.2
-  energyCost: 20
   maxSpeed: 14
   minSpeed: 10
-  vfx: {fileID: 0}
-  lifespan: Infinity
-  bounces: 0
   hasFixedSpeed: 1
+  lifespanMode: 0
+  lifespan: 20
+  vfx: {fileID: 0}
+  deathFX: {fileID: 7840899109096446629, guid: b7351e737bbee0d4480faf6a32fd11b8, type: 3}
+  massBonus: 0.15
+  maxSpeedBonus: 0.25
+  minSpeedBonus: 0.25
+  fixedSpeed: 0
+  explosionEnabled: 0
+  collisions: 1
+--- !u!114 &5101364338914610332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400387367144846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20963edbfdad614419e7170a83c067ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VFX: {fileID: 1527323029432444, guid: f89d8dab37cb98349b829a79c798926c, type: 3}
+  minPushForce: 5
+  maxPushForce: 10
+  minExplosionDMG: 0
+  maxExplosionDMG: 10
+  explosionRadius: 1.1
+  fuse: 0
+  screenShake: 1
+  useMask: 1
+  explosionMask:
+    serializedVersion: 2
+    m_Bits: 14135
+  sparked: 0
+  sparkedLastFrame: 0
+  autoDeleteFX: 1
 --- !u!50 &50267911146346318
 Rigidbody2D:
   serializedVersion: 4
@@ -120,12 +153,12 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1.5
+  m_Mass: 1.75
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 2
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -214,7 +247,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Time: 0.05
+  m_Time: 0.075
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -223,18 +256,18 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.34617126
-        inSlope: -0.116171256
-        outSlope: -0.116171256
+        value: 0.37629175
+        inSlope: -0.32035717
+        outSlope: -0.32035717
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 1
       - serializedVersion: 3
         time: 1
-        value: 0.24876097
-        inSlope: -0.11048573
-        outSlope: -0.11048573
+        value: 0.06024097
+        inSlope: -0.313253
+        outSlope: -0.313253
         tangentMode: 0
         weightedMode: 0
         inWeight: 1
@@ -245,7 +278,7 @@ TrailRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 0, a: 0.40392157}
-      key1: {r: 1, g: 1, b: 0, a: 0.14509805}
+      key1: {r: 1, g: 1, b: 0, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}

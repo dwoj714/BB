@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 58319838665102608}
   - component: {fileID: 114915006262516896}
   m_Layer: 10
-  m_Name: 2-Type
+  m_Name: Splitslug
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,10 +136,8 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  chargeTime: 1.15
-  energyCost: 10
-  transitionPower: 0.9
+  transitionPower: 0.875
   lowPowerAmmo: {fileID: 114547320035670472, guid: 93e7f0fdf4d040943822b1cf6cc0aa04,
     type: 3}
-  highPowerAmmo: {fileID: 114926519780051378, guid: 8164cb0c157fa04468301f5edc9ab2f5,
+  highPowerAmmo: {fileID: 2026314551842172795, guid: 8164cb0c157fa04468301f5edc9ab2f5,
     type: 3}

@@ -6,57 +6,69 @@ public class ProjectileController : Launchable
 {
 	//The launcher uses a percentage to determine actual speed. 
 	//0% results in minSpeed, 100% results in maxSpeed
+	[Header("Launch Speed/Behavior")]
 	public float maxSpeed = 5;
 	public float minSpeed = 0;
+	public bool hasFixedSpeed = false;
+	[SerializeField] private LifespanMode lifespanMode = LifespanMode.Timed;
+	public float lifespan = Mathf.Infinity;
 
+	[Header ("Visual References")]
 	[SerializeField]
 	private VFXController vfx;
+	[SerializeField] protected ParticleSystem deathFX;
+	private TrailRenderer trail;
 
-	public float lifespan = Mathf.Infinity;
+	[Header("Upgrades Per Level")]
+	[SerializeField] protected float massBonus = 0.15f;
+	[SerializeField] protected float maxSpeedBonus = 0.25f;
+	[SerializeField] protected float minSpeedBonus = 0.25f;
+
 	private float lifeTimer;
-
-	public int bounces = 3;
-	private int bounceCount = 0;
-
-	public bool hasFixedSpeed = false;
 
 	//Whether or not the projectile has left the launcher's circle collider
 	private bool escaped;
-	private bool launched = false;
-	protected float fixedSpeed;
+	protected bool launched = false;
+	public float fixedSpeed;
 
 	protected override void Awake()
 	{
 		base.Awake();
 		if(gameObject.layer != 11) gameObject.layer = 10;
 		lifeTimer = lifespan;
+		trail = GetComponentInChildren<TrailRenderer>();
+		if (deathFX)
+		{
+			deathFX = Instantiate(deathFX, transform.position, Quaternion.identity);
+			deathFX.gameObject.SetActive(false);
+		}
 	}
 
 	public override void Launch(Vector2 direction, float power)
 	{
 		launched = true;
-
-		float vDiff = maxSpeed - minSpeed;
 		rb.isKinematic = false;
-		rb.velocity = direction.normalized * (vDiff * power + minSpeed);
+		rb.velocity = direction.normalized * SpeedAtPower(power);
 		if (hasFixedSpeed)
 		{
-			fixedSpeed = Mathf.Abs(vDiff * power + minSpeed);
+			fixedSpeed = SpeedAtPower(power);
 		}
 
 		//Trigger VFX if available
 		if(vfx) vfx.ActivateFX();
-
 	}
 
 	protected virtual void Update()
 	{
-		if(launched)
-			lifeTimer -= Time.deltaTime;
-
-		if(lifeTimer <= 0)
+		if (lifespanMode == LifespanMode.Timed)
 		{
-			Destroy(gameObject);
+			if (launched)
+				lifeTimer -= Time.deltaTime;
+
+			if (lifeTimer <= 0)
+			{
+				Destroy(gameObject);
+			}
 		}
 	}
 
@@ -73,14 +85,37 @@ public class ProjectileController : Launchable
 			escaped = true;
 			gameObject.layer = 9;
 		}
-
 	}
 
-	protected override void OnCollisionEnter2D(Collision2D collision)
+	protected virtual void OnDestroy()
 	{
-		base.OnCollisionEnter2D(collision);
-		bounceCount++;
-		if (bounceCount > bounces)
-			Destroy(gameObject);
+		if (deathFX && launched)
+		{
+			deathFX.transform.position = transform.position;
+			deathFX.gameObject.SetActive(true);
+
+			if (trail)
+			{
+				trail.transform.parent = deathFX.transform;
+			}
+
+		}
 	}
+
+	public float SpeedAtPower(float power)
+	{
+		power = Mathf.Clamp01(power);
+		float vDiff = maxSpeed - minSpeed;
+		return vDiff * power + minSpeed;
+	}
+
+	public override void SetUpgrades(int[] upgradeLevels)
+	{
+		rb.mass *= 1 + upgradeLevels[0] * massBonus;
+		maxSpeed *= 1 + upgradeLevels[1] * maxSpeedBonus;
+		minSpeed *= 1 + upgradeLevels[2] * minSpeedBonus;
+	}
+
 }
+
+public enum LifespanMode {Timed, Other};

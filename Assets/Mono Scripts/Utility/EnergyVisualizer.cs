@@ -5,11 +5,23 @@ using UnityEngine.UI;
 
 public class EnergyVisualizer : Visualizer
 {
-	public EnergyUser source;
-	public Image target;
+	[SerializeField] private EnergyUser source;
+	private SpriteRenderer spr;
+	private int chargeID;
+	[SerializeField] private int segments = 3;
+
+	protected override void Start()
+	{
+		base.Start();
+		spr = GetComponent<SpriteRenderer>();
+		chargeID = Shader.PropertyToID("_charge");
+
+		spr.material.SetFloat("_seg", segments);
+
+	}
 
 	protected override void Update()
 	{
-		target.fillAmount = source.EnergyPercentage;
+		spr.material.SetFloat(chargeID, source.EnergyPercentage);
 	}
 }

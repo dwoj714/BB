@@ -2,30 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LauncherController : EnergyUser, IInputReciever
+public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 {
-
-	public float shotCost;
-
+	//[SerializeField] private float shotCost;
+	[SerializeField] private float shotEnergy = 5;
 	[Header("Aiming")]
+	public static float maxDragLength = 2.5f;
+	public static float minDragLength = 0.15f;
+	private Vector2 clickPos, dragPos;
+
+	private int[] upgrades = new int[3];
 
 	private float charge = 0;
 	public float chargeTime = 1;
 	
-	private Vector2 clickPos, dragPos;
-	public static float maxDragLength = 2.5f;
-	public static float minDragLength = 0.15f;
-
-	public IGController indicator;
+	private static IGController indicator = null;
+	public bool useDefaultGuide = true;
 
 	new public CircleCollider2D collider;
 
 	//Projectile to be copied
 	[SerializeField]
 	private Launchable ammo;
-
-	//Holds a reference to a copy of ammo, to be manipulated;
-	private Launchable shot;
+	public Launchable Shot { get; private set; }
 
 	public Vector2 Drag
 	{
@@ -35,8 +34,70 @@ public class LauncherController : EnergyUser, IInputReciever
 		}
 	}
 
+	public float ChargePercentage
+	{
+		get
+		{
+			return charge / chargeTime;
+		}
+	}
+
+	public float ShotPower()
+	{
+		return (Drag / maxDragLength * ChargePercentage).magnitude;
+	}
+
+	public bool Armed
+	{
+		get
+		{
+			return Shot;
+		}
+	}
+
+	//Drag clamped to maximum allowed charge
+	public Vector2 Pull
+	{
+		get
+		{
+			Vector2 pull = Vector2.ClampMagnitude(Drag, maxDragLength * ChargePercentage);
+			if (pull.y > 0)
+			{
+				return Vector2.zero;
+			}
+			return pull;
+		}
+	}
+
+	//Ratio of pull to max possible pull
+	public float PullPercentage
+	{
+		get
+		{
+			return Pull.magnitude / maxDragLength;
+		}
+	}
+
+	public Launchable Ammo
+	{
+		get
+		{
+			return ammo;
+		}
+
+		set
+		{
+			ammo = value;
+		}
+	}
+
 	void Awake()
 	{
+		if (indicator == null)
+		{
+			indicator = GameObject.Find("Interaction Graphics").GetComponent<IGController>();
+		}
+
 		indicator.launcher = this;
 		indicator.ChargeFieldVisible = false;
 		InitEnergy();
@@ -98,11 +159,11 @@ public class LauncherController : EnergyUser, IInputReciever
 	private void ReadyShot()
 	{
 		//If the required energy can be spent...
-		if (!Armed && SpendEnergy(shotCost))
+		if (!Armed && SpendEnergy(shotEnergy))
 		{
 			//create a copy of ammo, position it at the center of the launcher
-			shot = Instantiate(Ammo, transform.position, Quaternion.identity).GetComponent<Launchable>();
-			shot.launcherCollider = collider;
+			Shot = Instantiate(Ammo, transform.position, Quaternion.identity).GetComponent<Launchable>();
+			Shot.launcherCollider = collider;
 			recharging = false;
 			delayTimer = chargeTime;
 		}
@@ -110,15 +171,16 @@ public class LauncherController : EnergyUser, IInputReciever
 
 	private void AimShot()
 	{
-		shot.rb.MovePosition((Vector2)transform.position + Pull/ maxDragLength);
+		Shot.rb.MovePosition((Vector2)transform.position + Pull/ maxDragLength);
 	}
 
 	private void LaunchShot()
 	{
-		if (shot && Drag.sqrMagnitude >= Mathf.Pow(minDragLength, 2))
+		if (Pull.sqrMagnitude > 0)
 		{
 			//launch the shot, re-enable energy recharge
-			shot.Launch(-Pull, PullPercentage);
+			SendMessage("OnShotLaunched", Shot);
+			Shot.Launch(-Pull, PullPercentage);
 			recharging = true;
 		}
 		else
@@ -127,18 +189,18 @@ public class LauncherController : EnergyUser, IInputReciever
 		}
 
 		//clear the shot variable, reset charge variable
-		shot = null;
+		Shot = null;
 		charge = 0;
 	}
 
 	public void CancelShot()
 	{
-		if (shot)
+		if (Shot)
 		{
 			//Destroy the shot object, refund the energy, and reset charge.
-			Destroy(shot.gameObject);
-			energy += shotCost;
-			shot = null;
+			Destroy(Shot.gameObject);
+			energy += shotEnergy;
+			Shot = null;
 			charge = 0;
 
 			//immediately resume recharging energy
@@ -147,54 +209,11 @@ public class LauncherController : EnergyUser, IInputReciever
 		}
 	}
 
-	public float ChargePercentage
+	public void SetUpgrades(int[] upgrades)
 	{
-		get
+		for(int i = 0; i < this.upgrades.Length; i++)
 		{
-			return charge / chargeTime;
-		}
-	}
-
-	public float ShotPower()
-	{
-		return (Drag / maxDragLength * ChargePercentage).magnitude;
-	}
-
-	public bool Armed
-	{
-		get
-		{
-			return shot;
-		}
-	}
-
-	//Returns the drag value set by the input manager clamped to what the launcher allows for (bound by max length and current charge)
-	public Vector2 Pull
-	{
-		get
-		{
-			return Vector2.ClampMagnitude(Drag, maxDragLength * ChargePercentage);
-		}
-	}
-
-	public float PullPercentage
-	{
-		get
-		{
-			return Pull.magnitude / maxDragLength;
-		}
-	}
-
-	public Launchable Ammo
-	{
-		get
-		{
-			return ammo;
-		}
-
-		set
-		{
-			ammo = value;
+			this.upgrades[i] = upgrades[i];
 		}
 	}
 

@@ -45,15 +45,27 @@
 
             fixed4 frag (v2f i) : SV_Target
             {
+				//a & b have range (0,1)
 				float a = (1 + sin(_Time[1])) / 2;
 				float b = (1 + cos(_Time[1])) / 2;
 				
 				float4 select1 = tex2D(_noiseTex, float2(a, b));
 				float4 select2 = tex2D(_noiseTex, float2(b, a));
-								
-                fixed4 col = tex2D(_MainTex, i.uv + float2(select1[0] - 0.5f, select2[0] - 0.5f) * _mag);
+				
+				float x = select1[0] - 0.5f;
+				float y = select2[0] - 0.5f;
 
-                return col;
+				float2 position = i.uv + float2(select1[0] - 0.5f, select2[0] - 0.5f) * _mag;
+
+				//return pure black if the sample position is outside the 0,1 range
+				if (position.r > 1 || position.r < 0 || position.g > 1 || position.g < 0)
+				{
+					return fixed4(0,0,0,1);
+				}
+				else
+				{
+					return tex2D(_MainTex, position);
+				}
             }
             ENDCG
         }

@@ -9,34 +9,38 @@ public class DescriptionDisplayController : MonoBehaviour
 	[SerializeField] private GameObject[] objectList;
 
 	private Material baseMat;
-	private float initial, previous;    //values for FX (transparency) radius
+	private float initial, timer;    //values for FX (transparency) radius
 	private int objIdx;
-	private int nameID;
+	private int radID, blurID;
 
     // Start is called before the first frame update
     void Start()
     {
 		baseMat = baseSpr.material;
-		nameID = Shader.PropertyToID("_depth");
-		initial = previous = baseMat.GetFloat(nameID);
-		//objIdx = rotor.MedianIdx;
+		radID = Shader.PropertyToID("_depth");
+		blurID = Shader.PropertyToID("_blur");
+		initial = baseMat.GetFloat(radID);
     }
 
     public void OnWeaponCycle()
 	{
-		StartCoroutine("SwapStep");
+		if(rotor.CanSwap) StartCoroutine("SwapStep");
 	}
 
 	IEnumerator SwapStep()
 	{
-		float timer = 0;
-		float rad;
+		timer = 0;
 		int current = rotor.MedianIdx;
+
+		float progress;
 
 		while(timer <= rotor.swapTime / 2)
 		{
-			rad = initial * (1 - (timer / (rotor.swapTime / 2)));
-			baseMat.SetFloat(nameID, rad);
+			progress = 1 - (timer / (rotor.swapTime / 2));
+
+			baseMat.SetFloat(radID, initial * progress);
+			baseMat.SetFloat(blurID, 1 - progress);
+
 			timer += Time.deltaTime;
 			yield return null;
 		}
@@ -52,14 +56,17 @@ public class DescriptionDisplayController : MonoBehaviour
 
 		while(timer < rotor.swapTime)
 		{
-			rad = initial * ((timer - rotor.swapTime / 2) / (rotor.swapTime / 2));
-			baseMat.SetFloat(nameID, rad);
+			progress = (timer - rotor.swapTime / 2) / (rotor.swapTime / 2);
+
+			baseMat.SetFloat(radID, initial * progress);
+			baseMat.SetFloat(blurID, 1 - progress);
+
 			timer += Time.deltaTime;
 			yield return null;
 		}
 
-		baseMat.SetFloat(nameID, initial);
-
+		baseMat.SetFloat(radID, initial);
+		baseMat.SetFloat(blurID, 0);
 	}
 
 }
