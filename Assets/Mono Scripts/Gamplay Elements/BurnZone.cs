@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 [RequireComponent(typeof(CircleCollider2D))]
-public class BurnZone : MonoBehaviour, IUpgradeable
-{
+public class BurnZone : MonoBehaviour {
 
 	public float dpsMin = 10;
 	public float dpsMax = 30;
@@ -61,11 +59,6 @@ public class BurnZone : MonoBehaviour, IUpgradeable
 		{
 			bombs.Remove(bomb);
 		}
-	}
-
-	public void SetUpgrades(int[] upgradeLevels)
-	{
-		transform.localScale = (Vector2.up + Vector2.right) * (transform.localScale.x * (1 + .25f * upgradeLevels[4]));
 	}
 
 }

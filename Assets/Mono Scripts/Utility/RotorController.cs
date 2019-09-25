@@ -30,7 +30,7 @@ public class RotorController : MonoBehaviour
 		}
 	}
 
-	private void Awake()
+	private void Start()
 	{
 		int mid = rotors.Length / 2;
 		for(int i = 0; i < rotors.Length; i++)
@@ -140,14 +140,6 @@ public class RotorController : MonoBehaviour
 		return false;
 	}
 
-	public bool CanSwap
-	{
-		get
-		{
-			return !cycling;
-		}
-	}
-
 	public void CycleLeftButton()
 	{
 		if (!cycling)
@@ -164,9 +156,27 @@ public class RotorController : MonoBehaviour
 		}
 	}
 
-	public float CycleProgress()
+
+	//[ExecuteInEditMode]
+	/*private void OnDrawGizmos()
 	{
-		return amountMoved / spread;
+		float scale = 0.5f;
+		Gizmos.color = Color.blue;
+
+		foreach(Vector3 pos in Positions)
+		{
+			Gizmos.DrawLine(pos + Vector3.left * scale, pos + Vector3.right * scale);
+			Gizmos.DrawLine(pos + Vector3.up * scale, pos + Vector3.down * scale);
+		}
+
 	}
 
+	public Vector3[] Positions
+	{
+		get
+		{
+			Vector3[] positions = { rotors[0].up * 15, rotors[1].up * 15, rotors[2].up * 15 };
+			return positions;
+		}
+	}*/
 }

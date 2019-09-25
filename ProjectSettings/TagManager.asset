@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Projectile
   - Enemy
-  - FX
   layers:
   - Default
   - TransparentFX
@@ -22,7 +21,7 @@ TagManager:
   - Phantom Projectile
   - Bomb
   - Projectile Shield
-  - Stuck
+  - 
   - 
   - 
   - 

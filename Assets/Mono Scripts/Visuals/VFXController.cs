@@ -63,10 +63,7 @@ public class VFXController : MonoBehaviour
 
 	public void SetRadius(float radius)
 	{
-		if (transform.parent)
-			transform.localScale = (Vector2.up + Vector2.right) * radius * 2 * (1 / transform.parent.lossyScale.x);
-		else
-			transform.localScale = (Vector2.up + Vector2.right) * radius * 2;
+		transform.localScale = (Vector2.up + Vector2.right) * radius * 2 * (1 / transform.parent.lossyScale.x);
 	}
 
 	public bool Visible

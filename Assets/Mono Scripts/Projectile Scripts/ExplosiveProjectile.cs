@@ -5,7 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Detonator))]
 public abstract class ExplosiveProjectile : ProjectileController
 {
-	protected Detonator detonator;
+
+	[HideInInspector]
+	public Detonator detonator;
 
 	protected override void Awake()
 	{
@@ -13,8 +15,8 @@ public abstract class ExplosiveProjectile : ProjectileController
 		detonator = GetComponent<Detonator>();
 	}
 
-	protected virtual void OnExplosion()
+	protected void onExplosion()
 	{
-		Destroy(gameObject);
+		GameObject.Destroy(this.gameObject);
 	}
 }

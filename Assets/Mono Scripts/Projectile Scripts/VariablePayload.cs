@@ -9,39 +9,34 @@ public class VariablePayload : Launchable
 
 	//Projectile Type to launch when power is below transitionPower
 	public Launchable lowPowerAmmo;
+
 	//Projectile type to launch when power is above transitionPower
 	public Launchable highPowerAmmo;
 
-	private int[] upgradeLevels = null;
-
 	public override void Launch(Vector2 direction, float power)
 	{
-		Launchable shot;
-		float adjustedPower;
-
-		//instantiate shot to the proper object, give it the correct charge amount
+		//Debug.Log("Base Power: " + power + (power < transitionPower));
 		if(power < transitionPower)
 		{
-			shot = Instantiate(lowPowerAmmo, transform.position, Quaternion.identity);
-			adjustedPower = power / transitionPower;
+			Launchable shot = Instantiate(lowPowerAmmo, transform.position, Quaternion.identity);
+
+			shot.launcherCollider = launcherCollider;
+
+			//adjustedPower will have a range from 0 - 1
+			float adjustedPower = power / transitionPower;
+			//Debug.Log(adjustedPower);
+			shot.Launch(direction, adjustedPower);
 		}
 		else
 		{
-			shot = Instantiate(highPowerAmmo, transform.position, Quaternion.identity);
-			adjustedPower = (power - transitionPower) / (1 - transitionPower);
+			Launchable shot = Instantiate(highPowerAmmo, transform.position, Quaternion.identity);
+
+			shot.launcherCollider = launcherCollider;
+
+			float adjustedPower = (power - transitionPower) / (1 - transitionPower);
+			shot.Launch(direction, adjustedPower);
 		}
-
-		shot.launcherCollider = launcherCollider;
-		shot.SetUpgrades(upgradeLevels);
-
-		shot.Launch(direction, adjustedPower);
-
 		Destroy(gameObject);
-	}
-
-	public override void SetUpgrades(int[] upgradeLevels)
-	{
-		this.upgradeLevels = upgradeLevels;
 	}
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StatusEffectManager : MonoBehaviour
 {
-	//I'd LOVE to include the timers in this but you can't edit the values of a struct instance for some reason
+	//I'd LOVE to include the timers in this but you can't edit the values of a struct for some reason
 	public struct EffectTargetPair
 	{
 
@@ -14,7 +14,6 @@ public class StatusEffectManager : MonoBehaviour
 			target = t;
 		}
 
-		//Effects are equal if they share the same EffectType and target
 		public bool Equals(EffectTargetPair other)
 		{
 			return other.target == this.target && other.effect.EffectType == this.effect.EffectType;
@@ -38,8 +37,8 @@ public class StatusEffectManager : MonoBehaviour
 			//If an effect of the same type is on this object already... (determined in the .Equals method)
 			if (activeEffects[i].Equals(newPair))
 			{
-				//Debug.Log("Equivalent effect " + activeEffects[i].effect + " found on " + activeEffects[i].target);
-				//If the duration of the incoming effect is greater than the remaining time on the current effect, reset the timer with the new duration
+				Debug.Log("Equivalent effect " + activeEffects[i].effect + " found on " + activeEffects[i].target);
+				//If the duration of the new effect is greater than the remaining time on the old effect, reset the timer with the new duration
 				if (newPair.effect.duration > timers[i])
 				{
 					timers[i] = newPair.effect.duration;

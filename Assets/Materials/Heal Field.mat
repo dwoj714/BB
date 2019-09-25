@@ -72,12 +72,12 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _charge: 0.545
+    - _charge: 0.322
     - _min: 0.1
     - _ring: 0.01
-    - _startTime: -1
+    - _startTime: 50
     - _timeScale: 0.8
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _color: {r: 0, g: 1, b: 0, a: 0.62352943}
+    - _color: {r: 0.4206059, g: 1, b: 0, a: 0.62352943}

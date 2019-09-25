@@ -102,17 +102,13 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  maxSpeed: 18
-  minSpeed: 6
-  hasFixedSpeed: 0
-  lifespanMode: 2
-  lifespan: Infinity
+  maxSpeed: 20
+  minSpeed: 8
   vfx: {fileID: 0}
-  deathFX: {fileID: 0}
-  massBonus: 0.15
-  maxSpeedBonus: 0.25
-  minSpeedBonus: 0.25
-  fixedSpeed: 0
+  lifespan: Infinity
+  bounces: 3000000
+  hasFixedSpeed: 0
+  detonator: {fileID: 0}
 --- !u!58 &2283941518873556214
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -162,21 +158,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20963edbfdad614419e7170a83c067ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VFX: {fileID: 698324577287022185, guid: f76b3d65f445da04e9605160200500a3, type: 3}
+  VFX: {fileID: 1527323029432444, guid: f89d8dab37cb98349b829a79c798926c, type: 3}
+  incrementer: {fileID: 0}
   minPushForce: 0
   maxPushForce: 90
   minExplosionDMG: 0
   maxExplosionDMG: 0
   explosionRadius: 1.2
   fuse: 1.1
-  screenShake: 1
   useMask: 1
   explosionMask:
     serializedVersion: 2
     m_Bits: 5943
   sparked: 0
   sparkedLastFrame: 0
-  autoDeleteFX: 1
 --- !u!254 &5778496501228796847
 RelativeJoint2D:
   m_ObjectHideFlags: 0
