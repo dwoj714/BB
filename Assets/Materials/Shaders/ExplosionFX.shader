@@ -7,7 +7,7 @@
 		_timeScale("Time scale", float) = 1
 		_outer("Outer edge thickness", float) = 0.5
 		_color("Color", Color) = (1,1,1,1)
-		_bgScale("Background lightness/transparency scale", Range(0,1)) = 0.25
+		_bg("Background Color", Color) = (1,1,1,0.25)
 		_flip("Flip Gradient", Range(0,1)) = 1
 	}
 	SubShader
@@ -47,7 +47,7 @@
 			float _outer;
 			float _flip;
 			float4 _color;
-			float _bgScale;
+			float4 _bg;
 
 			float4 _MainTex_ST;
 
@@ -84,15 +84,10 @@
 				{
 					if(_timeScale>0)
 					{
-						col.r += _bgScale;
-						col.g += _bgScale;
-						col.b += _bgScale;
-
-						col.a = _color.a * _bgScale;
+						col = _bg;
+						col.a *= saturate(1 - _time * _time);
 					}
 				}
-
-				col.a = clamp(col.a, 0, _color.a);
 
 				return col;
 			}

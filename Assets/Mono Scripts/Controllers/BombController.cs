@@ -8,13 +8,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Detonator))]
 public class BombController : PhysCircle, IHealable
 {
-	protected static GameManager manager;
+	public static GameManager manager;
 
 	[Header("Scoring")]
 	public int pointValue = 10;
 	public int comboMult = 1;
-	[HideInInspector]
-	public ComboIncrement incrementer;
 
 	public static float massMod = 1;
 	public static float healthMod = 1;
@@ -32,18 +30,6 @@ public class BombController : PhysCircle, IHealable
 
 	[Header("Behavior")]
 	public float fallSpeed;
-
-	private int healthID, timeID;
-
-	//if true, the bomb will be disabled when it would normally be deleted, so the spawn
-	//formation's parent object can know how many bombs in its formation remain.
-	[SerializeField] private bool formationMember = false;
-
-	//If not immediately sparked, combo multipliers will linger for a little while
-	//If sparked while a combo timer is still active, it will hold that combo while detonating.
-	//These lists keep track of the combos applied to it, to prevent things from being ignored/overwritten
-	private List<int> comboValues = new List<int>();
-	private List<float> comboTimers = new List<float>();
 
 	//Assign this in the inspector. This is used by the spawner to check if the space for this bomb is clear before spawning.
 	//Intended for use with bombs that may have other parts attached as children.
@@ -67,6 +53,11 @@ public class BombController : PhysCircle, IHealable
 		spr = GetComponent<SpriteRenderer>();
 		text = GetComponentInChildren<Text>();
 		gravity = rb.gravityScale;
+
+		if (!showHealth)
+		{
+			text.enabled = false;
+		}
 	}
 
 	protected virtual void Start()
@@ -75,19 +66,8 @@ public class BombController : PhysCircle, IHealable
 		if (!manager)
 		{
 			manager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+			Debug.Log("Bombcontroller Game Manager assigned");
 		}
-
-		//instantiate the combo incrementer
-		incrementer = ScriptableObject.CreateInstance<ComboIncrement>();
-
-		healthID = Shader.PropertyToID("_health");
-		timeID = Shader.PropertyToID("_startTime");
-
-	}
-
-	protected virtual void Update()
-	{
-		ProcessCombos();
 	}
 
 	protected override void FixedUpdate()
@@ -117,16 +97,6 @@ public class BombController : PhysCircle, IHealable
 		fallSpeed = 0;
 		detonator.sparked = true;
 		spr.material.SetFloat("_health", hb.Health / hb.maxHealth);
-
-		//set comboMult to the largest active combo value
-		foreach(int i in comboValues)
-		{
-			if(i > comboMult)
-			{
-				comboMult = i;
-			}
-		}
-
 		text.text = "x" + comboMult;
 		text.color = Color.white;
 	}
@@ -141,15 +111,10 @@ public class BombController : PhysCircle, IHealable
 		UpdateHealthVisuals();
 	}
 
-	public void UpdateHealthVisuals()
+	void UpdateHealthVisuals()
 	{
-		spr.material.SetFloat(healthID, hb.Health / hb.maxHealth);
-		spr.material.SetFloat(timeID, Time.time);
-
-		if (showHealth)
-			text.text = Mathf.Ceil(hb.Health).ToString();
-		else
-			text.text = "";
+		spr.material.SetFloat("_health", hb.Health / hb.maxHealth);
+		text.text = "" + Mathf.Ceil(hb.Health);
 	}
 
 	void OnExplosion()
@@ -173,56 +138,7 @@ public class BombController : PhysCircle, IHealable
 
 		manager.AddScore(pointValue * comboMult);
 		//Debug.Log("Adding 10 * " + comboMult + "To score.");
-		if (!formationMember)
-			Destroy(gameObject);
-		else
-			gameObject.SetActive(false);
+
+		Destroy(this.gameObject);
 	}
-
-	protected override void OnCollisionEnter2D(Collision2D hit)
-	{
-		BombController bomb = hit.gameObject.GetComponent<BombController>();
-
-		if (bomb && detonator.sparked)
-		{
-			bomb.PrimeCombo(this, 0.5f);
-		}
-
-		base.OnCollisionEnter2D(hit);
-
-	}
-
-	private IEnumerator HandleCollisionCombo(BombController bomb)
-	{
-		//wait a frame to make sure both collisions have been processed
-		yield return null;
-	}
-
-	public void PrimeCombo(BombController primer, float duration)
-	{
-		comboValues.Add(primer.comboMult + 1);
-		comboTimers.Add(duration);
-	}
-
-	public void PrimeCombo(int primer, float duration)
-	{
-		comboValues.Add(primer);
-		comboTimers.Add(duration);
-	}
-
-	private void ProcessCombos()
-	{
-		if(!detonator.sparked)
-			for (int i = 0; i < comboValues.Count; i++)
-			{
-				comboTimers[i] -= Time.deltaTime;
-				if (comboTimers[i] <= 0)
-				{
-					comboTimers.RemoveAt(i);
-					comboValues.RemoveAt(i);
-					i--;
-				}
-			}
-	}
-
 }

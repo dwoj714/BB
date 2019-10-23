@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
 		presets.Add("Game", new CamPreset(new Vector3(0,21.8f,-100), 8));
 		presets.Add("Loadout", new CamPreset(new Vector3(0, 10, -100), 8));
 
-		nameID = Shader.PropertyToID("_mag");
+		nameID = shaker.GetInt("_mag");
 
 		border = GetComponent<CollisionBorder>();
 	}
@@ -54,8 +54,8 @@ public class CameraController : MonoBehaviour
 	{
 		if (moving)
 		{
-			transform.position = Vector3.Lerp(transform.position, targetPosition, transitionSpeed * Time.deltaTime);
-			cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetSize, transitionSpeed * Time.deltaTime);
+			transform.position = Vector3.Lerp(transform.position, targetPosition, transitionSpeed);
+			cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetSize, transitionSpeed);
 
 			if (Mathf.Approximately((transform.position - targetPosition).sqrMagnitude, 0))
 			{
@@ -67,7 +67,7 @@ public class CameraController : MonoBehaviour
 
 		if (shakeIntensity > shakeLimit) shakeIntensity = shakeLimit;
 
-		shakeIntensity = Mathf.Lerp(shakeIntensity, 0, 12 * Time.deltaTime);
+		shakeIntensity = Mathf.Lerp(shakeIntensity, 0, 0.2f);
 
 	}
 
@@ -118,11 +118,11 @@ public class CameraController : MonoBehaviour
 
 		if (screenShakeEnabled)
 		{
-			shaker.SetFloat(nameID, shakeIntensity);
+			shaker.SetFloat("_mag", shakeIntensity);
 		}
 		else
 		{
-			shaker.SetFloat(nameID, 0);
+			shaker.SetFloat("_mag", 0);
 		}
 
 		Graphics.Blit(source, destination, shaker);

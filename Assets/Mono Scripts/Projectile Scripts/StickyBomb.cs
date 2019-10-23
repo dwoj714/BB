@@ -7,9 +7,6 @@ public class StickyBomb : ExplosiveProjectile
 {
 	RelativeJoint2D joint;
 
-	private bool autoDetonate = false;
-	private BombController connection = null;
-
 	protected override void Awake()
 	{
 		base.Awake();
@@ -25,12 +22,7 @@ public class StickyBomb : ExplosiveProjectile
 	{
 		base.Update();
 
-		if (connection && autoDetonate && connection.detonator.sparked)
-		{
-			detonator.Explode();
-		}
-
-		if (gameObject.layer == 14 && !joint.connectedBody)
+		if (gameObject.layer == 11 && !joint.connectedBody)
 		{
 			gameObject.layer = 9;
 		}
@@ -49,20 +41,15 @@ public class StickyBomb : ExplosiveProjectile
 				joint.connectedBody = bomb.rb;
 				joint.enabled = true;
 				joint.linearOffset = joint.linearOffset.normalized * bomb.AdjustedRadius;
-				gameObject.layer = 14;
-				connection = bomb;
+				gameObject.layer = 11;
 			}
 		}
 		detonator.sparked = true;
 	}
 
-	public override void SetUpgrades(int[] upgradeLevels)
+	void OnExplosion()
 	{
-		base.SetUpgrades(upgradeLevels);
-		if(upgradeLevels[3] != 0)
-		{
-			autoDetonate = true;
-		}
+		Destroy(this.gameObject);
 	}
 
 }

@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Detonator : MonoBehaviour {
 
-	public ExplosionInstance VFX;
+	public GameObject VFX;
+
+	[HideInInspector]
+	public ComboIncrement incrementer;
 
 	//private ExplosionParameters defaultParameters;
 
 	public float minPushForce, maxPushForce;
 	public float minExplosionDMG, maxExplosionDMG;
 	public float explosionRadius;
-	public float fuse = 0.5f;
-	public bool screenShake = true;
+	public float fuse = .5f;
 
 	CameraController cam;
 
@@ -22,6 +24,20 @@ public class Detonator : MonoBehaviour {
 
 	float fuseTimer;
 
+	/*public struct ExplosionParameters
+	{
+		public float minPush, maxPush, minDMG, maxDMG, radius;
+
+		public ExplosionParameters(float rad, float minP, float maxP, float minD, float maxD)
+		{
+			minPush = minP;
+			maxPush = maxP;
+			minDMG = minD;
+			maxDMG = maxD;
+			radius = rad;
+		}
+	}*/
+
 	//When this is true, the fuse is shortened via deltaTime
 	public bool sparked;
 	[HideInInspector]
@@ -30,19 +46,15 @@ public class Detonator : MonoBehaviour {
 	[HideInInspector]
 	PhysCircle circle;
 
-	private BombController attachedBomb;
-
-	//private ExplosionInstance fx;
-
-	[HideInInspector] public bool autoDeleteFX = true;
-
 	void Awake()
 	{
 		fuseTimer = fuse;
 		circle = GetComponent<PhysCircle>();
-		cam = Camera.main.GetComponent<CameraController>();
-		attachedBomb = GetComponent<BombController>();
+		incrementer = ScriptableObject.CreateInstance<ComboIncrement>();
 
+		cam = Camera.main.GetComponent<CameraController>();
+
+		//defaultParameters = new ExplosionParameters(explosionRadius, minPushForce, maxPushForce, minExplosionDMG, maxExplosionDMG);
 	}
 
 	void Update()
@@ -58,7 +70,6 @@ public class Detonator : MonoBehaviour {
 				fuseTimer = fuse;
 			}
 		}
-		if (fuseTimer > fuse) fuseTimer = fuse;
 	}
 
 	//Not sure if this actually needs to be in lateUpdate but it can't hurt can it?
@@ -69,8 +80,7 @@ public class Detonator : MonoBehaviour {
 
 	public void Explode()
 	{
-		//Apply camera shale
-		if(screenShake) cam.shakeIntensity += Mathf.Log(Mathf.Sqrt(explosionRadius), 50)/2;
+		cam.shakeIntensity += Mathf.Log(Mathf.Sqrt(explosionRadius), 50)/2;
 
 		//When exploding, check for colliders within the blast radius
 		Collider2D[] results;
@@ -78,8 +88,7 @@ public class Detonator : MonoBehaviour {
 			results = Physics2D.OverlapCircleAll(circle.transform.position, explosionRadius, explosionMask);
 		else
 			results = Physics2D.OverlapCircleAll(circle.transform.position, explosionRadius);
-		
-		//How to affect things hit by the explosion
+
 		if (results.Length > 0)
 		{
 			//Declare a bunch of things to hold references to things to be affected by the explosion  
@@ -104,8 +113,11 @@ public class Detonator : MonoBehaviour {
 				if (hitCol != circle.col)
 				{
 					ColliderDistance2D cd = circle.col.Distance(hitCol);
+
 					//Clamp the collider distance to positive numbers to avoid issues related to negative collider distance
 					float dst = Mathf.Clamp(cd.distance, 0, Mathf.Infinity);
+
+					//Tbh, don't remember what exact purpose this had for explosion force/damage calculations
 					float adjustedRadius = explosionRadius - circle.AdjustedRadius;
 
 					//Add forces to colliders with rigidbodies
@@ -115,20 +127,14 @@ public class Detonator : MonoBehaviour {
 						hitRb.AddForce(cd.normal * pushForce * (cd.distance < 0 ? 1 : -1), ForceMode2D.Impulse);
 					}
 
-					//if this detonator is attached to a bomb, process combo stuff for bombs hit by the explosion
-					if (attachedBomb)
-					{
-						BombController hitBomb = hitCol.GetComponent<BombController>();
-						if (hitBomb)
-						{
-							hitBomb.PrimeCombo(attachedBomb, 1);
-						}
-					}
-
 					//deal damage to colliders attached to HealthBars
 					if (hitHb)
 					{
 						damage = (adjustedRadius - dst) / adjustedRadius * (dmgRange) + minExplosionDMG;
+						if(hitHb.Health >= 1 && damage > hitHb.Health)
+						{
+							incrementer.ApplyEffect(hitHb.gameObject);
+						}
 						hitHb.TakeDamage(damage, gameObject);
 					}
 				}
@@ -138,7 +144,6 @@ public class Detonator : MonoBehaviour {
 		if (VFX)
 		{
 			ExplosionInstance fx = Instantiate(VFX, transform.position, Quaternion.identity).GetComponent<ExplosionInstance>();
-
 			if (fx)
 			{
 				fx.SetRadius(explosionRadius);
@@ -147,6 +152,11 @@ public class Detonator : MonoBehaviour {
 		}
 		SendMessage("OnExplosion");
 	}
+
+	/*public void ExplosionOverride(float radius, float minPush, float maxPush, float minDMG, float maxDMG)
+	{
+		ExplosionParameters oldParams = new ExplosionParameters(explosionRadius, minPushForce, maxPushForce, minExplosionDMG, maxExplosionDMG);
+	}*/
 
 	void OnDrawGizmos()
 	{

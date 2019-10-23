@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour {
 
 	public IInputReciever reciever;
 
-	private bool mouseDetected = false;
+	private bool releasedLastFrame = false;
 
 	void Update ()
 	{
@@ -16,7 +16,6 @@ public class InputManager : MonoBehaviour {
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
-				mouseDetected = true;
 				reciever.OnInputStart(MouseWorldPosition);
 			}
 			if (Input.GetMouseButton(0))
@@ -28,7 +27,7 @@ public class InputManager : MonoBehaviour {
 				reciever.OnInputReleased(MouseWorldPosition);
 			}
 
-			if (!mouseDetected && Input.touchCount > 0)
+			if (Input.touchCount > 0)
 				switch (Input.GetTouch(0).phase)
 				{
 					case TouchPhase.Began:
@@ -36,7 +35,6 @@ public class InputManager : MonoBehaviour {
 						break;
 
 					case TouchPhase.Moved:
-					case TouchPhase.Stationary:
 						reciever.OnInputHeld(TouchWorldPosition);
 						break;
 
@@ -44,16 +42,95 @@ public class InputManager : MonoBehaviour {
 						reciever.OnInputReleased(TouchWorldPosition);
 						break;
 
-					case TouchPhase.Canceled:
-						reciever.OnInputCancel();
-						break;
-
 				}
-			
 
 		}
 		else inputPause = false;
+
 	}
+
+	/*void ManageAbility()
+	{
+		if (Input.GetMouseButtonUp(0))
+		{
+			Ability.Activate(MouseWorldPosition);
+			Ability.Disarm(this);
+			indicator.ActivateAbilityFX();
+		}
+		if (Input.GetMouseButton(0))
+		{
+			if(Ability.GetType() == typeof(RadialStatus))
+			{
+				indicator.abilityFX.SetRadius(((RadialStatus)Ability).radius);
+			}
+
+			indicator.abilityFX.transform.position = MouseWorldPosition;
+			indicator.abilityFX.Visible = true;
+		}
+	}*/
+
+	/*void ManageLauncher()
+	{
+		//When the mouse is clicked...
+		if (Input.GetMouseButtonDown(0))
+		{
+			dragStart = MouseWorldPosition;
+			indicator.field.transform.position = dragStart;
+		}
+
+		//If the mouse is being held down...
+		if (Input.GetMouseButton(0))
+		{
+			launcher.Drag = (MouseWorldPosition - dragStart);
+
+			if (!launcher.Armed() && launcher.Drag.magnitude >= launcher.minDragLength)
+			{
+				indicator.ChargeFieldVisible = true;
+				launcher.ReadyShot();
+			}
+		}
+
+		//When the mouse is released...
+		if (Input.GetMouseButtonUp(0))
+		{
+			launcher.LaunchShot();
+			launcher.Drag = Vector2.zero;
+			indicator.ChargeFieldVisible = false;
+		}
+
+		if (Input.touchCount > 0)
+		switch (Input.GetTouch(0).phase)
+		{
+			case TouchPhase.Began:
+
+				dragStart = TouchWorldPosition;
+				indicator.field.transform.position = dragStart;
+
+				break;
+
+			case TouchPhase.Moved:
+
+				launcher.Drag = (TouchWorldPosition - dragStart);
+
+				if (!launcher.Armed() && launcher.Drag.magnitude >= launcher.minDragLength)
+				{
+					indicator.ChargeFieldVisible = true;
+					launcher.ReadyShot();
+				}
+
+				break;
+
+			case TouchPhase.Ended:
+
+				launcher.LaunchShot();
+				launcher.Drag = Vector2.zero;
+				indicator.ChargeFieldVisible = false;
+
+				break;
+
+		}
+
+	}*/
 
 	public static Vector2 MouseWorldPosition
 	{
@@ -69,12 +146,6 @@ public class InputManager : MonoBehaviour {
 		{
 			return Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
 		}
-	}
-
-	//Public call to cancel input for the reciever
-	public void CancelInput()
-	{
-		reciever.OnInputCancel();
 	}
 
 }

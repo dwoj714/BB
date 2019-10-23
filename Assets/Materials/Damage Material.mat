@@ -77,13 +77,10 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     - _angle: 0
-    - _ccm: 1.4
     - _flicker: 10
     - _health: 1
     - _shakeInt: 20
-    - _shakeVar: -10
-    - _sigMult: 1
-    - _sigPlus: 1
+    - _shakeVar: -20
     - _startTime: 0
     - _trans: 0.5
     - health: 1

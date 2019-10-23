@@ -13,15 +13,18 @@ public class FollowObject : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
     }
 
-	private void FixedUpdate()
+	private void Update()
 	{
 		//if the rigidbody to be followed stops existing, destroy this gameObject
 		if (!followRB)
 		{
 			Destroy(gameObject);
 		}
-		if (followRB) rb.position = followRB.position + offset;
 	}
 
+	private void FixedUpdate()
+	{
+		if(followRB) rb.position = followRB.position + offset;
+	}
 
 }

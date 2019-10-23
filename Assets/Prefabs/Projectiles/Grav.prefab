@@ -132,9 +132,9 @@ PointEffector2D:
   m_ForceVariation: 0
   m_DistanceScale: 1
   m_ForceSource: 1
-  m_ForceTarget: 1
+  m_ForceTarget: 0
   m_ForceMode: 0
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0
 --- !u!1 &7508355541605256711
 GameObject:
@@ -273,11 +273,11 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
+  chargeTime: 1.2
+  energyCost: 50
   maxSpeed: 4.5
   minSpeed: 0.5
   vfx: {fileID: 5477861917631321750}
-  deathFX: {fileID: 0}
-  lifespanMode: 1
   lifespan: 12
   bounces: 50000
   hasFixedSpeed: 0

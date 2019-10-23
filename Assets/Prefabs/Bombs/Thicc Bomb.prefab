@@ -53,16 +53,14 @@ MonoBehaviour:
   rb: {fileID: 0}
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
-  pointValue: 30
+  pointValue: 10
   comboMult: 1
-  incrementer: {fileID: 0}
   gravity: 0
   detonator: {fileID: 0}
   loot: {fileID: 0}
   text: {fileID: 0}
   spr: {fileID: 0}
   fallSpeed: 0.55
-  formationMember: 0
   broadRadius: 0.65
 --- !u!212 &212906082995519072
 SpriteRenderer:
@@ -124,21 +122,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20963edbfdad614419e7170a83c067ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VFX: {fileID: 114863203888166904, guid: f89d8dab37cb98349b829a79c798926c, type: 3}
-  minPushForce: 20
-  maxPushForce: 60
-  minExplosionDMG: 15
-  maxExplosionDMG: 75
+  VFX: {fileID: 1527323029432444, guid: f89d8dab37cb98349b829a79c798926c, type: 3}
+  incrementer: {fileID: 0}
+  minPushForce: 15
+  maxPushForce: 55
+  minExplosionDMG: 10
+  maxExplosionDMG: 55
   explosionRadius: 4
   fuse: 1
-  screenShake: 1
-  useMask: 1
+  useMask: 0
   explosionMask:
     serializedVersion: 2
-    m_Bits: 30519
+    m_Bits: 0
   sparked: 0
   sparkedLastFrame: 0
-  autoDeleteFX: 1
 --- !u!114 &114004565069180068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c82a358de183a642b70657c5395756a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 150
+  maxHealth: 130
   maxShield: 0
   rechargeRate: 0
   rechargeDelay: 0
