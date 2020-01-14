@@ -85,6 +85,8 @@ public class UnlockController : MonoBehaviour
 			PlayerPrefs.SetInt("bank", PlayerPrefs.GetInt("bank", 0) - prices[idx]);
 			PlayerPrefs.Save();
 
+			UpdateText();
+
 		}
 	}
 

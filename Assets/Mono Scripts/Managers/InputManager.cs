@@ -5,14 +5,22 @@ using UnityEngine;
 public class InputManager : MonoBehaviour {
 
 	private bool inputPause = false;
+	public bool inputHalt = false;
+	public static InputManager main;
 
 	public IInputReciever reciever;
 
 	private bool mouseDetected = false;
 
+	private void Awake()
+	{
+		if (!main) main = this;
+		else Debug.LogError("More than one InputManager instantiated!");
+	}
+
 	void Update ()
 	{
-		if (GameManager.gameInProgress && !inputPause && !GameManager.paused)
+		if (GameManager.gameInProgress && !(inputPause || inputHalt) && !GameManager.paused)
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
@@ -49,7 +57,11 @@ public class InputManager : MonoBehaviour {
 						break;
 
 				}
-			
+
+			if (Input.GetKey(KeyCode.Escape))
+			{
+			//	GameManager.main.PauseGame();
+			}
 
 		}
 		else inputPause = false;

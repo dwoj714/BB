@@ -65,11 +65,13 @@ public class DifficultyManager : MonoBehaviour
 		{
 			case 0:
 				BombController.massMod += 0.1f;
+				StartCoroutine(progressBar.FlashMass());
 				//Debug.Log("Bomb mass increased 10%");
 				break;
 
 			case 1:
 				BombController.healthMod += 0.1f;
+				StartCoroutine(progressBar.FlashHealth());
 				//Debug.Log("Bomb health increased 10%");
 				break;
 

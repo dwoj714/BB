@@ -36,6 +36,14 @@ public class Detonator : MonoBehaviour {
 
 	[HideInInspector] public bool autoDeleteFX = true;
 
+	public float FusePercent
+	{
+		get
+		{
+			return fuseTimer / fuse;
+		}
+	}
+
 	void Awake()
 	{
 		fuseTimer = fuse;

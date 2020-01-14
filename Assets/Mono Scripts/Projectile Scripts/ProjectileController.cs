@@ -23,19 +23,20 @@ public class ProjectileController : Launchable
 	[SerializeField] protected float massBonus = 0.15f;
 	[SerializeField] protected float maxSpeedBonus = 0.25f;
 	[SerializeField] protected float minSpeedBonus = 0.25f;
+	[SerializeField] protected float lifeSpanBonus = 0.25f;
 
-	private float lifeTimer;
+	private float lifeTimer = 0;
 
 	//Whether or not the projectile has left the launcher's circle collider
 	private bool escaped;
 	protected bool launched = false;
-	public float fixedSpeed;
+	[HideInInspector] public float fixedSpeed;
 
 	protected override void Awake()
 	{
 		base.Awake();
 		if(gameObject.layer != 11) gameObject.layer = 10;
-		lifeTimer = lifespan;
+
 		trail = GetComponentInChildren<TrailRenderer>();
 		if (deathFX)
 		{
@@ -63,9 +64,9 @@ public class ProjectileController : Launchable
 		if (lifespanMode == LifespanMode.Timed)
 		{
 			if (launched)
-				lifeTimer -= Time.deltaTime;
+				lifeTimer += Time.deltaTime;
 
-			if (lifeTimer <= 0)
+			if (lifeTimer > lifespan * (1 + lifeSpanBonus * upgradeLevels[2]))
 			{
 				Destroy(gameObject);
 			}
@@ -109,11 +110,25 @@ public class ProjectileController : Launchable
 		return vDiff * power + minSpeed;
 	}
 
-	public override void SetUpgrades(int[] upgradeLevels)
+	public override int[] UpgradeLevels
 	{
-		rb.mass *= 1 + upgradeLevels[0] * massBonus;
-		maxSpeed *= 1 + upgradeLevels[1] * maxSpeedBonus;
-		minSpeed *= 1 + upgradeLevels[2] * minSpeedBonus;
+		get
+		{
+			return upgradeLevels;
+		}
+		set
+		{
+			base.UpgradeLevels = value;
+			rb.mass *= 1 + upgradeLevels[3] * massBonus;
+			maxSpeed *= 1 + upgradeLevels[4] * maxSpeedBonus;
+			minSpeed *= 1 + upgradeLevels[4] * minSpeedBonus;
+			lifespan *= 1 + upgradeLevels[5] * lifeSpanBonus;
+		}
+	}
+
+	public override float LaunchSpeed(float power)
+	{
+		return SpeedAtPower(power);
 	}
 
 }

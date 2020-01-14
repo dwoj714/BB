@@ -35,20 +35,11 @@ public class BombController : PhysCircle, IHealable
 
 	private int healthID, timeID;
 
-	//if true, the bomb will be disabled when it would normally be deleted, so the spawn
-	//formation's parent object can know how many bombs in its formation remain.
-	[SerializeField] private bool formationMember = false;
-
 	//If not immediately sparked, combo multipliers will linger for a little while
 	//If sparked while a combo timer is still active, it will hold that combo while detonating.
 	//These lists keep track of the combos applied to it, to prevent things from being ignored/overwritten
 	private List<int> comboValues = new List<int>();
 	private List<float> comboTimers = new List<float>();
-
-	//Assign this in the inspector. This is used by the spawner to check if the space for this bomb is clear before spawning.
-	//Intended for use with bombs that may have other parts attached as children.
-	//This radius should account for how far out those parts reach.
-	public float broadRadius;
 
 	//...Running UpdateHealthVisuals in Start() seems to do it after the values are properly set
 	//Do it once during Update, while this is false. (Set to true after calling UpdateHealthVisuals once.
@@ -58,10 +49,6 @@ public class BombController : PhysCircle, IHealable
 	{
 		base.Awake();
 		rb = GetComponent<Rigidbody2D>();
-
-		rb.mass *= massMod;
-		hb.maxHealth *= healthMod;
-		hb.FullHeal();
 
 		detonator = GetComponent<Detonator>();
 		spr = GetComponent<SpriteRenderer>();
@@ -105,6 +92,7 @@ public class BombController : PhysCircle, IHealable
 			rb.gravityScale = gravity;
 		}
 
+		//see definition of private bool updatedHealth
 		if (!updatedHealth)
 		{
 			UpdateHealthVisuals();
@@ -172,18 +160,14 @@ public class BombController : PhysCircle, IHealable
 		}
 
 		manager.AddScore(pointValue * comboMult);
-		//Debug.Log("Adding 10 * " + comboMult + "To score.");
-		if (!formationMember)
-			Destroy(gameObject);
-		else
-			gameObject.SetActive(false);
+		Destroy(gameObject);
 	}
 
 	protected override void OnCollisionEnter2D(Collision2D hit)
 	{
 		BombController bomb = hit.gameObject.GetComponent<BombController>();
 
-		if (bomb && detonator.sparked)
+		if (bomb && (detonator.sparked || bomb.detonator.sparked))
 		{
 			bomb.PrimeCombo(this, 0.5f);
 		}
@@ -223,6 +207,13 @@ public class BombController : PhysCircle, IHealable
 					i--;
 				}
 			}
+	}
+
+	public void ApplyScaling()
+	{
+		rb.mass *= massMod;
+		hb.maxHealth *= healthMod;
+		hb.FullHeal();
 	}
 
 }

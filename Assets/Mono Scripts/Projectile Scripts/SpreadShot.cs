@@ -8,7 +8,8 @@ public class SpreadShot : Launchable
 	public Launchable projectileType;
 	public float minSpreadDegrees, maxSpreadDegrees = 45;
 
-	private int[] upgradeLevels;
+	[Header("Upgrade Scaling")]
+	[SerializeField] private float chokeFactor = 0.4f;
 
 	//Launches [shotcount] projectiles in an arc [spreadDegrees] degrees wide
 	public override void Launch(Vector2 direction, float power)
@@ -26,11 +27,11 @@ public class SpreadShot : Launchable
 			shot = Instantiate(projectileType, transform.position, Quaternion.identity);
 
 			//calculate the angle & vector to send it off with
-			float shotAngle = Vector2.SignedAngle(Vector2.right, direction) + (i / (float)(shotCount - 1)* spreadDegrees) - spreadDegrees/2;
+			float shotAngle = Vector2.SignedAngle(Vector2.right, direction) + (i / (float)(shotCount - 1) * spreadDegrees) - spreadDegrees/2;
 			Vector2 shotDirection = new Vector2(Mathf.Cos(shotAngle * Mathf.Deg2Rad), Mathf.Sin(shotAngle * Mathf.Deg2Rad));
 
-			//make it apply whatever upgrades
-			shot.SetUpgrades(upgradeLevels);
+			//Apply upgrades to it
+			shot.UpgradeLevels = upgradeLevels;
 
 			//this step
 			shot.launcherCollider = launcherCollider;
@@ -41,13 +42,21 @@ public class SpreadShot : Launchable
 		Destroy(gameObject);
 	}
 
-	//upgradeLevels is sent to each projectile after instantiation
-	public override void SetUpgrades(int[] upgradeLevels)
+	public override int[] UpgradeLevels
 	{
-		this.upgradeLevels = new int[upgradeLevels.Length];
-		upgradeLevels.CopyTo(this.upgradeLevels, 0);
-		shotCount += upgradeLevels[4];
-		this.upgradeLevels[4] = 0;
+		set
+		{
+			base.UpgradeLevels = value;
+
+			shotCount += upgradeLevels[12];
+			maxSpreadDegrees *= 1/(1 + upgradeLevels[13] * chokeFactor);
+			minSpreadDegrees *= 1 / (1 + upgradeLevels[13] * (chokeFactor / 2));
+		}
+	}
+
+	public override float LaunchSpeed(float power)
+	{
+		return projectileType.LaunchSpeed(power);
 	}
 
 }

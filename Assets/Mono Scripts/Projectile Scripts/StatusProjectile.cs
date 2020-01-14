@@ -13,9 +13,16 @@ public class StatusProjectile : ProjectileController
 		if(effects[effectLevel] != null) effects[effectLevel].ApplyEffect(collision.collider.gameObject);
 	}
 
-	public override void SetUpgrades(int[] upgradeLevels)
+	public override int[] UpgradeLevels
 	{
-		base.SetUpgrades(upgradeLevels);
-		effectLevel = upgradeLevels[3];
+		get
+		{
+			return upgradeLevels;
+		}
+		set
+		{
+			base.UpgradeLevels = value;
+			effectLevel = upgradeLevels[10];
+		}
 	}
 }

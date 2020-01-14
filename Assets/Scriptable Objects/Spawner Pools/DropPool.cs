@@ -85,14 +85,11 @@ public class DropPool : ScriptableObject, IRandomList
 		name = pool.name + " (Copy)";
 		for(int i = 0; i < pool.Objects.Count; i++)
 		{
-			Debug.Log("Copied Object: " + pool.Objects[i] + ". Chances: " + pool.Chances[i]);
-
 			objects.Add(pool.Objects[i]);
 			chances.Add(pool.Chances[i]);
 		}
 		timer = pool.Timer;
 		depleteChances = pool.depleteChances;
-		Debug.Log(name + " Value copy complete");
 	}
 
 	public float Timer

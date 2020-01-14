@@ -85,13 +85,15 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				float _time = (_Time[1] - _startTime);
-
 				float4 _deltaColor = _color1 - _color2;
-
-				//_health = sqrt(_health);
+				//Curves the health equation so they only appear mostly red if very low on health
 				float newHealth = sqrt(_health * sqrt(_health));
+				fixed4 col;
 
-				fixed4 col = _color2 + _deltaColor * newHealth;
+								
+
+				//Sets color based on health
+				col = _color2 + _deltaColor * newHealth;
 				
 				if (newHealth <= 0 && floor(_time * _flicker) % 2==0)
 				{

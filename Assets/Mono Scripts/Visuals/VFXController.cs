@@ -15,6 +15,12 @@ public class VFXController : MonoBehaviour
 	public Transform targetTransform;
 	public bool parentScaleCompensation = true;
 
+
+	private int _flipID = Shader.PropertyToID("_flip");
+	private int _timeScaleID = Shader.PropertyToID("_timeScale");
+	private int _colorID = Shader.PropertyToID("_color");
+	private int _startTimeID = Shader.PropertyToID("_startTime");
+
 	// Use this for initialization
 	void Awake()
 	{
@@ -25,7 +31,6 @@ public class VFXController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
 		if(timer < duration)
 		{
 			timer += Time.deltaTime;
@@ -33,29 +38,28 @@ public class VFXController : MonoBehaviour
 			if(timer >= duration)
 			{
 				Visible = false;
-				mat.SetFloat("_flip", 0);
+				mat.SetFloat(_flipID, 0);
 			}
 		}
-
 
 		if (pTime != timeScale)
 		{
 			pTime = timeScale;
-			mat.SetFloat("_timeScale", timeScale);
+			mat.SetFloat(_timeScaleID, timeScale);
 		}
 
 		if (spr.color != pColor)
 		{
 			pColor = spr.color;
-			mat.SetColor("_color", pColor);
+			mat.SetColor(_colorID, pColor);
 		}
 	}
 
 	public void ActivateFX()
 	{
 		Visible = true;
-		mat.SetFloat("_startTime", Time.time);
-		mat.SetFloat("_flip", 1);
+		mat.SetFloat(_startTimeID, Time.time);
+		mat.SetFloat(_flipID, 1);
 		timer = 0;
 	}
 

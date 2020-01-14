@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IUpgradeable
 {
-	void SetUpgrades(int[] upgradeLevels);
+	int[] UpgradeLevels { set; }
+	//int[] UpgradeLimits { get; set; }
 }

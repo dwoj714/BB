@@ -4,26 +4,81 @@ using UnityEngine;
 
 public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 {
-	//[SerializeField] private float shotCost;
+//////////////////////////   BEHAVIOR   //////////////////////////
+	[Header("Behavior")]
+	//Time needed to fully charge a shot
+	public float chargeTime = 1;
+
+	//Energy used per shot
 	[SerializeField] private float shotEnergy = 5;
-	[Header("Aiming")]
+
+	//Projectile to be instantiated when firing
+	[SerializeField] private Launchable ammo;
+
+	[SerializeField] private bool launchWithAnimator = false;
+
+//////////////////////////   STATICS   //////////////////////////
+
+	public static bool invertAim = false;
+	public static float stiffness = 1.0f;
+	public static int InvertFactor
+	{
+		get
+		{
+			return invertAim ? -1 : 1;
+		}
+	}
 	public static float maxDragLength = 2.5f;
 	public static float minDragLength = 0.15f;
-	private Vector2 clickPos, dragPos;
+	private static IGController indicator = null;
 
-	private int[] upgrades = new int[3];
+	//////////////////////////    UPGRADES STUFF    //////////////////////////
+	
+	[Header("Upgrades Per Level")]
+	[SerializeField] private float chargeBonus;
+	[SerializeField] private float rechargeBonus;
+	[SerializeField] private float capacityBonus;
+
+	[Header("Upgrades (See UpgradeNodeController for effects)")]
+	private int[] upgradeLevels = new int[20];
+
+	public int[] UpgradeLevels
+	{
+		get
+		{
+			return upgradeLevels;
+		}
+		set
+		{
+			value.CopyTo(upgradeLevels, 0);
+
+			rechargeRate *= 1 + rechargeBonus * upgradeLevels[1];
+			maxEnergy *= 1 + capacityBonus * upgradeLevels[2];
+		}
+	}
+
+	[SerializeField] private int[] upgradeLimits;
+	public int[] UpgradeLimits
+	{
+		get
+		{
+			return upgradeLimits;
+		}
+		set
+		{
+			upgradeLimits = value;
+		}
+	}
+
+/////////////////////////////   INTERNAL   //////////////////////////////
 
 	private float charge = 0;
-	public float chargeTime = 1;
-	
-	private static IGController indicator = null;
-	public bool useDefaultGuide = true;
+	private Vector2 clickPos, dragPos, oldDrag;
+	private AnimationDispatcher animator;
+	[HideInInspector]public CircleCollider2D col;
 
-	new public CircleCollider2D collider;
+////////////////////////////    PROPERTIES    ////////////////////////////
 
-	//Projectile to be copied
-	[SerializeField]
-	private Launchable ammo;
 	public Launchable Shot { get; private set; }
 
 	public Vector2 Drag
@@ -31,6 +86,14 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		get
 		{
 			return dragPos - clickPos;
+		}
+	}
+
+	public Vector2 OldDrag
+	{
+		get
+		{
+			return oldDrag - clickPos;
 		}
 	}
 
@@ -42,9 +105,9 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		}
 	}
 
-	public float ShotPower()
+	public float ShotPower
 	{
-		return (Drag / maxDragLength * ChargePercentage).magnitude;
+		get { return (Pull / maxDragLength * ChargePercentage).magnitude; }
 	}
 
 	public bool Armed
@@ -61,14 +124,13 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		get
 		{
 			Vector2 pull = Vector2.ClampMagnitude(Drag, maxDragLength * ChargePercentage);
-			if (pull.y > 0)
+			if ((pull.y > 0 && !invertAim) || (pull.y < 0 && invertAim))
 			{
 				return Vector2.zero;
 			}
 			return pull;
 		}
 	}
-
 	//Ratio of pull to max possible pull
 	public float PullPercentage
 	{
@@ -91,7 +153,9 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		}
 	}
 
-	void Awake()
+////////////////////////////    METHODS    ////////////////////////////
+
+	private void Start()
 	{
 		if (indicator == null)
 		{
@@ -101,9 +165,12 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		indicator.launcher = this;
 		indicator.ChargeFieldVisible = false;
 		InitEnergy();
+
+		animator = GetComponent<AnimationDispatcher>();
+
 	}
 
-	void FixedUpdate()
+	private void LateUpdate()
 	{
 		if (Armed) AimShot();
 	}
@@ -116,7 +183,20 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	public void OnInputHeld(Vector2 position)
 	{
+		oldDrag = dragPos;
 		dragPos = position;
+
+		//move the scope if dragging past scope bounds based on stiffness
+		if(Vector2.SqrMagnitude(clickPos - dragPos) > maxDragLength * maxDragLength)
+		{
+			Vector2 excess =  Drag - Vector2.ClampMagnitude(Drag, maxDragLength);
+			Vector2 oldExcess = OldDrag - Vector2.ClampMagnitude(OldDrag, maxDragLength);
+
+			if (oldExcess.sqrMagnitude < excess.sqrMagnitude)
+				clickPos += (excess - oldExcess) * (1-stiffness);
+
+			indicator.fSprite.transform.position = clickPos;
+		}
 
 		//If the input is dragged far enough, make the charge field visible and attempt to ready a shot. 
 		if (!Armed && Drag.magnitude >= minDragLength)
@@ -127,15 +207,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		//If the launcher is armed, charge the shot until it's fully charged.
 		else if (Armed)
 		{
-			if (charge < chargeTime)
-			{
-				charge += Time.deltaTime;
-
-				if(charge > chargeTime)
-				{
-					charge = chargeTime;
-				}
-			}
+			IncrementCharge();
 		}
 	}
 
@@ -159,29 +231,60 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 	private void ReadyShot()
 	{
 		//If the required energy can be spent...
-		if (!Armed && SpendEnergy(shotEnergy))
+		if (!Armed && CanSpendEnergy(shotEnergy) && (!animator || animator.CancelAnimation()))
 		{
 			//create a copy of ammo, position it at the center of the launcher
 			Shot = Instantiate(Ammo, transform.position, Quaternion.identity).GetComponent<Launchable>();
-			Shot.launcherCollider = collider;
+			Shot.launcherCollider = col;
+
 			recharging = false;
 			delayTimer = chargeTime;
+			IncrementCharge();
+
+			//Transfer upgrades to the shot, and any IUpgradeable components in its children
+			Shot.UpgradeLevels = upgradeLevels;
+			foreach (IUpgradeable item in Shot.GetComponentsInChildren<IUpgradeable>())
+			{
+				item.UpgradeLevels = upgradeLevels;
+			}
 		}
 	}
 
 	private void AimShot()
 	{
-		Shot.rb.MovePosition((Vector2)transform.position + Pull/ maxDragLength);
+		if (animator != null)
+		{
+			Shot.transform.position = animator.ShotPosition;
+		}
+		else
+		{
+			Shot.rb.MovePosition((Vector2)transform.position + Pull / maxDragLength * InvertFactor);
+		}
 	}
 
 	private void LaunchShot()
 	{
-		if (Pull.sqrMagnitude > 0)
+		if (Pull != Vector2.zero)
 		{
-			//launch the shot, re-enable energy recharge
-			SendMessage("OnShotLaunched", Shot);
-			Shot.Launch(-Pull, PullPercentage);
 			recharging = true;
+
+			//If not launching with the animator, lau8nch the shot and play the animation
+			//otherwise, hand the shot over to the animator for launch
+			if (!launchWithAnimator)
+			{
+				Shot.Launch(-Pull.normalized * InvertFactor, ShotPower);
+
+				if (animator)
+				{
+					animator.OnShotLaunched();
+				}
+			}
+			else
+			{
+				animator.OnShotLaunched(Shot, -Pull.normalized * InvertFactor, ShotPower);
+			}
+			SpendEnergy(shotEnergy);
+
 		}
 		else
 		{
@@ -199,7 +302,6 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		{
 			//Destroy the shot object, refund the energy, and reset charge.
 			Destroy(Shot.gameObject);
-			energy += shotEnergy;
 			Shot = null;
 			charge = 0;
 
@@ -209,11 +311,26 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		}
 	}
 
-	public void SetUpgrades(int[] upgrades)
+	public void OnGameStart()
 	{
-		for(int i = 0; i < this.upgrades.Length; i++)
+		Debug.Log(name + ": OnGameStart()");
+		for (int i = 0; i < upgradeLevels.Length; i++)
 		{
-			this.upgrades[i] = upgrades[i];
+			upgradeLevels[i] = 0;
+		}
+		energy = maxEnergy;
+	}
+
+	private void IncrementCharge()
+	{
+		if (charge < chargeTime)
+		{
+			charge += Time.deltaTime * (1 + chargeBonus * upgradeLevels[0]);
+
+			if (charge > chargeTime)
+			{
+				charge = chargeTime;
+			}
 		}
 	}
 

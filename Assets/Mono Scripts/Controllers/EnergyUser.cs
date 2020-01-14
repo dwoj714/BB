@@ -62,10 +62,15 @@ public abstract class EnergyUser : MonoBehaviour
 		if (cost <= energy)
 		{
 			energy -= cost;
-			delayTimer = 0;
+			//delayTimer = 0;
 			return true;
 		}
 		else return false;
+	}
+
+	public bool CanSpendEnergy(float cost)
+	{
+		return cost <= energy;
 	}
 
 

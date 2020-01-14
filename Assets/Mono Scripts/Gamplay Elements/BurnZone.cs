@@ -15,6 +15,21 @@ public class BurnZone : MonoBehaviour, IUpgradeable
 
 	private HashSet<BombController> bombs;
 
+	[Header("Upgrade Scaling")]
+	[SerializeField] private float damageScale = 0.15f;
+	[SerializeField] private float radiusScale = 0.2f;
+
+	public int[] UpgradeLevels
+	{
+		set
+		{
+			transform.localScale = (Vector2.up + Vector2.right) * (transform.localScale.x * (1 + radiusScale * value[11]));
+
+			dpsMin *= 1 + (value[12] * damageScale);
+			dpsMax *= 1 + (value[12] * damageScale);
+		}
+	}
+
 	// Use this for initialization
 	void Start()
 	{
@@ -62,10 +77,4 @@ public class BurnZone : MonoBehaviour, IUpgradeable
 			bombs.Remove(bomb);
 		}
 	}
-
-	public void SetUpgrades(int[] upgradeLevels)
-	{
-		transform.localScale = (Vector2.up + Vector2.right) * (transform.localScale.x * (1 + .25f * upgradeLevels[4]));
-	}
-
 }

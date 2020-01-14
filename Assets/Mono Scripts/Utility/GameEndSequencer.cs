@@ -50,7 +50,6 @@ public class GameEndSequencer : MonoBehaviour
 	{
 		BankIncrementDisplay.main.SetScores();
 
-		Debug.Log("Move text");
 		StartCoroutine(MoveText());
 
 		float time = 0;
@@ -59,7 +58,7 @@ public class GameEndSequencer : MonoBehaviour
 			time += Time.deltaTime;
 			yield return null;
 		}
-		Debug.Log("Move score");
+
 		StartCoroutine(MoveScore());
 
 		time = 0;
@@ -69,7 +68,6 @@ public class GameEndSequencer : MonoBehaviour
 			yield return null;
 		}
 
-		Debug.Log("Move Buttons");
 		StartCoroutine(MoveButtons());
 
 		time = 0;
@@ -131,7 +129,6 @@ public class GameEndSequencer : MonoBehaviour
 			lerp = Vector2.Lerp(score.anchoredPosition, scorePos, 12 * Time.deltaTime);
 			yield return null;
 		} while (!Mathf.Approximately(lerp.sqrMagnitude, score.anchoredPosition.sqrMagnitude));
-		Debug.Log("Move Score Done");
 	}
 	
 	IEnumerator MoveButtons()

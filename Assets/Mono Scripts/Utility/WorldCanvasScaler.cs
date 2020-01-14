@@ -5,7 +5,7 @@ using UnityEngine;
 public class WorldCanvasScaler : MonoBehaviour
 {
     // Sets the bounds of the attached rect transform to match the camera viewport
-    void Update()
+    void Start()
     {
 		RectTransform rtf = (RectTransform)transform;
 		float vert = Camera.main.orthographicSize * 2;

@@ -4,12 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-[RequireComponent(typeof(TextMeshProUGUI))]
+//[RequireComponent(typeof(TextMeshProUGUI))]
 public class ScoreReader : MonoBehaviour
 {
 	[TextArea(15,10)]
 	public string formatText = "~";
-	private TextMeshProUGUI text;
 	private int score = -1;
 
 	[SerializeField] private string otherSource = "";
@@ -21,9 +20,11 @@ public class ScoreReader : MonoBehaviour
 
 	public ScoreCategory readSource = ScoreCategory.Current;
 
+	private TextComponent text;
+
 	private void Awake()
 	{
-		text = GetComponent<TextMeshProUGUI>();
+		text = new TextComponent(GetComponent<Text>(), GetComponent<TextMeshProUGUI>());
 	}
 
 	private void Update()
@@ -63,15 +64,59 @@ public class ScoreReader : MonoBehaviour
 		if (score != newScore)
 		{
 			score = newScore;
-			text.text = formatText.Replace("~", score.ToString());
+			text.Text = formatText.Replace("~", score.ToString());
 		}
 	}
 
 	public void SetScore(int newScore)
 	{
 		score = newScore;
-		text.text = formatText.Replace("~", score.ToString());
+		text.Text = formatText.Replace("~", score.ToString());
 	}
+}
+
+class TextComponent
+{
+	private bool isBasic;
+	Text basicText;
+	TextMeshProUGUI textMesh;
+
+	public TextComponent (Text basic, TextMeshProUGUI mesh)
+	{
+		if (mesh)
+		{
+			textMesh = mesh;
+			basicText = null;
+			isBasic = false;
+		}
+		else
+		{
+			mesh = null;
+			basicText = basic;
+			isBasic = true;
+		}
+	}
+
+	public string Text
+	{
+		get
+		{
+			if (isBasic)
+			{
+				return basicText.text;
+			}
+			else return textMesh.text;
+		}
+		set
+		{
+			if (isBasic)
+			{
+				basicText.text = value;
+			}
+			else textMesh.text = value;
+		}
+	}
+
 }
 
 public enum ScoreCategory { Current, First, Second, Third, Other, SetExternal };

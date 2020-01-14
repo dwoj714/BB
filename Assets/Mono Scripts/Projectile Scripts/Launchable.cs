@@ -13,13 +13,20 @@ public abstract class Launchable : PhysCircle, IUpgradeable
 		rb.isKinematic = true;
 	}
 
+	public abstract float LaunchSpeed(float power);
+
 	public abstract void Launch(Vector2 direction, float power);
 
-	public abstract void SetUpgrades(int[] upgradeLevels);
-
-	//public abstract void ApplyUpgrade(string name);
-	//public abstract void RemoveUpgrade(string name);
-	//public abstract bool UpgradeEnabled(string name);
-	//public abstract void RemoveAllUpgrades();
-
+	protected int[] upgradeLevels = new int[6];
+	public virtual int[] UpgradeLevels
+	{
+		get
+		{
+			return upgradeLevels;
+		}
+		set
+		{
+			upgradeLevels = value;
+		}
+	}
 }

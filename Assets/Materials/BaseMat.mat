@@ -81,10 +81,11 @@ Material:
     - _blur: 0
     - _depth: 0.639
     - _dist: 0.007
-    - _level: 0.402
+    - _level: 0
+    - _reach: 0.005
     - _startTime: -50
     - _thing: 1000
-    - _tile: 4.15
+    - _tile: 3.21
     - _timeScale: 0.3
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

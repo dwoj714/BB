@@ -11,6 +11,7 @@
 		_level("Crack level", Range(0,1)) = 1
 		_crack("Crack color", Color) = (1,1,1,1)
 		_tile("Crack tiling", float) = 1
+		_reach("Pixel reach", Range(0,0.005)) = 0.1
 
 		_core("Core FX color", Color) = (1,1,0,1)
 		_depth("Core radius", Range(0, 1)) = 0.25
@@ -66,6 +67,7 @@
 			float _acc;
 			float _blur;
 			float _tile;
+			float _reach;
 
 			float _level;
 			float4 _crack;
@@ -102,10 +104,37 @@
 					col = lerp(_glow, _color, saturate(_time * _acc));
 				}
 
-				if (_level > 0)
+				if(_level > 0)
 				{
-					fixed4 texCol = tex2D(_CrackTex, (i.uv * _tile) - floor(i.uv * _tile));
-					if (texCol.r > 1 - _level)
+					float2 coord = (i.uv * _tile) - floor(i.uv * _tile);
+					float min = 1;
+
+					float r = tex2D(_CrackTex, coord + float2(_reach, 0)).r;
+					if (r < min)
+					{
+						min = r;
+					}
+
+					r = tex2D(_CrackTex, coord + float2(-_reach, 0)).r;
+					if (r < min)
+					{
+						min = r;
+					}
+
+					r = tex2D(_CrackTex, coord + float2(0, _reach)).r;
+					if (r < min)
+					{
+						min = r;
+					}
+
+					r = tex2D(_CrackTex, coord + float2(0, -_reach)).r;
+					if (r < min)
+					{
+						min = r;
+					}
+
+					fixed4 texCol = tex2D(_CrackTex, coord);
+					if (texCol.r > 1 - _level && min > 1 - _level)
 					{
 						col =  _crack * grad + _color * (1 - grad);
 					}

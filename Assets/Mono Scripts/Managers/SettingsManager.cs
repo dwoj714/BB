@@ -10,6 +10,8 @@ public class SettingsManager : MonoBehaviour
 
 	//an array for each settins toggle button. Toggles the image indicating the status of the setting
 	public Image[] toggleImages;
+	public Text[] optionText;
+	public Slider[] sliders;
 
 	//the menu that opened the settings menu. This is to be re-enabled on settings menu exit.
 	//this can probably be set up with buttons.
@@ -32,6 +34,11 @@ public class SettingsManager : MonoBehaviour
 		ShowBombHealth = !ShowBombHealth;
 	}
 
+	public void ToggleInvertAim()
+	{
+		InvertAim = !InvertAim;
+	}
+
 	public void OpenMenu(GameObject activatingMenu)
 	{
 		this.activatingMenu = activatingMenu;
@@ -50,11 +57,18 @@ public class SettingsManager : MonoBehaviour
 	{
 		string read = PlayerPrefs.GetString("Toggle Settings");
 
-		if (read.Length > 0)
+		try
 		{
 			ScreenShakeEnabled = read[0] == '1';
 			ShowBombHealth = read[1] == '1';
+			InvertAim = read[2] == '1';
+		} catch(System.IndexOutOfRangeException e)
+		{
+			Debug.Log(e + ": One or more settings not loaded");
 		}
+
+		Stiffness = PlayerPrefs.GetFloat("Stiffness", 0.8f);
+
 	}
 
 	public bool ScreenShakeEnabled
@@ -90,11 +104,39 @@ public class SettingsManager : MonoBehaviour
 		}
 	}
 
+	public bool InvertAim
+	{
+		get
+		{
+			return LauncherController.invertAim;
+		}
+		set
+		{
+			LauncherController.invertAim = value;
+			toggleImages[2].sprite = value ? settingEnabled : settingDisabled;
+		}
+	}
+
+	public float Stiffness
+	{
+		get
+		{
+			return LauncherController.stiffness;
+		}
+		set
+		{
+			LauncherController.stiffness = value;
+			sliders[3].value = value;
+			PlayerPrefs.SetFloat("Stiffness", value);
+		}
+	}
+
 	private void SaveSettings()
 	{
 		string str = "";
 		str += ScreenShakeEnabled ? '1' : '0';
 		str += ShowBombHealth ? '1' : '0';
+		str += InvertAim ? '1' : '0';
 
 		PlayerPrefs.SetString("Toggle Settings", str);
 		PlayerPrefs.Save();

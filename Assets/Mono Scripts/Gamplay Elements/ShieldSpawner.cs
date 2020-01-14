@@ -14,10 +14,4 @@ public class ShieldSpawner : MonoBehaviour
 		shield.followRB = GetComponent<Rigidbody2D>();
 		shield.offset = offset;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

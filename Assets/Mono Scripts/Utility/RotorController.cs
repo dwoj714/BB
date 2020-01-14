@@ -6,6 +6,7 @@ public class RotorController : MonoBehaviour
 {
 	public float spread = 12;
 	public float swapTime = 1;
+	public float scaleMod = 1;
 	public Transform[] rotors = new Transform[3];
 
 	[SerializeField] private int[] slots;
@@ -51,6 +52,12 @@ public class RotorController : MonoBehaviour
 	IEnumerator CycleStep(bool left)
 	{
 		amountMoved = spread - amountMoved;
+
+		Transform[] targets = new Transform[rotors.Length];
+		for(int i = 0; i < rotors.Length; i++)
+		{
+			targets[i] = rotors[i].GetComponentInChildren<Transform>();
+		}
 
 		float rotaionStep;
 		bool halfway = false;
@@ -148,6 +155,7 @@ public class RotorController : MonoBehaviour
 		}
 	}
 
+	//For use w/ UI buttons
 	public void CycleLeftButton()
 	{
 		if (!cycling)
@@ -155,7 +163,6 @@ public class RotorController : MonoBehaviour
 			CycleLeft();
 		}
 	}
-
 	public void CycleRightButton()
 	{
 		if (!cycling)

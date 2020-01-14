@@ -24,7 +24,6 @@ public class StickyBomb : ExplosiveProjectile
 	protected override void Update()
 	{
 		base.Update();
-
 		if (connection && autoDetonate && connection.detonator.sparked)
 		{
 			detonator.Explode();
@@ -56,12 +55,20 @@ public class StickyBomb : ExplosiveProjectile
 		detonator.sparked = true;
 	}
 
-	public override void SetUpgrades(int[] upgradeLevels)
+	public override int[] UpgradeLevels
 	{
-		base.SetUpgrades(upgradeLevels);
-		if(upgradeLevels[3] != 0)
+		get
 		{
-			autoDetonate = true;
+			return upgradeLevels;
+		}
+		set
+		{
+			base.UpgradeLevels = value;
+
+			if (upgradeLevels[11] != 0)
+			{
+				autoDetonate = true;
+			}
 		}
 	}
 

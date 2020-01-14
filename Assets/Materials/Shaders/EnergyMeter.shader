@@ -45,7 +45,6 @@
 				};
 
 				sampler2D _MainTex;
-				sampler2D _CrackTex;
 
 				fixed4 _color1;
 				fixed4 _color2;
@@ -81,7 +80,7 @@
 					float x = (i.uv.r - 0.5) * 2;
 					float y = (i.uv.g - 0.5) * 2;
 
-					//the angle of the pixel, counterclockwise from the top
+					//the angle of the pixel, counterclockwise from the top, 0-1 range
 					float angle = .5 + atan2(x, -y) / 6.283185;
 
 					//angular separation between segment start and endpoints
@@ -94,7 +93,7 @@
 					float minSeg = (_charge < segLen) ? _charge : (_charge % segLen);
 
 
-					//good luck interperating this later
+					//good luck interpreting this later
 					if (grad > _inner)
 					{
 						//make the first halfgap of the circle white
@@ -135,32 +134,6 @@
 
 						if(angle > 1 - halfGap)
 							col = white;
-
-
-						/*for (uint i = 0; i <= _seg; i++)
-						{
-							if (i == 0)
-							{
-								if (angle > halfGap && angle < (minSeg - halfGap))
-								{
-									col = _charge < 1 ? _color1 : _color2;
-								}
-								else if (angle <= halfGap)
-								{
-									col = float4(1,1,1,1);
-								}
-							}
-							else
-							{
-								//min segment separation + previous segment separation + gap offset
-								float lowerBound = minSeg + segLen * (i-1) + _gap / 2;
-								float upperBound = lowerBound + segLen - _gap;
-								if (_charge >= segLen * i && angle < upperBound && angle > lowerBound)
-								{
-									col = _charge >= segLen * (i + 1) ? _color2 : _color3;
-								}
-							}
-						}*/
 					}
 					
 					return col;

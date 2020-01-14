@@ -66,14 +66,18 @@ public class GuideController : MonoBehaviour
 	//Power should be between 0 and 1
 	public void Aim(Vector2 direction, float power)
 	{
+		direction *= LauncherController.InvertFactor;
+
 		SetVisible(power > 0);
 
 		float length = (maxLength - minLength) * power + minLength;
 
+
 		Vector2 pos = direction.normalized * length;
+
 		tip.transform.localPosition = Vector2.Lerp(tip.transform.localPosition, pos, speed);
 		line.SetPosition(0, tip.transform.localPosition);
-		tip.transform.eulerAngles = new Vector3(0, 0, Vector2.SignedAngle(Vector2.up, tip.transform.localPosition));
+		tip.transform.eulerAngles = Vector3.forward * Vector2.SignedAngle(Vector2.up, tip.transform.localPosition);
 
 		line.endWidth = line.startWidth = (maxWidth - minWidth) * (1 - power) + minWidth;
 

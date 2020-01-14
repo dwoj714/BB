@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
 
 	BaseController launcherBase;
-	Spawner spawner;
+	SpawnerController spawner;
 	CameraController camController;
 	InputManager inputManager;
 
@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField] private GameEndSequencer gameOverMenu;
 	[SerializeField] private GameObject mainMenu, inGameMenu, pauseMenu, loadoutMenu, swapButtons;
+	[SerializeField] private UpgradeMenuController upgradeMenu;
 
 	[Header("PhysCircle hitFX prefab")]
 	[SerializeField] private GameObject hitFX;
@@ -24,8 +25,9 @@ public class GameManager : MonoBehaviour
 
 	[HideInInspector]
 	public static int score = 0;
-
 	private static int points = 0;
+
+	
 
 	public static int Points
 	{
@@ -44,8 +46,10 @@ public class GameManager : MonoBehaviour
 	{
 		PhysCircle.hitFX = hitFX;
 
+		Application.targetFrameRate = 60;
+
 		launcherBase = GameObject.Find("Base").GetComponent<BaseController>();
-		spawner = GameObject.Find("Spawner").GetComponent<Spawner>();
+		spawner = GameObject.Find("Spawner").GetComponent<SpawnerController>();
 		camController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 		inputManager = GetComponent<InputManager>();
 
@@ -57,75 +61,36 @@ public class GameManager : MonoBehaviour
 		gameOverMenu.gameObject.SetActive(false);
 		gameOverMenu.HideAll();
 
+		upgradeMenu.gameObject.SetActive(false);
 		swapButtons.SetActive(false);
 		loadoutMenu.SetActive(false);
 		pauseMenu.SetActive(false);
+		
 
-		GameManager.main = this;
-	}
-
-	private void Update()
-	{
-		if (launcherBase.charges <= 0 && gameInProgress)
-		{
-			EndGame();
-		}
-	}
-
-	void Awake()
-	{
-		QualitySettings.vSyncCount = 0;  // VSync must be disabled
-	}
-
-	//For use with buttons loading drop pools/chains
-	public void StartGame(ScriptableObject obj)
-	{
-		try
-		{
-			StartGame((IRandomList)obj);
-		}
-		catch (InvalidCastException)
-		{
-			Debug.Log("Invalid object sent to StartGame(ScriptableObject)");
-		}
+		main = this;
 	}
 
 	public void StartGame()
 	{
-		StartGame(lastSpawnPool);
-	}
-
-	public void StartGame(IRandomList randList)
-	{
 		BroadcastMessage("OnGameStart", SendMessageOptions.DontRequireReceiver);
-		spawner.OnGameStart();
-		lastSpawnPool = randList;
 
-		if (randList.GetType() == typeof(DropPool))
-		{
-			//Debug.Log("Loading DropPool");
-			DropPool pool = ScriptableObject.CreateInstance<DropPool>();
-			pool.CopyValues((DropPool)randList);
-			spawner.Pool = pool;
-		}
-		else if (randList.GetType() == typeof(DropChain))
-		{
-			//Debug.Log("Loading DropChain");
-			DropChain chain = ScriptableObject.CreateInstance<DropChain>();
-			chain.CopyValues((DropChain)randList);
-			spawner.Chain = chain;
-		}
-		//else Debug.Log("Chain or pool not given");
+		//yield return null;
+
+		spawner.OnGameStart();
 
 		gameInProgress = true;
 		inGameMenu.SetActive(true);
 		score = 0;
 		points = 0;
 
+		//yield return null;
+
 		//reset the game over menu;
 		gameOverMenu.StopAllCoroutines();
 		gameOverMenu.HideAll();
 		gameOverMenu.gameObject.SetActive(false);
+
+		//yield return null;
 
 		mainMenu.SetActive(false);
 		swapButtons.SetActive(true);
@@ -134,6 +99,10 @@ public class GameManager : MonoBehaviour
 		spawner.enabled = true;
 		PurgeGameplayObjects();
 		launcherBase.Restart();
+
+		//yield return null;
+
+		upgradeMenu.SpawnMenus();
 
 		camController.SetDestination("Game");
 	}
@@ -197,13 +166,10 @@ public class GameManager : MonoBehaviour
 		PlayerPrefs.SetInt("bank", PlayerPrefs.GetInt("bank", 0) + Mathf.RoundToInt(score / 10.0f));
 		PlayerPrefs.Save();
 
-
-
 		launcherBase.enabled = false;
 		spawner.enabled = false;
 		swapButtons.SetActive(false);
 		inGameMenu.SetActive(false);
-		launcherBase.charges = 0;
 
 		BroadcastMessage("OnGameEnd");
 
@@ -217,7 +183,7 @@ public class GameManager : MonoBehaviour
 		spawner.enabled = false;
 		swapButtons.SetActive(false);
 		inGameMenu.SetActive(false);
-		launcherBase.charges = 0;
+		launcherBase.Charges = 0;
 		BroadcastMessage("OnGameEnd");
 
 		GoToMenu();
@@ -236,6 +202,7 @@ public class GameManager : MonoBehaviour
 		loadoutMenu.SetActive(false);
 		mainMenu.SetActive(true);
 		PurgeGameplayObjects();
+		launcherBase.Restart();
 		camController.SetDestination("Menu");
 	}
 
@@ -254,7 +221,6 @@ public class GameManager : MonoBehaviour
 
 	private IEnumerator ClearAll()
 	{
-		Debug.Log("PurgeGameplayObjects()");
 		foreach (GameObject projectile in GameObject.FindGameObjectsWithTag("Projectile"))
 		{
 			Destroy(projectile);
@@ -281,7 +247,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public static bool SpendPoints(int i)
+	public bool SpendPoints(int i)
 	{
 		if (i > points) return false;
 		points -= i;

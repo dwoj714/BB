@@ -51,6 +51,20 @@ public class PhysCircle : MonoBehaviour
 		}
 	}
 
+	public float LocalRadius
+	{
+		get
+		{
+			float greaterScale = transform.localScale.x > transform.localScale.y ? transform.localScale.x : transform.localScale.y;
+			return col.radius * greaterScale;
+		}
+		set
+		{
+			value = Mathf.Abs(value);
+			transform.localScale = Vector3.up * value + Vector3.right * value;
+		}
+	}
+
 	protected virtual void OnCollisionEnter2D(Collision2D hit)
 	{
 		lastCollisionNormal = hit.GetContact(0).normal;

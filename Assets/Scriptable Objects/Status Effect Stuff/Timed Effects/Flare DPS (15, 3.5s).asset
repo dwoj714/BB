@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 3.5
   DPS: 15
-  particleFX: {fileID: 2377077856866907514, guid: a972a278f99ca5f49a77a6e48d6ce6c1,
+  particleFX: {fileID: 2377077856866907514, guid: 12bcc7f3ae5f10548a6e75af9b61d298,
     type: 3}

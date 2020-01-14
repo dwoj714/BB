@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,15 +9,35 @@ public class WeaponManager : MonoBehaviour
 	public List<GameObject> prefabs = new List<GameObject>();
 
 	[SerializeField] private Transform[] slots = new Transform[3];
-	public static int[] equippedPrefabs = new int[3];
 	public RotorController rotorController;
 	InputManager inputMan;
 	CircleCollider2D baseCol;
 	public IGController indicator;
-	private IInputReciever[] weapons = new IInputReciever[3];
-	private static int activeWeapon = 1;
 
-	//[SerializeField] private DotSight defaultSight;
+	private static int activeWeapon = 1;
+	public static WeaponManager main;
+
+	private static int[] equippedPrefabs = new int[3];
+	public static int[] EquippedPrefabs
+	{
+		get
+		{
+			return equippedPrefabs;
+		}
+		private set
+		{
+			equippedPrefabs = value;
+		}
+	}
+
+	private static IInputReciever[] weapons = new IInputReciever[3];
+	public static IInputReciever[] Weapons
+	{
+		get
+		{
+			return weapons;
+		}
+	}
 
 	private void Awake()
 	{
@@ -32,8 +53,6 @@ public class WeaponManager : MonoBehaviour
 
 	void Start()
 	{
-
-
 		inputMan = GameObject.Find("Game Manager").GetComponent<InputManager>();
 		baseCol = GameObject.Find("Base").GetComponent<CircleCollider2D>();
 
@@ -47,76 +66,19 @@ public class WeaponManager : MonoBehaviour
 		{
 			inputMan.reciever = weapons[0];
 		}
+		if (!main) main = this;
+		else Debug.LogError("More than one WeaponManager spawned!");
 	}
 
 	void OnGameStart()
 	{
-		foreach (EnergyUser weapon in weapons)
+		foreach (LauncherController weapon in weapons)
 		{
-			weapon.energy = weapon.maxEnergy;
+			weapon.OnGameStart();
 		}
 
 		inputMan.reciever = weapons[MiddleIdx];
 		SetupIndicator();
-
-
-		//UpgradeTransmitter container;
-
-		//for each weapon, assign the references of relevant UpgradeTransmitter objects so they
-		//can interact with the attached UpgradeApplicators.
-		//for(int i=0;i<equippedPrefabs.Length;i++)
-		//{
-		//	try
-		//	{
-				
-		//		switch (equippedPrefabs[i])
-		//		{
-		//			//splitslug
-		//			case 0:
-		//				Debug.Log("re");
-		//				GameObject f = GameObject.;
-
-		//				Debug.Log(f);
-		//				container = f.GetComponent<UpgradeTransmitter>();
-
-		//				Debug.Log("reee");
-		//				container.applicator = ((MonoBehaviour)weapons[i]).GetComponent<UpgradeApplicator>();
-		//				break;
-		//			//flare
-		//			case 1:
-		//				container = GameObject.Find("Flare Upgrades").GetComponent<UpgradeTransmitter>();
-		//				container.applicator = ((MonoBehaviour)weapons[i]).GetComponent<UpgradeApplicator>();
-		//				break;
-		//			//sticky
-		//			case 2:
-		//				container = GameObject.Find("Impulse Charge Upgrades").GetComponent<UpgradeTransmitter>();
-		//				container.applicator = ((MonoBehaviour)weapons[i]).GetComponent<UpgradeApplicator>();
-		//				break;
-		//			//grav
-		//			case 3:
-		//				container = GameObject.Find("Grav Upgrades").GetComponent<UpgradeTransmitter>();
-		//				container.applicator = ((MonoBehaviour)weapons[i]).GetComponent<UpgradeApplicator>();
-		//				break;
-		//			//mass driver
-		//			case 4:
-		//				container = GameObject.Find("Mass Driver Upgrades").GetComponent<UpgradeTransmitter>();
-		//				container.applicator = ((MonoBehaviour)weapons[i]).GetComponent<UpgradeApplicator>();
-		//				break;
-		//			//time bomb
-		//			case 5:
-		//				container = GameObject.Find("Time Bomb Upgrades").GetComponent<UpgradeTransmitter>();
-		//				container.applicator = ((MonoBehaviour)weapons[i]).GetComponent<UpgradeApplicator>();
-		//				break;
-		//			//pulsar
-		//			case 6:
-		//				container = GameObject.Find("Pulsar Upgrades").GetComponent<UpgradeTransmitter>();
-		//				container.applicator = ((MonoBehaviour)weapons[i]).GetComponent<UpgradeApplicator>();
-		//				break;
-		//		}
-		//	} catch (NullReferenceException) { Debug.Log("Failed to locate upgrade transmitter"); }
-		//
-		//}
-
 	}
 
 	//returns true if the given weapon index isn't locked
@@ -127,9 +89,17 @@ public class WeaponManager : MonoBehaviour
 		{
 			return false;
 		}
+		StartCoroutine(SetWeaponSlotCo(pfIdx, i));
+		return true;
+	}
 
+	//Method converted to coroutine to execute in steps, hopefully eliminating hitching
+	private IEnumerator SetWeaponSlotCo(int pfIdx, int i)
+	{
 		//instantiate as a child of rotor in slot i
 		GameObject obj = Instantiate(prefabs[pfIdx], slots[i]);
+
+		yield return null;
 
 		//attempt to get an input reciever from the object
 		IInputReciever recv = obj.GetComponent<IInputReciever>();
@@ -138,6 +108,8 @@ public class WeaponManager : MonoBehaviour
 			//move so it's at the edge of its rotor.
 			obj.transform.localPosition = Vector3.up * 15;
 
+			yield return null;
+
 			//If there's already an object in the slot, destroy it
 			if (weapons[i] != null)
 			{
@@ -145,25 +117,35 @@ public class WeaponManager : MonoBehaviour
 			}
 
 			weapons[i] = recv;
-			equippedPrefabs[i] = pfIdx;
+			EquippedPrefabs[i] = pfIdx;
+
+			string debugStr = "wut";
+			if (i == MiddleIdx)
+				debugStr = "Middle";
+			else if (i == LeftIdx)
+				debugStr = "Left";
+			else if (i == RightIdx)
+				debugStr = "Right";
+
+			Debug.Log("Weapons[" + i + "] (" + debugStr + ") prefab idx: " + pfIdx);
+
+			yield return null;
 
 			//if the reciever is a launcher controller, set its collider accordingly
 			try
 			{
 				LauncherController launcher = (LauncherController)recv;
-				launcher.collider = baseCol;
+				launcher.col = baseCol;
 			}
 			catch (InvalidCastException)
 			{
 				Debug.Log("Non-launcher caught in SetWeaponSlot");
 			}
-
 		}
 		else
 		{
 			Debug.LogError("No Input reciever found on object " + obj);
 		}
-		return true;
 	}
 
 	public void Swap(bool left)
@@ -261,7 +243,6 @@ public class WeaponManager : MonoBehaviour
 
 	public void LoadWeapons()
 	{
-
 		if(!SetWeaponSlot(PlayerPrefs.GetInt("Left Weapon", 0), LeftIdx))
 		{
 			SetWeaponSlot(0, LeftIdx);
@@ -277,5 +258,4 @@ public class WeaponManager : MonoBehaviour
 			SetWeaponSlot(2, RightIdx);
 		}
 	}
-
 }

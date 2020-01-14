@@ -10,8 +10,8 @@ public class StatusBomb : BombController {
 	public float radius;
 	public float delay = 1;
 	private float timer;
-	private int chargeID;
-	private int alphaID;
+	private int chargeID = Shader.PropertyToID("_charge");
+	private int alphaID = Shader.PropertyToID("_min");
 	private bool timerEnabled = true;
 
 	[Header("Detection Mode Values")]
@@ -39,8 +39,6 @@ public class StatusBomb : BombController {
 		base.Start();
 		FX.SetRadius(radius);
 
-		chargeID = Shader.PropertyToID("_charge");
-		alphaID = Shader.PropertyToID("_min");
 
 		if (pulseMode == PulseMode.Sync)
 		{

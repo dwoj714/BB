@@ -97,7 +97,7 @@ public class Spawner : MonoBehaviour {
 
 		if (bomb)
 		{
-			holdRad = bomb.broadRadius;
+
 			hits = Physics2D.OverlapCircleAll(pos, holdRad);
 		}
 

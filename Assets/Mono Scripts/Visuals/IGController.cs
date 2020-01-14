@@ -26,8 +26,13 @@ public class IGController : MonoBehaviour {
 	{
 		if (launcher &&  launcher.Armed)
 		{
-			pSprite.transform.localPosition = launcher.Pull / (2 * LauncherController.maxDragLength);
-			pSprite.transform.rotation = Quaternion.Euler(Vector3.forward * Vector2.SignedAngle(Vector2.up, -launcher.Pull));
+			pSprite.transform.localPosition = launcher.Pull / (2 * LauncherController.maxDragLength) * LauncherController.InvertFactor;
+
+			float zAngle = 0;
+			if (launcher.Pull != Vector2.zero)
+				zAngle = Vector2.SignedAngle(Vector2.up, -launcher.Pull) + (LauncherController.invertAim ? 180 : 0);
+
+			pSprite.transform.rotation = Quaternion.Euler(Vector3.forward * zAngle);
 
 			line.SetPosition(1, pSprite.transform.localPosition);
 
@@ -54,6 +59,9 @@ public class IGController : MonoBehaviour {
 				line.SetPosition(1, pSprite.transform.localPosition);
 				fSprite.material.SetFloat("_charge", launcher.ChargePercentage);
 				fSprite.material.SetFloat("_drag", launcher.PullPercentage);
+
+				pSprite.transform.rotation = Quaternion.identity;
+				fSprite.transform.rotation = Quaternion.Euler(0, 0, LauncherController.invertAim ? 180 : 0);
 			}
 		}
 	}

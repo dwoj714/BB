@@ -365,9 +365,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8063954341065944352}
   - component: {fileID: 8061603027825748121}
-  - component: {fileID: 7859949214897091222}
   - component: {fileID: 7962041717199548690}
   - component: {fileID: 7958812774510912956}
+  - component: {fileID: 7859949214897091222}
   - component: {fileID: 8022068210951572938}
   - component: {fileID: 8010134437445261220}
   m_Layer: 12
@@ -410,7 +410,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
-  pointValue: 10
+  pointValue: 16
   comboMult: 1
   incrementer: {fileID: 0}
   gravity: 0
@@ -431,6 +431,49 @@ MonoBehaviour:
     m_Bits: 512
   unchargedAlpha: 0.1
   chargedAlpha: 0.3
+--- !u!114 &7962041717199548690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8061603027825748122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20963edbfdad614419e7170a83c067ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VFX: {fileID: 114863203888166904, guid: f89d8dab37cb98349b829a79c798926c, type: 3}
+  minPushForce: 5
+  maxPushForce: 35
+  minExplosionDMG: 10
+  maxExplosionDMG: 50
+  explosionRadius: 3
+  fuse: 0.6
+  screenShake: 1
+  useMask: 1
+  explosionMask:
+    serializedVersion: 2
+    m_Bits: 4919
+  sparked: 0
+  sparkedLastFrame: 0
+  autoDeleteFX: 1
+--- !u!114 &7958812774510912956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8061603027825748122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c82a358de183a642b70657c5395756a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 90
+  maxShield: 0
+  rechargeRate: 0
+  rechargeDelay: 0
 --- !u!212 &7859949214897091222
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -479,49 +522,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7962041717199548690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8061603027825748122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20963edbfdad614419e7170a83c067ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  VFX: {fileID: 114863203888166904, guid: f89d8dab37cb98349b829a79c798926c, type: 3}
-  minPushForce: 5
-  maxPushForce: 35
-  minExplosionDMG: 10
-  maxExplosionDMG: 50
-  explosionRadius: 3
-  fuse: 0.6
-  screenShake: 1
-  useMask: 1
-  explosionMask:
-    serializedVersion: 2
-    m_Bits: 30519
-  sparked: 0
-  sparkedLastFrame: 0
-  autoDeleteFX: 1
---- !u!114 &7958812774510912956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8061603027825748122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c82a358de183a642b70657c5395756a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 90
-  maxShield: 0
-  rechargeRate: 0
-  rechargeDelay: 0
 --- !u!50 &8022068210951572938
 Rigidbody2D:
   serializedVersion: 4

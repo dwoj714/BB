@@ -107,11 +107,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4309987333507452}
+  - component: {fileID: 5184456224714618679}
   - component: {fileID: 6761516815063761017}
   - component: {fileID: 6344683638082307532}
   - component: {fileID: 5537582059899901793}
   - component: {fileID: 8402577792383879105}
-  - component: {fileID: 5184456224714618679}
   - component: {fileID: 9090444000939164759}
   - component: {fileID: 7264693221671793044}
   m_Layer: 12
@@ -138,6 +138,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5184456224714618679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421079546083430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d848a1ed9b7c21340b9a5b418dae384a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  col: {fileID: 0}
+  rb: {fileID: 0}
+  oldVelocity: {x: 0, y: 0}
+  hb: {fileID: 0}
+  pointValue: 8
+  comboMult: 1
+  incrementer: {fileID: 0}
+  gravity: 0
+  detonator: {fileID: 6761516815063761017}
+  loot: {fileID: 0}
+  text: {fileID: 324482797287358150}
+  spr: {fileID: 7264693221671793044}
+  fallSpeed: 0.8
+  formationMember: 0
+  broadRadius: 0.5
+  effect: {fileID: 11400000, guid: 9efa30bd8e85b9241af1a8ff303a3c56, type: 2}
+  FX: {fileID: 114391258043959108}
+  pulseMode: 0
+  radius: 2.25
+  delay: 2.2
+  detectionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  unchargedAlpha: 0.1
+  chargedAlpha: 0.3
 --- !u!114 &6761516815063761017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,7 +198,7 @@ MonoBehaviour:
   useMask: 1
   explosionMask:
     serializedVersion: 2
-    m_Bits: 30519
+    m_Bits: 4919
   sparked: 0
   sparkedLastFrame: 0
   autoDeleteFX: 1
@@ -218,43 +255,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &5184456224714618679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1421079546083430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d848a1ed9b7c21340b9a5b418dae384a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  col: {fileID: 0}
-  rb: {fileID: 0}
-  oldVelocity: {x: 0, y: 0}
-  hb: {fileID: 0}
-  pointValue: 10
-  comboMult: 1
-  incrementer: {fileID: 0}
-  gravity: 0
-  detonator: {fileID: 6761516815063761017}
-  loot: {fileID: 0}
-  text: {fileID: 324482797287358150}
-  spr: {fileID: 7264693221671793044}
-  fallSpeed: 0.8
-  formationMember: 0
-  broadRadius: 0.5
-  effect: {fileID: 11400000, guid: 9efa30bd8e85b9241af1a8ff303a3c56, type: 2}
-  FX: {fileID: 114391258043959108}
-  pulseMode: 0
-  radius: 2.25
-  delay: 2.2
-  detectionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  unchargedAlpha: 0.1
-  chargedAlpha: 0.3
 --- !u!114 &9090444000939164759
 MonoBehaviour:
   m_ObjectHideFlags: 0

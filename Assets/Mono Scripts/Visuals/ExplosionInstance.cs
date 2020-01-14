@@ -8,7 +8,11 @@ public class ExplosionInstance : MonoBehaviour
 	public Material mat;
 	public SpriteRenderer spr;
 	public bool selfDestruct = true;
-	[SerializeField]private bool trigger = false;
+
+	private static float minRadAudio = 1;
+	private static float maxRadAudio = 4.5f;
+	private static float minPitch = 0.2f;
+	private static float maxPitch = 1.8f;	
 
 	[SerializeField] private AudioClip[] clipPool;
 
@@ -41,15 +45,8 @@ public class ExplosionInstance : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void Update()
+	void Start()
 	{
-
-		if (trigger)
-		{
-			Detonate();
-			trigger = false; 
-		}
-
 		if (pTime != timeScale)
 		{
 			pTime = timeScale;
@@ -68,7 +65,37 @@ public class ExplosionInstance : MonoBehaviour
 		if (audio)
 		{
 			audio.clip = GetClip();
-			audio.pitch = Random.Range(0.25f, 2f);
+
+			//set the pitch of the clip based on the size of the explosion
+			float radius = transform.localScale.x / 2;
+			if (radius >= maxRadAudio)
+				audio.pitch = minPitch;
+			else if (radius <= minRadAudio)
+				audio.pitch = maxPitch;
+			else
+			{
+				float radRange = maxRadAudio - minRadAudio;
+				float scaledRadius = radius - minRadAudio;
+				audio.pitch = (1 - (scaledRadius / radRange)) * (maxPitch - minPitch) + minPitch;
+			}
+
+			/*/set the pitch of the clip based on the size of the explosion
+			// Modified to use radius squares
+			float sqrRad = Mathf.Pow(transform.localScale.x / 2, 2);
+			float sqrMinRad = minRadAudio * minRadAudio;
+			float sqrMaxRad = maxRadAudio * maxRadAudio;
+
+			if (sqrRad >= sqrMaxRad)
+				audio.pitch = minPitch;
+			else if (sqrRad <= sqrMinRad)
+				audio.pitch = maxPitch;
+			else
+			{
+				float radRange = sqrMaxRad - sqrMinRad;
+				float scaledRadius = sqrRad - sqrMinRad;
+				audio.pitch = (1 - (scaledRadius / radRange)) * (maxPitch - minPitch) + minPitch;
+			}*/
+
 			audio.Play();
 		}
 		mat.SetFloat("_startTime", Time.time);
@@ -83,11 +110,6 @@ public class ExplosionInstance : MonoBehaviour
 	{
 		int clips = clipPool.Length;
 		float rng = Random.Range(0, clips);
-		if(rng == clips)
-		{
-			rng --;
-		}
-
 		return clipPool[Mathf.FloorToInt(rng)];
 	}
 
