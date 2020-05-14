@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
 		cam = GetComponent<Camera>();
 		presets.Add("Menu", new CamPreset(transform.position, cam.orthographicSize));
 		presets.Add("Game", new CamPreset(new Vector3(0,21.8f,-100), 8));
-		presets.Add("Loadout", new CamPreset(new Vector3(0, 10, -100), 8));
+		presets.Add("Loadout", new CamPreset(new Vector3(0, 21.8f, -100), 8));
 
 		nameID = Shader.PropertyToID("_mag");
 

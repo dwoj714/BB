@@ -66,6 +66,7 @@ public class SpawnerController : MonoBehaviour {
 
 
 		//Debug.Log("Start enhancement selection ------------------------------------");
+
 		GameObject obj;
 
 		//determine which enhancements can be applied to the bomb given its stat value

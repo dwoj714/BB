@@ -11,7 +11,6 @@ public class PullbackAnimator : MonoBehaviour
 	public float rotationScale = 0;
 	[SerializeField] private float lerp = 0.2f;
 	[HideInInspector] public Vector2 restPos;
-	private float restRotation;
 
 	private Vector2 targetPos;
 
@@ -74,7 +73,6 @@ public class PullbackAnimator : MonoBehaviour
 	private void Start()
 	{
 		restPos = transform.localPosition;
-		restRotation = transform.eulerAngles.z;
 	}
 
 	private void Update()

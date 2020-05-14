@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public class BurnZone : MonoBehaviour, IUpgradeable
 {
-
 	public float dpsMin = 10;
 	public float dpsMax = 30;
 
@@ -19,6 +18,13 @@ public class BurnZone : MonoBehaviour, IUpgradeable
 	[SerializeField] private float damageScale = 0.15f;
 	[SerializeField] private float radiusScale = 0.2f;
 
+	[Header("Upgrade colors")]
+	[SerializeField] private Color[] outerColors = new Color[3];
+	[SerializeField] private Color[] innerColors = new Color[3];
+
+	private int outerColorID = Shader.PropertyToID("_color1");
+	private int innerColorID = Shader.PropertyToID("_color2");
+
 	public int[] UpgradeLevels
 	{
 		set
@@ -27,6 +33,10 @@ public class BurnZone : MonoBehaviour, IUpgradeable
 
 			dpsMin *= 1 + (value[12] * damageScale);
 			dpsMax *= 1 + (value[12] * damageScale);
+
+			SpriteRenderer spr = GetComponent<SpriteRenderer>();
+			spr.material.SetColor(outerColorID, outerColors[value[12]]);
+			spr.material.SetColor(innerColorID, innerColors[value[12]]);
 		}
 	}
 

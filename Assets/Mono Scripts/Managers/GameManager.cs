@@ -9,13 +9,18 @@ public class GameManager : MonoBehaviour
 	BaseController launcherBase;
 	SpawnerController spawner;
 	CameraController camController;
-	InputManager inputManager;
+	public InputManager InputMan
+	{
+		get;
+		private set;
+	}
 
 	IRandomList lastSpawnPool;
 
 	[SerializeField] private GameEndSequencer gameOverMenu;
 	[SerializeField] private GameObject mainMenu, inGameMenu, pauseMenu, loadoutMenu, swapButtons;
 	[SerializeField] private UpgradeMenuController upgradeMenu;
+	[SerializeField] private RotorController weaponWheel;
 
 	[Header("PhysCircle hitFX prefab")]
 	[SerializeField] private GameObject hitFX;
@@ -51,7 +56,7 @@ public class GameManager : MonoBehaviour
 		launcherBase = GameObject.Find("Base").GetComponent<BaseController>();
 		spawner = GameObject.Find("Spawner").GetComponent<SpawnerController>();
 		camController = GameObject.Find("Main Camera").GetComponent<CameraController>();
-		inputManager = GetComponent<InputManager>();
+		InputMan = GetComponent<InputManager>();
 
 		mainMenu.SetActive(true);
 		inGameMenu.SetActive(false);
@@ -157,7 +162,8 @@ public class GameManager : MonoBehaviour
 			PlayerPrefs.SetInt("Score 3", score);
 		}
 
-		inputManager.reciever.OnInputCancel();
+		InputMan.CancelAll();
+	
 		gameInProgress = false;
 
 		gameOverMenu.gameObject.SetActive(true);
@@ -177,7 +183,7 @@ public class GameManager : MonoBehaviour
 
 	public void QuitGame()
 	{
-		inputManager.reciever.OnInputCancel();
+		InputMan.CancelAll();
 		gameInProgress = false;
 		launcherBase.enabled = false;
 		spawner.enabled = false;
@@ -187,6 +193,14 @@ public class GameManager : MonoBehaviour
 		BroadcastMessage("OnGameEnd");
 
 		GoToMenu();
+	}
+
+	public void OnEscapePressed()
+	{
+		if (gameInProgress)
+		{
+			PauseGame();
+		}
 	}
 
 	public void GoToMenu()
@@ -203,6 +217,9 @@ public class GameManager : MonoBehaviour
 		mainMenu.SetActive(true);
 		PurgeGameplayObjects();
 		launcherBase.Restart();
+
+		//remove the input reciever
+		//inputManager.recievers.Clear();
 		camController.SetDestination("Menu");
 	}
 
@@ -212,6 +229,8 @@ public class GameManager : MonoBehaviour
 		camController.SetDestination("Loadout");
 		swapButtons.SetActive(false);
 		loadoutMenu.SetActive(true);
+
+		LoadoutMenuSequencer.main.PlayEntry();
 	}
 
 	public void PurgeGameplayObjects()

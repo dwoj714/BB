@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour {
 	public static InputManager main;
 
 	public IInputReciever reciever;
+	//public List<IInputReciever> recievers = new List<IInputReciever>();
 
 	private bool mouseDetected = false;
 
@@ -20,12 +21,16 @@ public class InputManager : MonoBehaviour {
 
 	void Update ()
 	{
-		if (GameManager.gameInProgress && !(inputPause || inputHalt) && !GameManager.paused)
+		if (reciever != null && !(inputPause || inputHalt) && !GameManager.paused)
 		{
+			//foreach (IInputReciever reciever in recievers)
+			//{
 			if (Input.GetMouseButtonDown(0))
 			{
+
 				mouseDetected = true;
 				reciever.OnInputStart(MouseWorldPosition);
+				
 			}
 			if (Input.GetMouseButton(0))
 			{
@@ -57,14 +62,28 @@ public class InputManager : MonoBehaviour {
 						break;
 
 				}
+			//}
 
-			if (Input.GetKey(KeyCode.Escape))
+			if (Input.GetKeyDown(KeyCode.Escape))
 			{
-			//	GameManager.main.PauseGame();
+				GameManager.main.OnEscapePressed();
 			}
 
 		}
 		else inputPause = false;
+	}
+
+	void OnGameEnd()
+	{
+		//recievers.Clear();
+	}
+
+	public void CancelAll()
+	{
+		//foreach(IInputReciever reciever in recievers)
+		//{
+		//	reciever.OnInputCancel();
+		//}
 	}
 
 	public static Vector2 MouseWorldPosition

@@ -179,7 +179,7 @@ MonoBehaviour:
   damageBonus: 0.12
   impulseBonus: 0.15
   radiusBonus: 0.07
-  explosions: 16
+  explosions: 22
   minFuse: 0.06
-  maxFuse: 0.6
-  explosionCountBonus: 0.25
+  maxFuse: 0.4
+  explosionCountBonus: 0.4

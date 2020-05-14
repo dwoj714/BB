@@ -161,6 +161,7 @@ MonoBehaviour:
   text: {fileID: 1762232576799370303}
   spr: {fileID: 2666011595043148532}
   fallSpeed: 0.8
+  statNum: 0
   maxMass: 24
   minMass: 4
   maxHealth: 150
@@ -179,6 +180,8 @@ MonoBehaviour:
   minInnerForce: 20
   maxExplosionRadius: 4.25
   minExplosionRadius: 1.85
+  maxFuse: 1.2
+  minFuse: 0.2
 --- !u!114 &2854137334990969632
 MonoBehaviour:
   m_ObjectHideFlags: 0

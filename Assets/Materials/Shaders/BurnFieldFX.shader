@@ -7,7 +7,8 @@
 		_timeScale("Time scale", float) = 1
 		_loop("Loop Duration", float) = 5
 		_delay("Light-up delay", float) = 0.2
-		_color("Color", Color) = (1,1,1,1)
+		_color1("OuterColor", Color) = (1,1,1,1)
+		_color2("Inner Color", Color) = (1,1,1,1)
 		_flip("Pre/post launch", Range(0,1)) = 0
 	}
 		SubShader
@@ -47,7 +48,7 @@
 				float _loop;
 				float _delay;
 				float _flip;
-				float4 _color;
+				float4 _color1, _color2;
 
 				float4 _MainTex_ST;
 
@@ -68,14 +69,16 @@
 
 					if(_flip)
 					{
-						col = _color;
-
 						float _time = (_Time[1] - _startTime) * _timeScale - _delay;
 
 						_loop -= _delay;
 	
 						//The pixel's distance from the center
 						float grad = sqrt((i.uv.r - 0.5f)*(i.uv.r - 0.5f) * 4 + (i.uv.g - 0.5f)*(i.uv.g - 0.5f) * 4);
+
+						//transition between color1 and 2 across grad
+						float4 _deltaColor = _color1 - _color2;
+						col = _color2 + _deltaColor * grad;
 
 						float flicker = (1 + sin(_time * 25 * (_time / _loop)) / 25);
 
@@ -84,6 +87,8 @@
 
 						//Controls when the flare starts to fade out
 						col.a *= (grad * (2 - grad)) * saturate(_loop * sin((_time / _loop) * 3.142f));
+
+						col = saturate(col);
 					}
 					return col;
 				}

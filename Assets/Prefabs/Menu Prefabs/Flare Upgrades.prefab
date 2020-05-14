@@ -227,8 +227,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0ed1d476bda0b8a4bba9718fc8136338, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: b7748a9dbb9086449b0952018069d024, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -305,8 +305,8 @@ MonoBehaviour:
   priceText: {fileID: 2097235705782018617}
   transmitter: {fileID: 5315409137359864884}
   upgradeIdx: 11
-  baseCost: 10
-  costIncrement: 10
+  baseCost: 400
+  costIncrement: 200
 --- !u!1 &5192168914163458670
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,8 +669,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0ed1d476bda0b8a4bba9718fc8136338, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: b7748a9dbb9086449b0952018069d024, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -747,8 +747,8 @@ MonoBehaviour:
   priceText: {fileID: 8643020840877187506}
   transmitter: {fileID: 5315409137359864884}
   upgradeIdx: 10
-  baseCost: 10
-  costIncrement: 10
+  baseCost: 500
+  costIncrement: 150
 --- !u!1 &7461496460357236051
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,8 +818,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0ed1d476bda0b8a4bba9718fc8136338, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: b7748a9dbb9086449b0952018069d024, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -896,8 +896,8 @@ MonoBehaviour:
   priceText: {fileID: 8016029763053619321}
   transmitter: {fileID: 5315409137359864884}
   upgradeIdx: 12
-  baseCost: 10
-  costIncrement: 10
+  baseCost: 400
+  costIncrement: 200
 --- !u!1 &7745153073646910099
 GameObject:
   m_ObjectHideFlags: 0

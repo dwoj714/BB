@@ -7,7 +7,7 @@ public class AnimationDispatcher : MonoBehaviour
 	[SerializeField] private int holderIDX;
 	[SerializeField] private Vector2 shotOffset = Vector2.zero;
 	[SerializeField] private PullbackAnimator[] subTargets;
-	[SerializeField] private float releaseDuration, retractPause, releaseResetDuration = 0.1f;
+	[SerializeField] private float releaseDuration = 0.1f, retractPause = 0.1f, releaseResetDuration = 0.1f;
 
 	[Header("Launcher sprite rotation")]
 	[SerializeField] private float targetRotateSpeed = 0.5f;

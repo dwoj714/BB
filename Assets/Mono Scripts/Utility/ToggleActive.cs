@@ -8,6 +8,6 @@ public class ToggleActive : MonoBehaviour
 {
     public void Toggle()
 	{
-		gameObject.SetActive(!gameObject.active);
+		gameObject.SetActive(!gameObject.activeSelf);
 	}
 }

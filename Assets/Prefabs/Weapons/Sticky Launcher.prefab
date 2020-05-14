@@ -221,7 +221,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4888510334342234525
 Transform:
   m_ObjectHideFlags: 0
@@ -273,7 +273,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 23cd3cf2661e85a44b6f19034e5223f1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -483,7 +483,7 @@ MonoBehaviour:
   chargeTime: 0.8
   shotEnergy: 8
   ammo: {fileID: 2268059238857250125, guid: 1e3bdcc29467f324690db078a372f4c2, type: 3}
-  launchWithAnimator: 1
+  launchWithAnimator: 0
   chargeBonus: 0
   rechargeBonus: 0
   capacityBonus: 0
@@ -508,7 +508,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5144104000904435694}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 025c29a85c0d32c439ff3ea160525ec5, type: 3}
   m_Name: 

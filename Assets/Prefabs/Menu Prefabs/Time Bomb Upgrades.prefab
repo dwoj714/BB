@@ -283,8 +283,8 @@ MonoBehaviour:
   priceText: {fileID: 8411971722234957891}
   transmitter: {fileID: 139910487522137901}
   upgradeIdx: 12
-  baseCost: 10
-  costIncrement: 10
+  baseCost: 500
+  costIncrement: 100
 --- !u!1 &1637962679234777756
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,8 +669,8 @@ MonoBehaviour:
   priceText: {fileID: 31380583526557270}
   transmitter: {fileID: 139910487522137901}
   upgradeIdx: 11
-  baseCost: 10
-  costIncrement: 10
+  baseCost: 500
+  costIncrement: 200
 --- !u!1 &4030192797845118278
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,7 +1055,7 @@ MonoBehaviour:
   priceText: {fileID: 8345486515958383240}
   transmitter: {fileID: 139910487522137901}
   upgradeIdx: 13
-  baseCost: 10
+  baseCost: 650
   costIncrement: 10
 --- !u!1 &5163293236839336332
 GameObject:
@@ -1441,5 +1441,5 @@ MonoBehaviour:
   priceText: {fileID: 4028518562442484404}
   transmitter: {fileID: 139910487522137901}
   upgradeIdx: 3
-  baseCost: 10
-  costIncrement: 10
+  baseCost: 400
+  costIncrement: 200

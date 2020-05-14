@@ -13,9 +13,11 @@
 		_tile("Crack tiling", float) = 1
 		_reach("Pixel reach", Range(0,0.005)) = 0.1
 
+		/*
 		_core("Core FX color", Color) = (1,1,0,1)
 		_depth("Core radius", Range(0, 1)) = 0.25
 		_blur("Core edge fade", Range(0,1)) = 0
+		*/
 
 		_glow("Glow Color", Color) = (1,1,1,0.25)
 		_dist("Glow Distance", Range(0,1)) = 0.1
@@ -140,8 +142,10 @@
 					}
 				}
 
-				//code for the core FX (visible during weapon selection)
+				return col;
 
+				//code for the core FX ([formerly] visible during weapon selection)
+				/*
 				float4 coreCol = _core;
 				//coreCol.a *= sin( 16.18 / pow (pow(x,4) * (cos(6.28 + _thing * (x * y))/2 + .5), pow(y,4)) + _Time[1]);
 				//coreCol.a *= sin(16.18 / pow(pow(x, 4) * (cos(_thing * (x * y)) / 2 + .5), pow(y, 4)) + _Time[1]);
@@ -154,6 +158,7 @@
 					float share = saturate((grad - _depth) * (100 / (1 + 20 * _blur)));
 					return (1 - share) * saturate(coreCol) + share * col;
 				}
+				*/
 			}
 		ENDCG
 		}

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1787592740791579194}
   - component: {fileID: 3022361701440030921}
-  - component: {fileID: 2577590081919137253}
   - component: {fileID: 8946195115816798210}
   - component: {fileID: 6622093629397131560}
+  - component: {fileID: 5980386166981340008}
   m_Layer: 0
   m_Name: Flare Launcher
   m_TagString: Untagged
@@ -85,31 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2577590081919137253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1074466803923409290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a69f9f90d41f1478a51f1d47917147, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxEnergy: 90
-  rechargeRate: 12
-  energy: 0
-  chargeTime: 1
-  shotEnergy: 30
-  ammo: {fileID: 114910225400339268, guid: fa9f4e785218b0442b33849680a710e1, type: 3}
-  launchWithAnimator: 1
-  chargeBonus: 0
-  rechargeBonus: 0
-  capacityBonus: 0
-  upgradeLevels: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  upgradeLimits: 00000000000000000000000000000000000000000000000000000000000000000000000000000000010000000300000003000000
-  col: {fileID: 0}
 --- !u!114 &8946195115816798210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,7 +104,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1074466803923409290}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 025c29a85c0d32c439ff3ea160525ec5, type: 3}
   m_Name: 
@@ -145,6 +120,30 @@ MonoBehaviour:
   rotationResetDelay: 0.6
   target: {fileID: 7493318609458938358}
   allowFullCancel: 0
+--- !u!114 &5980386166981340008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074466803923409290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52a69f9f90d41f1478a51f1d47917147, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxEnergy: 90
+  rechargeRate: 12
+  energy: 0
+  chargeTime: 1
+  shotEnergy: 30
+  ammo: {fileID: 114910225400339268, guid: 73ab655715f2a8c4b97f130cad9bca13, type: 3}
+  launchWithAnimator: 0
+  chargeBonus: 0
+  rechargeBonus: 0
+  capacityBonus: 0
+  upgradeLimits: 00000000000000000000000000000000000000000000000000000000000000000000000000000000020000000300000002000000
+  col: {fileID: 0}
 --- !u!1 &1860360394713513518
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +200,7 @@ MonoBehaviour:
   altColor: {r: 0, g: 0, b: 0, a: 0}
   lineObj: {fileID: 2950903356530041754}
   tipObj: {fileID: 6226863585456764340}
-  launcher: {fileID: 2577590081919137253}
+  launcher: {fileID: 5980386166981340008}
 --- !u!1 &2950903356530041754
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,7 +517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mobile: 0
-  source: {fileID: 2577590081919137253}
+  source: {fileID: 5980386166981340008}
   segments: 3
 --- !u!1 &6226863585456764340
 GameObject:
@@ -615,7 +614,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7493318609458938358
 Transform:
   m_ObjectHideFlags: 0

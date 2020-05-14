@@ -16,7 +16,7 @@ public class UnlockController : MonoBehaviour
 	[SerializeField] private string unlockText;
 	[SerializeField] private string cantAffordText; //Implement this
 
-	private bool swapWait = false;
+	//private bool swapWait = false;
 
 	private void Start()
 	{
@@ -34,11 +34,11 @@ public class UnlockController : MonoBehaviour
 
 	private void Update()
 	{
-		if (swapWait && weaponRotor.CycleProgress() > 0.5f)
+		/*if (swapWait && weaponRotor.CycleProgress() > 0.5f)
 		{
 			UpdateText();
 			swapWait = false;
-		}
+		}*/
 	}
 
 	//returns true if the unlock is affordable and the index isn't already unlocked
@@ -51,10 +51,10 @@ public class UnlockController : MonoBehaviour
 		else return false;
 	}
 
-	public void OnWeaponCycle()
-	{
-		swapWait = true;
-	}
+	//public void OnWeaponCycle()
+	//{
+	//	swapWait = true;
+	//}
 
 	public static bool IndexUnlocked(int i)
 	{
@@ -92,18 +92,19 @@ public class UnlockController : MonoBehaviour
 
 	private void UpdateText()
 	{
-		if (IndexUnlocked(weaponRotor.MedianIdx))
-		{
-			text.text = equipText;
-		}
-		else if(CanUnlock(weaponRotor.MedianIdx))
-		{
-			text.text = unlockText.Replace("~", prices[weaponRotor.MedianIdx].ToString());
-		}
-		else
-		{
-			text.text = cantAffordText.Replace("~", prices[weaponRotor.MedianIdx].ToString());
-		}
+		if(weaponRotor)
+			if (IndexUnlocked(weaponRotor.MedianIdx))
+			{
+				text.text = equipText;
+			}
+			else if(CanUnlock(weaponRotor.MedianIdx))
+			{
+				text.text = unlockText.Replace("~", prices[weaponRotor.MedianIdx].ToString());
+			}
+			else
+			{
+				text.text = cantAffordText.Replace("~", prices[weaponRotor.MedianIdx].ToString());
+			}
 	}
 
 }

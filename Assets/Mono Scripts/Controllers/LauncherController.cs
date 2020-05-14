@@ -32,7 +32,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 	public static float minDragLength = 0.15f;
 	private static IGController indicator = null;
 
-	//////////////////////////    UPGRADES STUFF    //////////////////////////
+//////////////////////////    UPGRADES STUFF    //////////////////////////
 	
 	[Header("Upgrades Per Level")]
 	[SerializeField] private float chargeBonus;
@@ -252,7 +252,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	private void AimShot()
 	{
-		if (animator != null)
+		if (animator != null && animator.enabled)
 		{
 			Shot.transform.position = animator.ShotPosition;
 		}
@@ -274,7 +274,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 			{
 				Shot.Launch(-Pull.normalized * InvertFactor, ShotPower);
 
-				if (animator)
+				if (animator != null && animator.enabled)
 				{
 					animator.OnShotLaunched();
 				}

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class VariableBomb : BombController
 {
-	[SerializeField] private float statNum;
-
 	[Header("Mass Range")]
 	[SerializeField] private float maxMass = 25;
 	[SerializeField] private float minMass = 5;
@@ -18,25 +16,22 @@ public class VariableBomb : BombController
 	[Header("Score Value Range")]
 	[SerializeField] private int maxScore = 30;
 	[SerializeField] private int minScore = 5;
-	[Header("Damage Ranges")]
+	[Header("Detonator Ranges")]
 	[SerializeField] private float maxOuterDamage = 20;
 	[SerializeField] private float minOuterDamage = 5;
 	[SerializeField] private float maxInnerDamage = 80;
 	[SerializeField] private float minInnerDamage = 40;
-	[Header("Explosion Force Ranges")]
 	[SerializeField] private float maxOuterForce = 15;
 	[SerializeField] private float minOuterForce = 0;
 	[SerializeField] private float maxInnerForce = 40;
 	[SerializeField] private float minInnerForce = 20;
-	[Header("Explosion Size Range")]
 	[SerializeField] private float maxExplosionRadius = 2;
 	[SerializeField] private float minExplosionRadius = 4;
-
+	[SerializeField] private float maxFuse = 1.2f;
+	[SerializeField] private float minFuse = 0.2f;
 
 	public void SetStats(float value)
 	{
-		statNum = value;
-
 		rb.mass = minMass + (maxMass - minMass) * value;
 		hb.maxHealth = minHealth + (maxHealth - minHealth) * value;
 		LocalRadius = minRadius + (maxRadius - minRadius) * value;
@@ -47,6 +42,7 @@ public class VariableBomb : BombController
 		detonator.maxPushForce = minInnerForce + (maxInnerForce - minInnerForce) * value;
 		detonator.minPushForce = minOuterForce + (maxOuterForce - minOuterForce) * value;
 		detonator.explosionRadius = minExplosionRadius + (maxExplosionRadius - minExplosionRadius) * value;
+		detonator.fuse = minFuse + (maxFuse - minFuse) * value;
 
 		ApplyScaling();
 	}

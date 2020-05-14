@@ -9,7 +9,7 @@ public class WeaponManager : MonoBehaviour
 	public List<GameObject> prefabs = new List<GameObject>();
 
 	[SerializeField] private Transform[] slots = new Transform[3];
-	public RotorController rotorController;
+	public RotorController weaponRotor;
 	InputManager inputMan;
 	CircleCollider2D baseCol;
 	public IGController indicator;
@@ -67,7 +67,7 @@ public class WeaponManager : MonoBehaviour
 			inputMan.reciever = weapons[0];
 		}
 		if (!main) main = this;
-		else Debug.LogError("More than one WeaponManager spawned!");
+		else Debug.LogError("More than one WeaponManager spawned: " + name);
 	}
 
 	void OnGameStart()
@@ -148,40 +148,30 @@ public class WeaponManager : MonoBehaviour
 		}
 	}
 
+	//to swap weapons, we cancel any active input functions, tell the Rotor to swap, and await the new InputReciever
 	public void Swap(bool left)
 	{
 		inputMan.reciever.OnInputCancel();
 
-		bool canSwap = false;
+		weaponRotor.IncrementRotation(left);
 
-		if (left)
+		switch (activeWeapon)
 		{
-			canSwap = rotorController.CycleLeft();
-		}
-		else
-		{
-			canSwap = rotorController.CycleRight();
-		}
+			case 0:
+				activeWeapon = left ? 2 : activeWeapon + 1;
+				break;
 
-		if(canSwap)
-		{
-			switch (activeWeapon)
-			{
-				case 0:
-					activeWeapon = left ? 2 : activeWeapon + 1;
-					break;
+			case 1:
+				activeWeapon += left ? -1 : 1;
+				break;
 
-				case 1:
-					activeWeapon += left ? -1 : 1;
-					break;
-
-				case 2:
-					activeWeapon = left ? activeWeapon - 1 : 0;
-					break;
-			}
-			inputMan.reciever = weapons[activeWeapon];
-			SetupIndicator();
+			case 2:
+				activeWeapon = left ? activeWeapon - 1 : 0;
+				break;
 		}
+		inputMan.reciever = weapons[activeWeapon];
+		SetupIndicator();
+
 	}
 
 	public static int MiddleIdx
@@ -228,12 +218,6 @@ public class WeaponManager : MonoBehaviour
 		{
 			LauncherController launcher = (LauncherController)weapons[activeWeapon];
 			indicator.launcher = launcher;
-
-			//if (launcher.useDefaultGuide)
-			//{
-			//	defaultSight.Launcher = launcher;
-			//}
-
 		}
 		catch (InvalidCastException e)
 		{
@@ -258,4 +242,23 @@ public class WeaponManager : MonoBehaviour
 			SetWeaponSlot(2, RightIdx);
 		}
 	}
+
+	private IEnumerator AwaitNewWeapon(float waitDuration)
+	{
+		float timer = 0;
+		bool done = false;
+		while (timer <= waitDuration && !done)
+		{
+			if(weaponRotor.MedianIdx != activeWeapon)
+			{
+				activeWeapon = weaponRotor.MedianIdx;
+				done = true;
+			}
+			timer += Time.deltaTime;
+			yield return null;
+		}
+
+
+	}
+
 }

@@ -2,15 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotorController : MonoBehaviour
+public class RotorController : MonoBehaviour, IInputReciever
 {
-	public float spread = 12;
-	public float swapTime = 1;
-	public float scaleMod = 1;
-	public Transform[] rotors = new Transform[3];
+	[SerializeField] private float spread = 12;
+	[SerializeField] private float sensitivity = 1;
+	[SerializeField] private float minY = 0;
+	[SerializeField] private float maxY = 0;
+	[SerializeField] private float drag = 1;
+	[SerializeField] private bool autoCenter = false;
+	[SerializeField] private float autoCenterStrength = 1;
+	public float swapTime = 0.4f;
+
+	private bool inputActive = false;
+
+	private Coroutine active;
+
+	private float rotation = 0;
+	public float Rotation
+	{
+		get
+		{
+			return rotation;
+		}
+		set
+		{
+			SetRotation(value);
+		}
+	}
+
+	[SerializeField] private Rotor[] rotors = new Rotor[3]; 
 
 	[SerializeField] private int[] slots;
-
 	public int[] Slots
 	{
 		get
@@ -19,24 +41,32 @@ public class RotorController : MonoBehaviour
 		}
 	}
 
-	private float amountMoved;
-
-	private bool cycling, cyclingLeft = false;
-
+	//the index of the rotor nearest to vertical rotation
 	public int MedianIdx
 	{
 		get
 		{
-			return slots[slots.Length / 2];
+			for (int i = 0; i < rotors.Length; i++)
+			{
+				float z = rotors[i].Rotation;
+
+				//Debug.Log("abs(z = " + z + ") < " + spread / 2 + " ? " + (Mathf.Abs(z) < spread / 2));
+				if (InRange(-spread / 2, spread / 2, z))
+				{
+					return i;
+				}
+			}
+
+			Debug.LogError("Failed to calculate rotorController MedianIDX on " + name);
+			return -1;
 		}
 	}
 
 	private void Awake()
 	{
-		int mid = rotors.Length / 2;
 		for(int i = 0; i < rotors.Length; i++)
 		{
-			rotors[i].SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, (mid - i ) * spread));
+			rotors[i].Rotation = (MedianIdx - i) * spread;
 		}
 
 		slots = new int[rotors.Length];
@@ -45,135 +75,233 @@ public class RotorController : MonoBehaviour
 			slots[i] = i;
 		}
 
-		amountMoved = spread;
+		Rotation = 0;
+	}
+
+	private void Update()
+	{
+		if (velocity != 0)
+		{
+			Rotation += velocity * Time.deltaTime;
+			velocity -= (drag + drag * Mathf.Abs(velocity)) * Time.deltaTime * (velocity > 0 ? 1 : -1);
+		}
+
+		//alter velocity to rotate towards the middle index
+		if (autoCenter && !inputActive)
+		{
+			velocity += DegreesOffCenter * autoCenterStrength;
+		}
+
+		if (Mathf.Abs(velocity) < 0.1f) velocity = 0;
+
 
 	}
 
-	IEnumerator CycleStep(bool left)
+	public void SetRotation(float degrees)
 	{
-		amountMoved = spread - amountMoved;
+		rotation = degrees;
 
-		Transform[] targets = new Transform[rotors.Length];
+		//range is the range of rotation values each rotor can have
+		float range = spread * rotors.Length;
+
 		for(int i = 0; i < rotors.Length; i++)
 		{
-			targets[i] = rotors[i].GetComponentInChildren<Transform>();
+			int mid = slots.Length / 2;
+
+			float newZ = degrees - (i - mid) * spread;
+
+			while(newZ >= range / 2)
+			{
+				newZ -= range;
+			}
+			while(newZ < -range / 2)
+			{
+				newZ += range;
+			}
+
+			rotors[i].Rotation = newZ;
+
 		}
 
-		float rotaionStep;
-		bool halfway = false;
-		do
+		
+	}
+
+	public void IncrementRotation(bool left)
+	{
+		if (active != null)
 		{
-			float accMod = 2f - (1.5f * (amountMoved / spread));
+			StopCoroutine(active);
+			active = null;
+		}
 
-			//The amount to move each frame to complete the swap over [swaptime] seconds
-			rotaionStep = spread / swapTime * Time.deltaTime * (left ? -1 : 1) * accMod;
-			amountMoved += Mathf.Abs(rotaionStep);
+		active = StartCoroutine(IncrementRotationCO(left));
+	}
 
-			//Halfway through the rotation...
-			if(!halfway && amountMoved / spread > 0.5f)
-			{
-				halfway = true;
-				int idx = left ? rotors.Length - 1 : 0;
+	private IEnumerator IncrementRotationCO(bool left)
+	{
+		//new position is one spread offset from current position
+		float target = rotation + spread * (left ? -1 : 1);
+		int targetNotches = Mathf.RoundToInt(target / spread);
 
-				//Move the offscreen rotor to the opposite side
-				rotors[slots[idx]].Rotate(Vector3.forward, rotors.Length * spread * (left ? 1 : -1));
+		//the "real" target is the closest "notch" to the left/right
+		target = targetNotches * spread;
 
-				int[] temp = (int[]) slots.Clone();
+		//the rotation to be added to the current position
+		float delta = target - rotation;
 
-				if (left)
-				{
-					for(int i = 1; i < slots.Length; i++)
-					{
-						slots[i] = temp[i - 1];
-					}
-					slots[0] = temp[slots.Length - 1];
-
-				}
-				else
-				{
-					for(int i=0;i<slots.Length - 1; i++)
-					{
-						slots[i] = temp[i + 1];
-					}
-					slots[slots.Length - 1] = temp[0];
-
-				}
-			}
-
-			//when we've completed the rotation...
-			if(amountMoved > spread)
-			{
-				//if we overstep the total amount to rotate, subtract the extra rotation from the final rotation step
-				rotaionStep -= (amountMoved - spread) * (left ? -1 : 1);
-				amountMoved = spread;
-			}
-
-			foreach (Transform rotor in rotors)
-			{
-				rotor.Rotate(Vector3.forward * rotaionStep, Space.Self);
-			}
+		//apply the rotation over time specified by swapTime
+		float timer = 0;
+		float startRotation = Rotation;
+		while(timer < swapTime)
+		{
+			timer = Mathf.Clamp(timer + Time.deltaTime, 0, swapTime);
+			Rotation = startRotation + delta * (timer / swapTime);
 
 			yield return null;
-
-		} while (amountMoved < spread);
-
-		cycling = false;
-
-	}
-
-	public bool CycleLeft()
-	{
-		if (!(cycling && cyclingLeft))
-		{
-			StopAllCoroutines();
-			cycling = true;
-			cyclingLeft = true;
-			StartCoroutine(CycleStep(true));
-			return true;
 		}
-		return false;
+
 	}
 
-	public bool CycleRight()
-	{
-		if (!(cycling && !cyclingLeft))
-		{
-			StopAllCoroutines();
-			cycling = true;
-			cyclingLeft = false;
-			StartCoroutine(CycleStep(false));
-			return true;
-		}
-		return false;
-	}
-
-	public bool CanSwap
+	public float DegreesOffCenter
 	{
 		get
 		{
-			return !cycling;
+			//return the angle between the median index and 0 rotation
+			return Mathf.DeltaAngle(rotors[MedianIdx].Rotation, 0);
 		}
 	}
 
-	//For use w/ UI buttons
-	public void CycleLeftButton()
+	public float PercentOffCenter
 	{
-		if (!cycling)
+		get
 		{
-			CycleLeft();
-		}
-	}
-	public void CycleRightButton()
-	{
-		if (!cycling)
-		{
-			CycleRight();
+			return DegreesOffCenter / (spread / 2);
 		}
 	}
 
-	public float CycleProgress()
+	//returns if angle measures are between each other, lower bound inclusive, upper bound exclusive
+	public static bool InRange(float lower, float upper, float value)
 	{
-		return amountMoved / spread;
+		//simplify all values
+		while (lower >= 360)
+			lower -= 360;
+		while (lower < 0)
+			lower += 360;
+
+		while (upper >= 360)
+			upper -= 360;
+		while (lower < 0)
+			upper += 360;
+
+		while (value >= 360)
+			value -= 360;
+		while (value < 0)
+			value += 360;
+
+		if (lower > upper)
+		{
+			//Debug.Log(value + " between " + lower + " and " + upper + "? " + (value >= lower || value < upper));
+			return value >= lower || value < upper;
+		}
+		else
+		{
+			//Debug.Log(value + " between " + lower + " and " + upper + "? " + (value >= lower && value < upper));
+			return value >= lower && value < upper;
+		}
+
+	}
+
+
+//Input handling
+
+	//Input Vars
+	private Vector2 lastPos;
+	private float velocity = 0;
+
+	//holds the last few position deltas
+	private Vector2[] history = new Vector2[12];
+
+	public void OnInputStart(Vector2 position)
+	{
+		//stop the active rotation coroutine if one exists
+		if (active != null)
+		{
+			StopCoroutine(active);
+			active = null;
+		}
+
+		//store starting values
+		if (position.y <= maxY && position.y >= minY)
+		{
+			lastPos = position;
+			inputActive = true;
+			velocity = 0;
+
+			//initialize the history list
+			for(int i = 0; i < history.Length; i++ )
+			{
+				history[i] = Vector2.zero;
+			}
+
+		}
+		else inputActive = false;
+	}
+
+	public void OnInputHeld(Vector2 position)
+	{
+		if (inputActive)
+		{
+			Vector2 delta = lastPos - position;
+			Rotation = rotation + delta.x * sensitivity;
+
+			//enqueue the next position delta
+			//this loop "bubbles down" the current topmost entry
+			for(int i = history.Length - 1; i > 1; i--)
+			{
+				history[i] = history[i - 1];
+			}
+			//Set the topmost entry to the new delta
+			history[0] = delta;
+
+			lastPos = position;
+		}
+	}
+
+	public void OnInputReleased(Vector2 position)
+	{
+		//apply angular velocity based on the history array
+		if (inputActive)
+		{
+			//stores the amount of zero vectors in the deltas, so they can be disregarded in the average calculation
+			int zCount = 0;
+			Vector2 sum = Vector2.zero;
+			for(int i = 0; i < history.Length; i++)
+			{
+				sum += history[i];
+
+				if(history[i] == Vector2.zero)
+				{
+					zCount++;
+				}
+			}
+
+			//set velocity based on the average of the nonzero entries in the history list
+			if (zCount != history.Length)
+			{
+				//convert the sum to an average
+				sum /= history.Length - zCount;
+
+				//add to the velocity the average * sensitivity * inverse delta time
+				velocity = sum.x * sensitivity * 1 / Time.fixedDeltaTime;
+			}
+		}
+
+		inputActive = false;
+	}
+
+	public void OnInputCancel()
+	{
+		inputActive = false;
 	}
 
 }

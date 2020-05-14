@@ -31,12 +31,10 @@ public class Pulsar : ExplosiveProjectile
 		float fDiff = (1 - power) * (maxFuse - minFuse);
 		detonator.fuse = minFuse + fDiff;
 
-		float fuse = detonator.fuse;
-
 		//alter the fuse so explosion density is accurate
-		detonator.fuse /= ((float)explosions) / ((float)baseExplosions);
+		detonator.fuse /= explosions / (float)baseExplosions;
 
-		Debug.Log(fuse + " -- Fuse /= " + ((float)explosions) / ((float)baseExplosions));
+		//Debug.Log(fuse + " -- Fuse /= " + ((float)explosions) / ((float)baseExplosions));
 	}
 
 	private void LateUpdate()
