@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class WeaponLoader : MonoBehaviour
 {
-	RotorController rotor;
+	RotorController rotorController;
 	WeaponManager manager;
 
     // Start is called before the first frame update
     void Start()
     {
 		manager = GameObject.Find("Game Manager").GetComponent<WeaponManager>();
-		rotor = GameObject.Find("Weapon Wheel Rotor").GetComponent<RotorController>();
+		rotorController = GameObject.Find("Weapon Wheel Rotor").GetComponent<RotorController>();
     }
 
 	public void EquipLeft()
@@ -45,7 +45,7 @@ public class WeaponLoader : MonoBehaviour
 	{
 		get
 		{
-			return rotor.MedianIdx;
+			return rotorController.MedianIdx;
 		}
 	}
 

@@ -21,9 +21,7 @@ public class Pulsar : ExplosiveProjectile
 
 	public override void Launch(Vector2 direction, float power)
 	{
-		power = Mathf.Sqrt(power);
-
-		base.Launch(direction, power);
+		base.Launch(direction, Mathf.Pow(power, 2));
 		detonator.sparked = true;
 		detonator.screenShake = false;
 

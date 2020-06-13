@@ -79,85 +79,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 0
---- !u!1 &2833505572051217962
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8713351441377846943}
-  - component: {fileID: 5225437040253509321}
-  - component: {fileID: 7807519317923635326}
-  m_Layer: 5
-  m_Name: Flare
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8713351441377846943
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2833505572051217962}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5315409137359864872}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 16, y: 2.5}
-  m_SizeDelta: {x: -32, y: -55}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5225437040253509321
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2833505572051217962}
-  m_CullTransparentMesh: 0
---- !u!114 &7807519317923635326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2833505572051217962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.93725497, b: 0.63529414, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 195
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Flare
 --- !u!1 &3564467826798732942
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +98,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1756656385340316734
 RectTransform:
   m_ObjectHideFlags: 0
@@ -192,12 +113,12 @@ RectTransform:
   - {fileID: 6737677447818141378}
   - {fileID: 7237285423003733181}
   m_Father: {fileID: 5315409137359864872}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 72, y: -200}
-  m_SizeDelta: {x: -144, y: 130}
+  m_AnchoredPosition: {x: 133.98004, y: -1183.7017}
+  m_SizeDelta: {x: -314, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7863262856710889747
 CanvasRenderer:
@@ -301,9 +222,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2fddce1934727f4ebda561cee557297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconButton: {fileID: 4965982776939792561}
+  upgradeButton: {fileID: 0}
   priceText: {fileID: 2097235705782018617}
-  transmitter: {fileID: 5315409137359864884}
+  transmitter: {fileID: 0}
+  upgradeProgress: {fileID: 0}
+  descriptionRect: {fileID: 0}
+  progressRect: {fileID: 0}
   upgradeIdx: 11
   baseCost: 400
   costIncrement: 200
@@ -341,7 +265,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -119.9, y: 0}
+  m_AnchoredPosition: {x: -119.8999, y: 0}
   m_SizeDelta: {x: -262.7, y: -60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5960698194010809798
@@ -396,9 +320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5315409137359864872}
   - component: {fileID: 5315409137359864885}
-  - component: {fileID: 5315409137359864886}
-  - component: {fileID: 5315409137359864887}
-  - component: {fileID: 5315409137359864884}
+  - component: {fileID: 3044944438377790305}
   m_Layer: 5
   m_Name: Flare Upgrades
   m_TagString: Untagged
@@ -417,17 +339,16 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8713351441377846943}
   - {fileID: 1756656385340316734}
   - {fileID: 7477881005911085575}
   - {fileID: 6152090414648905395}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -250}
-  m_SizeDelta: {x: 0, y: 130}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.024902, y: -24}
+  m_SizeDelta: {x: 634.95, y: 1317}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5315409137359864885
 CanvasRenderer:
@@ -437,78 +358,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5315409137359864873}
   m_CullTransparentMesh: 0
---- !u!114 &5315409137359864886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5315409137359864873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0ed1d476bda0b8a4bba9718fc8136338, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
---- !u!114 &5315409137359864887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5315409137359864873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 0, g: 0, b: 0, a: 0.27058825}
-    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0.27058825}
-    m_PressedColor: {r: 0, g: 0, b: 0, a: 0.5019608}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 5315409137359864886}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
---- !u!114 &5315409137359864884
+--- !u!114 &3044944438377790305
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -555,7 +405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -119.9, y: 0}
+  m_AnchoredPosition: {x: -119.8999, y: 0}
   m_SizeDelta: {x: -262.7, y: -60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3454833032417667428
@@ -619,7 +469,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6152090414648905395
 RectTransform:
   m_ObjectHideFlags: 0
@@ -634,12 +484,12 @@ RectTransform:
   - {fileID: 7501068959731713443}
   - {fileID: 569346389557625092}
   m_Father: {fileID: 5315409137359864872}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 72, y: -470}
-  m_SizeDelta: {x: -144, y: 130}
+  m_AnchoredPosition: {x: 133.98004, y: -1453.7017}
+  m_SizeDelta: {x: -314, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6334180291936556109
 CanvasRenderer:
@@ -743,9 +593,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2fddce1934727f4ebda561cee557297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconButton: {fileID: 1106928405740711647}
+  upgradeButton: {fileID: 0}
   priceText: {fileID: 8643020840877187506}
-  transmitter: {fileID: 5315409137359864884}
+  transmitter: {fileID: 0}
+  upgradeProgress: {fileID: 0}
+  descriptionRect: {fileID: 0}
+  progressRect: {fileID: 0}
   upgradeIdx: 10
   baseCost: 500
   costIncrement: 150
@@ -768,7 +621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7477881005911085575
 RectTransform:
   m_ObjectHideFlags: 0
@@ -783,12 +636,12 @@ RectTransform:
   - {fileID: 6804184964925208218}
   - {fileID: 8056578540262438521}
   m_Father: {fileID: 5315409137359864872}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 72, y: -335}
-  m_SizeDelta: {x: -144, y: 130}
+  m_AnchoredPosition: {x: 133.98004, y: -1318.7017}
+  m_SizeDelta: {x: -314, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5047421036926875855
 CanvasRenderer:
@@ -892,9 +745,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2fddce1934727f4ebda561cee557297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconButton: {fileID: 2842934186856050677}
+  upgradeButton: {fileID: 0}
   priceText: {fileID: 8016029763053619321}
-  transmitter: {fileID: 5315409137359864884}
+  transmitter: {fileID: 0}
+  upgradeProgress: {fileID: 0}
+  descriptionRect: {fileID: 0}
+  progressRect: {fileID: 0}
   upgradeIdx: 12
   baseCost: 400
   costIncrement: 200
@@ -1011,7 +867,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -119.9, y: 0}
+  m_AnchoredPosition: {x: -119.8999, y: 0}
   m_SizeDelta: {x: -262.7, y: -60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6512048078522669315

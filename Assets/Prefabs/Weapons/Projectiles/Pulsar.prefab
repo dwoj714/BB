@@ -164,9 +164,9 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  maxSpeed: 11
-  minSpeed: 0.6
-  hasFixedSpeed: 0
+  maxSpeed: 12
+  minSpeed: 2
+  hasFixedSpeed: 1
   lifespanMode: 1
   lifespan: Infinity
   vfx: {fileID: 0}
@@ -180,6 +180,6 @@ MonoBehaviour:
   impulseBonus: 0.15
   radiusBonus: 0.07
   explosions: 22
-  minFuse: 0.06
-  maxFuse: 0.4
+  minFuse: 0.055
+  maxFuse: 0.37
   explosionCountBonus: 0.4

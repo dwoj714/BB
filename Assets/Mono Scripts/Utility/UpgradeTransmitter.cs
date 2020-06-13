@@ -34,6 +34,11 @@ public class UpgradeTransmitter : MonoBehaviour
 		}
 	}
 
+	public int MaxLevel(int i)
+	{
+		return target.UpgradeLimits[i];
+	}
+
 	private void ResetUpgrades()
 	{
 		for(int i = 0; i < target.UpgradeLevels.Length; i++)

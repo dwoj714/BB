@@ -1,72 +1,182 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
 public class UpgradeMenuController : MonoBehaviour
 {
+	[SerializeField] private Button[] tabs = new Button[3];
+	[SerializeField] private UpgradeNodeController[] rootNodePrefabs = new UpgradeNodeController[7];
+	//private UpgradeNodeController[] loadedRootNodes = new UpgradeNodeController[3];
+	[SerializeField] private RectTransform scrollContent;
 
-	[SerializeField] private UpgradeTransmitter[] menuPrefabs;
-	private UpgradeTransmitter[] spawnedMenus = new UpgradeTransmitter[3];
-
-	private IUpgradeable launcher1, launcher2, launcher3;
-
-	public void SpawnMenus()
+	public void SelectTab(int tab)
 	{
-		//destroy existing menus
-		for (int i = 0; i < 3; i++)
+		ActiveTab = tab;
+	}
+
+	private List<UpgradeNodeController>[] nodeChains = new List<UpgradeNodeController>[3];
+
+	private int activeTab = 1;
+	public int ActiveTab
+	{
+		get
 		{
-			if (spawnedMenus[i]) Destroy(spawnedMenus[i].gameObject);
+			return activeTab;
 		}
+		set
+		{
+			activeTab = value;
 
-		UpgradeTransmitter pf;
+			switch (activeTab)
+			{
+				case 0:
+					tabs[0].interactable = false;
+					tabs[1].interactable = true;
+					tabs[2].interactable = true;
 
-		//spawn new menus and assign upgrade applicators to the menus, typecasted from WeaponManager Input Recievers
-		pf = menuPrefabs[WeaponManager.EquippedPrefabs[WeaponManager.LeftIdx]];
-		spawnedMenus[WeaponManager.LeftIdx] = Instantiate(pf.gameObject, transform).GetComponent<UpgradeTransmitter>();
-		spawnedMenus[WeaponManager.LeftIdx].target = ((MonoBehaviour)WeaponManager.Weapons[WeaponManager.LeftIdx]).GetComponent<LauncherController>();
+					GetRootNode(0).gameObject.SetActive(true);
+					GetRootNode(1).gameObject.SetActive(false);
+					GetRootNode(2).gameObject.SetActive(false);
 
-		pf = menuPrefabs[WeaponManager.EquippedPrefabs[WeaponManager.MiddleIdx]];
-		spawnedMenus[WeaponManager.MiddleIdx] = Instantiate(pf.gameObject, transform).GetComponent<UpgradeTransmitter>();
-		spawnedMenus[WeaponManager.MiddleIdx].target = ((MonoBehaviour)WeaponManager.Weapons[WeaponManager.MiddleIdx]).GetComponent<LauncherController>();
+					GetRootNode(0).CollapseDownward();
+					
+					break;
+				case 1:
+					tabs[0].interactable = true;
+					tabs[1].interactable = false;
+					tabs[2].interactable = true;
 
-		pf = menuPrefabs[WeaponManager.EquippedPrefabs[WeaponManager.RightIdx]];
-		spawnedMenus[WeaponManager.RightIdx] = Instantiate(pf.gameObject, transform).GetComponent<UpgradeTransmitter>();
-		spawnedMenus[WeaponManager.RightIdx].target = ((MonoBehaviour)WeaponManager.Weapons[WeaponManager.RightIdx]).GetComponent<LauncherController>();
+					GetRootNode(0).gameObject.SetActive(false);
+					GetRootNode(1).gameObject.SetActive(true);
+					GetRootNode(2).gameObject.SetActive(false);
+
+					GetRootNode(1).CollapseDownward();
+					
+					break;
+				case 2:
+					tabs[0].interactable = true;
+					tabs[1].interactable = true;
+					tabs[2].interactable = false;
+
+					GetRootNode(0).gameObject.SetActive(false);
+					GetRootNode(1).gameObject.SetActive(false);
+					GetRootNode(2).gameObject.SetActive(true);
+
+					GetRootNode(2).CollapseDownward();
+
+					break;
+			}
+		}
 	}
 
 	//Activate the upgrade menu for the middle launcher
 	private void OnEnable()
 	{
-		InputManager.main.inputHalt = true;
-		InputManager.main.CancelInput();
-		if (spawnedMenus[0])
-		{
-			spawnedMenus[WeaponManager.LeftIdx].gameObject.SetActive(false);
-			spawnedMenus[WeaponManager.RightIdx].gameObject.SetActive(false);
-
-			spawnedMenus[WeaponManager.MiddleIdx].gameObject.SetActive(true);
-		}
+		ActiveTab = WeaponManager.MiddleIdx;
 	}
 
-	//Need to make weapon levels reset on game start
-
-	private void OnDisable()
+	private void Update()
 	{
-		//this always fails on frame 1 if enabled at game start, so don't bother
-		try { InputManager.main.inputHalt = false; } catch (System.Exception) { return;}
+		//resize the scroll view based on the height of all the upgrade nodes
+		scrollContent.sizeDelta = Vector2.right * scrollContent.sizeDelta.x + Vector2.up * NodeChainHeight(activeTab);
+	}
 
-		if (spawnedMenus[0])
+	public UpgradeMenuController()
+	{
+		//Instantiate the members of nodeChains
+		nodeChains[0] = new List<UpgradeNodeController>();
+		nodeChains[1] = new List<UpgradeNodeController>();
+		nodeChains[2] = new List<UpgradeNodeController>();
+	}
+
+	private void Awake()
+	{
+		gameObject.SetActive(false);
+		UpgradeNodeController.upgradeMenu = this;
+	} 
+
+	public void SetupMenus()
+	{
+		//destroy node chains that already exist before spawning new ones
+		for(int i = 0; i < 3; i++)
 		{
-			spawnedMenus[WeaponManager.LeftIdx].gameObject.SetActive(false);
-			spawnedMenus[WeaponManager.RightIdx].gameObject.SetActive(false);
+			Debug.Log("Delete Attempt " + i + ": " + GetRootNode(i));
+			if (GetRootNode(i) != null)
+			{
+				Debug.Log("Destroying " + GetRootNode(i).gameObject);
+				Destroy(GetRootNode(i).gameObject);
+				nodeChains[i].Clear();
+			}
+		}
 
-			spawnedMenus[WeaponManager.MiddleIdx].gameObject.SetActive(false);
+		for(int i = 0; i < WeaponManager.EquippedPrefabs.Length; i++)
+		{
+			UpgradeNodeController root = Instantiate(rootNodePrefabs[WeaponManager.EquippedPrefabs[i]], scrollContent).GetComponent<UpgradeNodeController>();
+
+			Debug.Log("Instantiated root node from equipped prefab " + WeaponManager.EquippedPrefabs[i]);
+
+			FillChainDownward(root, nodeChains[i]);
+
+			foreach(UpgradeNodeController node in nodeChains[i])
+			{
+				node.targetLauncher = (LauncherController)WeaponManager.Weapons[i];
+			}
+
+			root.gameObject.SetActive(false);
+
+			//spawn the root node corresponding to the equipped 
+			//loadedRootNodes[i] = Instantiate<UpgradeNodeController>(rootNodePrefabs[WeaponManager.EquippedPrefabs[i]], scrollContent);
+			//loadedRootNodes[i].SetLauncherDownward(WeaponManager.Weapons[i] as LauncherController);
+		}
+
+	}
+
+	private void FillChainDownward(UpgradeNodeController root, List<UpgradeNodeController> list)
+	{
+		list.Add(root);
+		UpgradeNodeController[] childNodes = root.GetComponentsInChildren<UpgradeNodeController>();
+		foreach (UpgradeNodeController node in childNodes)
+		{
+			if (!list.Contains(node))
+			{
+				list.Add(node);
+			}
 		}
 	}
 
 	public void ToggleActive()
 	{
 		gameObject.SetActive(!gameObject.activeInHierarchy);
+	}
+
+	public void OnNodeExpanded(UpgradeNodeController node)
+	{
+		bool foundLastNode = false;
+		for(int i = 0; i < nodeChains[activeTab].Count && !foundLastNode; i++)
+		{
+
+		}
+	}
+
+	private UpgradeNodeController GetRootNode(int i)
+	{
+		try
+		{
+			return nodeChains[i][0];
+		}
+		catch(Exception) { return null; }
+	}
+
+	private float NodeChainHeight(int i)
+	{
+		float total = 0;
+		foreach(UpgradeNodeController node in nodeChains[i])
+		{
+			total += node.CurrentHeight;
+		}
+		return total;
 	}
 
 }

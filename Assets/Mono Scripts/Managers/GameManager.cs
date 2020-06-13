@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public static bool gameInProgress, paused = false;
+	public static bool gameInProgress, frozen = false;
 
 	//so things don't need to get a reference to this manager
 	public static GameManager main;
@@ -79,8 +79,6 @@ public class GameManager : MonoBehaviour
 	{
 		BroadcastMessage("OnGameStart", SendMessageOptions.DontRequireReceiver);
 
-		//yield return null;
-
 		spawner.OnGameStart();
 
 		gameInProgress = true;
@@ -88,14 +86,10 @@ public class GameManager : MonoBehaviour
 		score = 0;
 		points = 0;
 
-		//yield return null;
-
 		//reset the game over menu;
 		gameOverMenu.StopAllCoroutines();
 		gameOverMenu.HideAll();
 		gameOverMenu.gameObject.SetActive(false);
-
-		//yield return null;
 
 		mainMenu.SetActive(false);
 		swapButtons.SetActive(true);
@@ -105,40 +99,68 @@ public class GameManager : MonoBehaviour
 		PurgeGameplayObjects();
 		launcherBase.Restart();
 
-		//yield return null;
-
-		upgradeMenu.SpawnMenus();
+		upgradeMenu.SetupMenus();
 
 		camController.SetDestination("Game");
 	}
-
-	public void PauseGame()
+	
+	public void TogglePauseMenu()
 	{
-		storedTimeScale = Time.timeScale;
-		Time.timeScale = 0;
-
-		pauseMenu.SetActive(true);
-		paused = true;
-		AudioListener.pause = true;
-	}
-
-	public void ResumeGame()
-	{
-		Time.timeScale = storedTimeScale;
-		pauseMenu.SetActive(false);
-		paused = false;
-		AudioListener.pause = false;
-	}
-
-	public void TogglePaused()
-	{
-		if (paused)
+		if (pauseMenu.activeSelf)
 		{
-			ResumeGame();
+			SetFrozen(false);
+			pauseMenu.SetActive(false);
 		}
 		else
 		{
-			PauseGame();
+			if (frozen)
+			{
+				upgradeMenu.gameObject.SetActive(false);
+				pauseMenu.SetActive(true);
+			}
+			else
+			{
+				SetFrozen(true);
+				pauseMenu.SetActive(true);
+			}
+		}
+	}
+
+	public void ToggleUpgradeMenu()
+	{
+		if (upgradeMenu.gameObject.activeSelf)
+		{
+			SetFrozen(false);
+			upgradeMenu.gameObject.SetActive(false);
+		}
+		else
+		{
+			if (frozen)
+			{
+				pauseMenu.SetActive(false);
+				upgradeMenu.gameObject.SetActive(true);
+			}
+			else
+			{
+				SetFrozen(true);
+				upgradeMenu.gameObject.SetActive(true);
+			}
+		}
+	}
+
+	private void SetFrozen(bool frozen)
+	{
+		GameManager.frozen = frozen;
+		if (frozen)
+		{
+			storedTimeScale = Time.timeScale;
+			Time.timeScale = 0;
+			AudioListener.pause = true;
+		}
+		else
+		{
+			Time.timeScale = storedTimeScale;
+			AudioListener.pause = false;
 		}
 	}
 
@@ -162,7 +184,7 @@ public class GameManager : MonoBehaviour
 			PlayerPrefs.SetInt("Score 3", score);
 		}
 
-		InputMan.CancelAll();
+		InputMan.CancelInput();
 	
 		gameInProgress = false;
 
@@ -183,7 +205,7 @@ public class GameManager : MonoBehaviour
 
 	public void QuitGame()
 	{
-		InputMan.CancelAll();
+		InputMan.CancelInput();
 		gameInProgress = false;
 		launcherBase.enabled = false;
 		spawner.enabled = false;
@@ -197,10 +219,12 @@ public class GameManager : MonoBehaviour
 
 	public void OnEscapePressed()
 	{
-		if (gameInProgress)
-		{
-			PauseGame();
-		}
+		
+	}
+
+	private void OnApplicationFocus(bool focus)
+	{
+
 	}
 
 	public void GoToMenu()

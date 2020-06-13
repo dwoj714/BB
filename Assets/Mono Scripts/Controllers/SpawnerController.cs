@@ -67,7 +67,9 @@ public class SpawnerController : MonoBehaviour {
 
 		//Debug.Log("Start enhancement selection ------------------------------------");
 
+#pragma warning disable 0219
 		GameObject obj;
+#pragma warning restore 0219
 
 		//determine which enhancements can be applied to the bomb given its stat value
 		bool[] isValid = new bool[bombEnhancers.Length];

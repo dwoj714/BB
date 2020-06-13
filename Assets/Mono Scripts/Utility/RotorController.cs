@@ -26,63 +26,39 @@ public class RotorController : MonoBehaviour, IInputReciever
 		}
 		set
 		{
+			rotation = value;
 			SetRotation(value);
 		}
 	}
 
-	[SerializeField] private Rotor[] rotors = new Rotor[3]; 
+	public Rotor[] rotors = new Rotor[3];
 
-	[SerializeField] private int[] slots;
-	public int[] Slots
-	{
-		get
-		{
-			return slots;
-		}
-	}
+	private int lastMedian;
 
-	//the index of the rotor nearest to vertical rotation
 	public int MedianIdx
 	{
-		get
-		{
-			for (int i = 0; i < rotors.Length; i++)
-			{
-				float z = rotors[i].Rotation;
-
-				//Debug.Log("abs(z = " + z + ") < " + spread / 2 + " ? " + (Mathf.Abs(z) < spread / 2));
-				if (InRange(-spread / 2, spread / 2, z))
-				{
-					return i;
-				}
-			}
-
-			Debug.LogError("Failed to calculate rotorController MedianIDX on " + name);
-			return -1;
-		}
+		get;
+		private set;
 	}
 
-	private void Awake()
+	private void Start()
 	{
 		for(int i = 0; i < rotors.Length; i++)
 		{
-			rotors[i].Rotation = (MedianIdx - i) * spread;
+			rotors[i].Rotation = ((rotors.Length / 2) - i) * spread;
+			rotors[i].index = i;
+			rotors[i].rotorController = this;
 		}
-
-		slots = new int[rotors.Length];
-		for(int i = 0; i < slots.Length; i++)
-		{
-			slots[i] = i;
-		}
-
 		Rotation = 0;
+
+		rotors[MedianIdx].mid = true;
 	}
 
 	private void Update()
 	{
+		Rotation += velocity * Time.deltaTime;
 		if (velocity != 0)
 		{
-			Rotation += velocity * Time.deltaTime;
 			velocity -= (drag + drag * Mathf.Abs(velocity)) * Time.deltaTime * (velocity > 0 ? 1 : -1);
 		}
 
@@ -93,23 +69,17 @@ public class RotorController : MonoBehaviour, IInputReciever
 		}
 
 		if (Mathf.Abs(velocity) < 0.1f) velocity = 0;
-
-
 	}
 
-	public void SetRotation(float degrees)
+	private void SetRotation(float degrees)
 	{
-		rotation = degrees;
-
 		//range is the range of rotation values each rotor can have
 		float range = spread * rotors.Length;
 
 		for(int i = 0; i < rotors.Length; i++)
 		{
-			int mid = slots.Length / 2;
-
+			int mid = rotors.Length / 2;
 			float newZ = degrees - (i - mid) * spread;
-
 			while(newZ >= range / 2)
 			{
 				newZ -= range;
@@ -118,12 +88,18 @@ public class RotorController : MonoBehaviour, IInputReciever
 			{
 				newZ += range;
 			}
-
 			rotors[i].Rotation = newZ;
-
 		}
 
-		
+		CalculateMedian();
+
+		if(lastMedian != MedianIdx)
+		{
+			rotors[lastMedian].OnExitMiddle();
+			rotors[MedianIdx].OnEnterMiddle();
+		}
+
+		lastMedian = MedianIdx;
 	}
 
 	public void IncrementRotation(bool left)
@@ -175,7 +151,7 @@ public class RotorController : MonoBehaviour, IInputReciever
 	{
 		get
 		{
-			return DegreesOffCenter / (spread / 2);
+			return Mathf.Abs(DegreesOffCenter) / (spread / 2);
 		}
 	}
 
@@ -209,6 +185,24 @@ public class RotorController : MonoBehaviour, IInputReciever
 			return value >= lower && value < upper;
 		}
 
+	}
+
+	private int CalculateMedian()
+	{
+		for (int i = 0; i < rotors.Length; i++)
+		{
+			float z = rotors[i].Rotation;
+
+			//Debug.Log("abs(z = " + "rotors["+ i +"] = " + + z + ") < " + spread / 2 + " ? " + (Mathf.Abs(z) < spread / 2));
+			if (InRange(-spread / 2, spread / 2, z))
+			{
+				MedianIdx = i;
+				return i;
+			}
+		}
+
+		Debug.LogError("Failed to calculate rotorController MedianIDX on " + name);
+		return -1;
 	}
 
 

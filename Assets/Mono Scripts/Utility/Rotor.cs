@@ -5,16 +5,20 @@ using UnityEngine;
 public class Rotor : MonoBehaviour
 {
 
-	public void Awake()
+	[HideInInspector] public int index;
+	[HideInInspector] public bool mid = false;
+	[HideInInspector] public RotorController rotorController;
+
+	protected virtual void Awake()
 	{
 		transform.localPosition = Vector3.zero;
 	}
 
-	public float Rotation
+	public virtual float Rotation
 	{
 		get
 		{
-			return transform.localRotation.z;
+			return transform.localRotation.eulerAngles.z;
 		}
 		set
 		{
@@ -22,6 +26,12 @@ public class Rotor : MonoBehaviour
 		}
 	}
 
-	public virtual void OnEnterMiddle() { }
-	public virtual void OnExitMiddle() { }
+	public virtual void OnEnterMiddle()
+	{
+		mid = true;
+	}
+	public virtual void OnExitMiddle()
+	{
+		mid = false;
+	}
 }

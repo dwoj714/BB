@@ -32,10 +32,6 @@ public class VariablePayload : Launchable
 
 		shot.launcherCollider = launcherCollider;
 
-		System.Type t = shot.GetType();
-
-		Debug.Log("VariablePayload: Shot type = " + t);	
-
 		shot.UpgradeLevels = upgradeLevels;
 
 		shot.Launch(direction, adjustedPower);

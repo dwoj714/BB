@@ -8,7 +8,6 @@ public class WeaponManager : MonoBehaviour
 	[Header("Weapon prefabs")]
 	public List<GameObject> prefabs = new List<GameObject>();
 
-	[SerializeField] private Transform[] slots = new Transform[3];
 	public RotorController weaponRotor;
 	InputManager inputMan;
 	CircleCollider2D baseCol;
@@ -97,7 +96,7 @@ public class WeaponManager : MonoBehaviour
 	private IEnumerator SetWeaponSlotCo(int pfIdx, int i)
 	{
 		//instantiate as a child of rotor in slot i
-		GameObject obj = Instantiate(prefabs[pfIdx], slots[i]);
+		GameObject obj = Instantiate(prefabs[pfIdx], weaponRotor.rotors[i].transform);
 
 		yield return null;
 
@@ -151,6 +150,9 @@ public class WeaponManager : MonoBehaviour
 	//to swap weapons, we cancel any active input functions, tell the Rotor to swap, and await the new InputReciever
 	public void Swap(bool left)
 	{
+		//don't do anything while the game is paused
+		if (GameManager.frozen) return;
+
 		inputMan.reciever.OnInputCancel();
 
 		weaponRotor.IncrementRotation(left);

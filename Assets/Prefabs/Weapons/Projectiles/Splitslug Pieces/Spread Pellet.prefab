@@ -131,12 +131,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20963edbfdad614419e7170a83c067ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VFX: {fileID: 0}
+  VFX: {fileID: 698324577287022185, guid: 609623045473ed94586b5e680b2601d2, type: 3}
   minPushForce: 5
   maxPushForce: 10
   minExplosionDMG: 0
-  maxExplosionDMG: 10
-  explosionRadius: 1.1
+  maxExplosionDMG: 8
+  explosionRadius: 0.9
   fuse: 0
   screenShake: 1
   useMask: 1
@@ -163,7 +163,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 1
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4

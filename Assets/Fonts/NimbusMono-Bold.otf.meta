@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: b637f782113a2914cb38a07a5b41f406
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Nimbus Mono
+  fontNames:
+  - Nimbus Mono
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 9ebdc41b1d1105940b88412cfafc9bbc, type: 3}
+  - {fileID: 12800000, guid: 13658e7c9b936dd4e8fce295219dbaeb, type: 3}
+  - {fileID: 12800000, guid: 4480ef4f5890e744f950539249c0b83c, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

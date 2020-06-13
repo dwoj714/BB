@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
 
-	private bool inputPause = false;
-	public bool inputHalt = false;
+	private static bool inputPause = false;
+	public static bool inputHalt = false;
 	public static InputManager main;
 
 	public IInputReciever reciever;
-	//public List<IInputReciever> recievers = new List<IInputReciever>();
 
 	private bool mouseDetected = false;
 
 	private void Awake()
 	{
+		Debug.Log("Inputman set");
 		if (!main) main = this;
 		else Debug.LogError("More than one InputManager instantiated!");
 	}
 
 	void Update ()
 	{
-		if (reciever != null && !(inputPause || inputHalt) && !GameManager.paused)
+		if (reciever != null && !(inputPause || inputHalt) && !GameManager.frozen)
 		{
 			//foreach (IInputReciever reciever in recievers)
 			//{
@@ -75,15 +75,7 @@ public class InputManager : MonoBehaviour {
 
 	void OnGameEnd()
 	{
-		//recievers.Clear();
-	}
-
-	public void CancelAll()
-	{
-		//foreach(IInputReciever reciever in recievers)
-		//{
-		//	reciever.OnInputCancel();
-		//}
+		reciever = null;
 	}
 
 	public static Vector2 MouseWorldPosition
