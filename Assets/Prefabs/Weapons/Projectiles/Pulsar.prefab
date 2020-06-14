@@ -137,7 +137,7 @@ MonoBehaviour:
   maxPushForce: 20
   minExplosionDMG: 10
   maxExplosionDMG: 15
-  explosionRadius: 1.2
+  explosionRadius: 0.9
   fuse: 0.5
   screenShake: 1
   useMask: 1
@@ -179,7 +179,7 @@ MonoBehaviour:
   damageBonus: 0.12
   impulseBonus: 0.15
   radiusBonus: 0.07
-  explosions: 22
-  minFuse: 0.055
+  explosions: 24
+  minFuse: 0.05
   maxFuse: 0.37
-  explosionCountBonus: 0.4
+  explosionCountBonus: 0.2

@@ -428,7 +428,6 @@ MonoBehaviour:
   priceText: {fileID: 1531535378001634022}
   upgradeProgress: {fileID: 1531535378541357554}
   descriptionRect: {fileID: 1531535377375285951}
-  descriptionLowerAnchor: {fileID: 1531535376558026785}
   barRect: {fileID: 1531535378035494613}
   upgradeIdx: 0
   baseCost: 10
@@ -524,7 +523,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 79.72995, y: 0}
+  m_AnchoredPosition: {x: 80, y: 0}
   m_SizeDelta: {x: 159.46, y: 87.57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1531535377875984911
@@ -810,8 +809,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 333.27, y: 0}
-  m_SizeDelta: {x: 666.85, y: -38.3}
+  m_AnchoredPosition: {x: 523.27, y: 0}
+  m_SizeDelta: {x: 1046.9, y: -38.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1531535378035494610
 CanvasRenderer:
