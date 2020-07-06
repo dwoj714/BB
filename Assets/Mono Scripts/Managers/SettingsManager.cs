@@ -34,11 +34,6 @@ public class SettingsManager : MonoBehaviour
 		ShowBombHealth = !ShowBombHealth;
 	}
 
-	public void ToggleInvertAim()
-	{
-		InvertAim = !InvertAim;
-	}
-
 	public void OpenMenu(GameObject activatingMenu)
 	{
 		this.activatingMenu = activatingMenu;
@@ -61,7 +56,6 @@ public class SettingsManager : MonoBehaviour
 		{
 			ScreenShakeEnabled = read[0] == '1';
 			ShowBombHealth = read[1] == '1';
-			InvertAim = read[2] == '1';
 		} catch(System.IndexOutOfRangeException e)
 		{
 			Debug.Log(e + ": One or more settings not loaded");
@@ -104,19 +98,6 @@ public class SettingsManager : MonoBehaviour
 		}
 	}
 
-	public bool InvertAim
-	{
-		get
-		{
-			return LauncherController.invertAim;
-		}
-		set
-		{
-			LauncherController.invertAim = value;
-			toggleImages[2].sprite = value ? settingEnabled : settingDisabled;
-		}
-	}
-
 	public float Stiffness
 	{
 		get
@@ -136,7 +117,6 @@ public class SettingsManager : MonoBehaviour
 		string str = "";
 		str += ScreenShakeEnabled ? '1' : '0';
 		str += ShowBombHealth ? '1' : '0';
-		str += InvertAim ? '1' : '0';
 
 		PlayerPrefs.SetString("Toggle Settings", str);
 		PlayerPrefs.Save();

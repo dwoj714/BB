@@ -1407,8 +1407,7 @@ PrefabInstance:
     - target: {fileID: 1531535377375285948, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Text
-      value: Projectiles are launched at higher speeds, allowing for easier aiming
-        and harder hits
+      value: Increased explosion size
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b22ce774fb6450e42826380158d97d92, type: 3}

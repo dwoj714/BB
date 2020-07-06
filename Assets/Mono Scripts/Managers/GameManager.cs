@@ -18,9 +18,10 @@ public class GameManager : MonoBehaviour
 	IRandomList lastSpawnPool;
 
 	[SerializeField] private GameEndSequencer gameOverMenu;
-	[SerializeField] private GameObject mainMenu, inGameMenu, pauseMenu, loadoutMenu, swapButtons;
+	[SerializeField] private GameObject mainMenu, inGameMenu, pauseMenu, loadoutMenuWorld, swapButtons;
 	[SerializeField] private UpgradeMenuController upgradeMenu;
-	[SerializeField] private RotorController weaponWheel;
+	//[SerializeField] private RotorController weaponWheel;
+	[SerializeField] private DescriptionDisplayController loadoutMenuScreen;
 
 	[Header("PhysCircle hitFX prefab")]
 	[SerializeField] private GameObject hitFX;
@@ -31,8 +32,6 @@ public class GameManager : MonoBehaviour
 	[HideInInspector]
 	public static int score = 0;
 	private static int points = 0;
-
-	
 
 	public static int Points
 	{
@@ -66,9 +65,12 @@ public class GameManager : MonoBehaviour
 		gameOverMenu.gameObject.SetActive(false);
 		gameOverMenu.HideAll();
 
+		upgradeMenu.Init();
 		upgradeMenu.gameObject.SetActive(false);
 		swapButtons.SetActive(false);
-		loadoutMenu.SetActive(false);
+		loadoutMenuWorld.SetActive(false);
+		loadoutMenuScreen.gameObject.SetActive(false);
+
 		pauseMenu.SetActive(false);
 		
 
@@ -93,7 +95,8 @@ public class GameManager : MonoBehaviour
 
 		mainMenu.SetActive(false);
 		swapButtons.SetActive(true);
-		loadoutMenu.SetActive(false);
+		loadoutMenuWorld.SetActive(false);
+		loadoutMenuScreen.gameObject.SetActive(false);
 		launcherBase.enabled = true;
 		spawner.enabled = true;
 		PurgeGameplayObjects();
@@ -106,22 +109,25 @@ public class GameManager : MonoBehaviour
 	
 	public void TogglePauseMenu()
 	{
-		if (pauseMenu.activeSelf)
+		if (gameInProgress)
 		{
-			SetFrozen(false);
-			pauseMenu.SetActive(false);
-		}
-		else
-		{
-			if (frozen)
+			if (pauseMenu.activeSelf)
 			{
-				upgradeMenu.gameObject.SetActive(false);
-				pauseMenu.SetActive(true);
+				SetFrozen(false);
+				pauseMenu.SetActive(false);
 			}
 			else
 			{
-				SetFrozen(true);
-				pauseMenu.SetActive(true);
+				if (frozen)
+				{
+					upgradeMenu.gameObject.SetActive(false);
+					pauseMenu.SetActive(true);
+				}
+				else
+				{
+					SetFrozen(true);
+					pauseMenu.SetActive(true);
+				}
 			}
 		}
 	}
@@ -138,12 +144,12 @@ public class GameManager : MonoBehaviour
 			if (frozen)
 			{
 				pauseMenu.SetActive(false);
-				upgradeMenu.gameObject.SetActive(true);
+				upgradeMenu.Enable();
 			}
 			else
 			{
 				SetFrozen(true);
-				upgradeMenu.gameObject.SetActive(true);
+				upgradeMenu.Enable();
 			}
 		}
 	}
@@ -219,12 +225,15 @@ public class GameManager : MonoBehaviour
 
 	public void OnEscapePressed()
 	{
-		
+		TogglePauseMenu();
 	}
 
 	private void OnApplicationFocus(bool focus)
 	{
-
+		if (!frozen)
+		{
+			TogglePauseMenu();
+		}
 	}
 
 	public void GoToMenu()
@@ -237,7 +246,8 @@ public class GameManager : MonoBehaviour
 		gameOverMenu.gameObject.SetActive(false);
 
 		inGameMenu.SetActive(false);
-		loadoutMenu.SetActive(false);
+		loadoutMenuWorld.SetActive(false);
+		loadoutMenuScreen.gameObject.SetActive(false);
 		mainMenu.SetActive(true);
 		PurgeGameplayObjects();
 		launcherBase.Restart();
@@ -252,7 +262,8 @@ public class GameManager : MonoBehaviour
 		mainMenu.SetActive(false);
 		camController.SetDestination("Loadout");
 		swapButtons.SetActive(false);
-		loadoutMenu.SetActive(true);
+		loadoutMenuWorld.SetActive(true);
+		loadoutMenuScreen.gameObject.SetActive(true);
 
 		LoadoutMenuSequencer.main.PlayEntry();
 	}

@@ -96,7 +96,7 @@ public class ExplosionInstance : MonoBehaviour
 				audio.pitch = (1 - (scaledRadius / radRange)) * (maxPitch - minPitch) + minPitch;
 			}*/
 
-			audio.Play();
+			//audio.Play();
 		}
 		mat.SetFloat("_startTime", Time.time);
 		if (selfDestruct)

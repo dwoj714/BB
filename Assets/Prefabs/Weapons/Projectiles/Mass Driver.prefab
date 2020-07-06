@@ -107,9 +107,9 @@ MonoBehaviour:
   lifespan: 20
   vfx: {fileID: 0}
   deathFX: {fileID: 2756038530175877105, guid: c5934165eddbd664d9ee50422d022139, type: 3}
-  massBonus: 0.15
-  maxSpeedBonus: 0.15
-  minSpeedBonus: 0.25
+  massBonus: 1
+  maxSpeedBonus: 0.2
+  minSpeedBonus: 0.2
   lifeSpanBonus: 0.25
   fixedSpeed: 0
 --- !u!50 &1344252239080468775

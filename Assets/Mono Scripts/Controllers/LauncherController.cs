@@ -75,6 +75,8 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 	private float charge = 0;
 	private Vector2 clickPos, dragPos, oldDrag;
 	private AnimationDispatcher animator;
+	private Color bgColor;
+	private SpriteRenderer iconSprite;
 	[HideInInspector]public CircleCollider2D col;
 
 ////////////////////////////    PROPERTIES    ////////////////////////////
@@ -168,6 +170,9 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 		animator = GetComponent<AnimationDispatcher>();
 
+		iconSprite = GetComponentInChildren<SpriteRenderer>();
+		bgColor = GetComponent<SpriteRenderer>().color;
+
 	}
 
 	private void LateUpdate()
@@ -201,7 +206,12 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		//If the input is dragged far enough, make the charge field visible and attempt to ready a shot. 
 		if (!Armed && Drag.magnitude >= minDragLength)
 		{
-			indicator.ChargeFieldVisible = true;
+			if (!indicator.ChargeFieldVisible)
+			{
+				invertAim = Drag.y > 0;
+				indicator.ChargeFieldVisible = true;
+			}
+
 			ReadyShot();
 		}
 		//If the launcher is armed, charge the shot until it's fully charged.
@@ -222,6 +232,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	public void OnInputCancel()
 	{
+		Debug.LogWarning("OnInputCancel()");
 		CancelShot();
 		recharging = true;
 		OnInputReleased(Vector2.zero);
@@ -298,6 +309,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	public void CancelShot()
 	{
+		Debug.LogWarning("CancelShot()");
 		if (Shot)
 		{
 			//Destroy the shot object, refund the energy, and reset charge.
