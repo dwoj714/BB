@@ -24,7 +24,7 @@ public class StickyBomb : ExplosiveProjectile
 	protected override void Update()
 	{
 		base.Update();
-		if (connection && autoDetonate && connection.detonator.sparked)
+		if (connection && autoDetonate && connection.hb.Health <= detonator.maxExplosionDMG)
 		{
 			detonator.Explode();
 		}
@@ -63,7 +63,14 @@ public class StickyBomb : ExplosiveProjectile
 		}
 		set
 		{
-			base.UpgradeLevels = value;
+
+			int[] valCopy = new int[value.Length];
+			value.CopyTo(valCopy, 0);
+			valCopy[6] = valCopy[12];
+			valCopy[7] = valCopy[12];
+			valCopy[8] = valCopy[12];
+
+			base.UpgradeLevels = valCopy;
 
 			if (upgradeLevels[11] != 0)
 			{

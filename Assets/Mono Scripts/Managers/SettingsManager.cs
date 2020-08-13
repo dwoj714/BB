@@ -82,7 +82,6 @@ public class SettingsManager : MonoBehaviour
 	{
 		get
 		{
-			Debug.Log(BombController.showHealth);
 			return BombController.showHealth;
 		}
 

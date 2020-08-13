@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 9137526970945996867}
   - component: {fileID: 9137526970945996864}
   m_Layer: 5
-  m_Name: Driver Node Chain
+  m_Name: Flare Node Chain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -171,9 +171,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -162.48}
-  m_SizeDelta: {x: 0, y: 324.97}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 324.96}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &9137526970945996865
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 6cd417f41b12ac84b8f436eaef38e954, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9a67f87594e81e949adf2afaf7572a2e, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -228,8 +228,8 @@ MonoBehaviour:
   upgradeProgress: {fileID: 9137526971578657807}
   descriptionRect: {fileID: 9137526972710934338}
   barRect: {fileID: 9137526971203734312}
-  upgradeIdx: 0
-  baseCost: 10
+  upgradeIdx: 11
+  baseCost: 400
   costIncrement: 100
   targetLauncher: {fileID: 0}
 --- !u!114 &9137526970945996864
@@ -252,9 +252,9 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0, g: 0, b: 0, a: 0.3372549}
-    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0.3372549}
-    m_PressedColor: {r: 0, g: 0, b: 0, a: 0.3372549}
+    m_NormalColor: {r: 1, g: 0.93725497, b: 0.63529414, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.93725497, b: 0.63529414, a: 1}
+    m_PressedColor: {r: 1, g: 0.76470596, b: 0.63529414, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.3372549}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -656,7 +656,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Charge Speed up
+  m_Text: Corona Size
 --- !u!1 &9137526971333185539
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,8 +843,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 111.67993, y: 0}
-  m_SizeDelta: {x: -393.3, y: -310}
+  m_AnchoredPosition: {x: 111.68994, y: 0}
+  m_SizeDelta: {x: -393.32, y: -310}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9137526971762252999
 MonoBehaviour:
@@ -930,7 +930,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 4.0000153}
+  m_AnchoredPosition: {x: 0, y: 4}
   m_SizeDelta: {x: 0, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9137526971875915218
@@ -1004,7 +1004,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -4.0000153}
+  m_AnchoredPosition: {x: 0, y: -4}
   m_SizeDelta: {x: 0, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9137526972371602379
@@ -1144,7 +1144,7 @@ GameObject:
   - component: {fileID: 9137526972710934338}
   - component: {fileID: 9137526972710934336}
   - component: {fileID: 9137526972710934337}
-  - component: {fileID: 4732875643455134220}
+  - component: {fileID: 3557985334315905644}
   m_Layer: 5
   m_Name: Upgrade Description
   m_TagString: Untagged
@@ -1168,7 +1168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -7}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9137526972710934336
@@ -1212,8 +1212,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Shots charge faster, allowing for powerful shots more quickly
---- !u!114 &4732875643455134220
+  m_Text: Increases the size of the Flare's Corona, enabling flares to damage bombs
+    from further away
+--- !u!114 &3557985334315905644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1237,7 +1238,7 @@ PrefabInstance:
     - target: {fileID: 1531535377759735216, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Name
-      value: Speed Up Node
+      value: Corona Damage Node
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1302,7 +1303,7 @@ PrefabInstance:
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -162.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1312,7 +1313,7 @@ PrefabInstance:
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 325
+      value: 326
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1342,17 +1343,32 @@ PrefabInstance:
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735230, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: upgradeIdx
-      value: 3
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531535377759735230, guid: b22ce774fb6450e42826380158d97d92,
+        type: 3}
+      propertyPath: upgradeProgress
+      value: 
+      objectReference: {fileID: 9137526971672884594}
+    - target: {fileID: 1531535377759735230, guid: b22ce774fb6450e42826380158d97d92,
+        type: 3}
+      propertyPath: baseCost
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735230, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: costIncrement
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531535378035494613, guid: b22ce774fb6450e42826380158d97d92,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.22998047
       objectReference: {fileID: 0}
     - target: {fileID: 1531535378035494613, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1371,11 +1387,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1531535378035494613, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.22998047
-      objectReference: {fileID: 0}
-    - target: {fileID: 1531535378035494613, guid: b22ce774fb6450e42826380158d97d92,
-        type: 3}
       propertyPath: m_SizeDelta.x
       value: -0.15002441
       objectReference: {fileID: 0}
@@ -1387,7 +1398,7 @@ PrefabInstance:
     - target: {fileID: 1531535377375285951, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000022888
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377375285951, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1397,14 +1408,17 @@ PrefabInstance:
     - target: {fileID: 1531535378260099212, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Text
-      value: Mass x2
+      value: Corona Damage
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377375285948, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Text
-      value: 'In awe at the mass of this projectile. Absolute Unit.
-
-        (+100% projectile Mass)'
+      value: The Flare's Corona deals more damage to bombs
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531535377375285948, guid: b22ce774fb6450e42826380158d97d92,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b22ce774fb6450e42826380158d97d92, type: 3}
@@ -1414,7 +1428,19 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7750166170098621568}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &7826931470853349980
+--- !u!114 &9137526971672884594 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1531535378541357554, guid: b22ce774fb6450e42826380158d97d92,
+    type: 3}
+  m_PrefabInstance: {fileID: 7750166170098621568}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &7750166170565684435
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1424,7 +1450,7 @@ PrefabInstance:
     - target: {fileID: 1531535377759735216, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Name
-      value: Speed Up Node (1)
+      value: Burn Damage Node
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1489,7 +1515,7 @@ PrefabInstance:
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -162.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1499,7 +1525,7 @@ PrefabInstance:
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 325
+      value: 325.76
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1529,17 +1555,32 @@ PrefabInstance:
     - target: {fileID: 1531535377759735217, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735230, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: upgradeIdx
-      value: 4
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531535377759735230, guid: b22ce774fb6450e42826380158d97d92,
+        type: 3}
+      propertyPath: upgradeProgress
+      value: 
+      objectReference: {fileID: 9137526971204863265}
+    - target: {fileID: 1531535377759735230, guid: b22ce774fb6450e42826380158d97d92,
+        type: 3}
+      propertyPath: baseCost
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377759735230, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: costIncrement
-      value: 100
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531535378035494613, guid: b22ce774fb6450e42826380158d97d92,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.22998047
       objectReference: {fileID: 0}
     - target: {fileID: 1531535378035494613, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1558,11 +1599,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1531535378035494613, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.22998047
-      objectReference: {fileID: 0}
-    - target: {fileID: 1531535378035494613, guid: b22ce774fb6450e42826380158d97d92,
-        type: 3}
       propertyPath: m_SizeDelta.x
       value: -0.15002441
       objectReference: {fileID: 0}
@@ -1573,8 +1609,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377375285951, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.0024414062
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377375285951, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
@@ -1584,18 +1620,29 @@ PrefabInstance:
     - target: {fileID: 1531535378260099212, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Text
-      value: Speed Up
-      objectReference: {fileID: 0}
-    - target: {fileID: 1531535377375285948, guid: b22ce774fb6450e42826380158d97d92,
-        type: 3}
-      propertyPath: m_FontData.m_VerticalOverflow
-      value: 1
+      value: Burn Damage
       objectReference: {fileID: 0}
     - target: {fileID: 1531535377375285948, guid: b22ce774fb6450e42826380158d97d92,
         type: 3}
       propertyPath: m_Text
-      value: Projectiles are launched at higher speeds, allowing for easier aiming
-        and harder hits
+      value: Bombs ignited by flares take more burn damage
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531535377375285948, guid: b22ce774fb6450e42826380158d97d92,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b22ce774fb6450e42826380158d97d92, type: 3}
+--- !u!114 &9137526971204863265 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1531535378541357554, guid: b22ce774fb6450e42826380158d97d92,
+    type: 3}
+  m_PrefabInstance: {fileID: 7750166170565684435}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

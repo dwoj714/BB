@@ -17,10 +17,10 @@ public class DescriptionDisplayController : MonoBehaviour
 			"A shell that fires a spread of pellets at low charge, and a bouncing slug at high charge"),
 
 		new ProjectileInfo( "Flare",
-			"A burning flare that continuously deals damage to anything near it"),
+			"A burning flare that continuously deals damage to bombs near it, while setting fire to bombs it touches"),
 
 		new ProjectileInfo( "Impulse Charge",
-			"A volatile projectile that sticks to bombs before exploding"),
+			"A volatile projectile that sticks to bombs before exploding with high impulse but low damage"),
 
 		new ProjectileInfo( "Grav",
 			"A gravity well that attracts anything near it"),
@@ -40,7 +40,7 @@ public class DescriptionDisplayController : MonoBehaviour
 	private void Start()
 	{
 		activeIdx = rotorController.MedianIdx;
-		
+		SetDisplay(activeIdx);
 	}
 
 	private void Update()

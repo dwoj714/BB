@@ -11,6 +11,8 @@ public class UpgradeMenuController : MonoBehaviour
 	[SerializeField] private UpgradeNodeController[] rootNodePrefabs = new UpgradeNodeController[7];
 	[SerializeField] private RectTransform scrollContent;
 
+	[SerializeField] private Sprite activeTabSprite, inactiveTabSprite;
+
 	private List<UpgradeNodeController>[] nodeChains = new List<UpgradeNodeController>[3];
 
 	private int activeTab = 1;
@@ -65,6 +67,10 @@ public class UpgradeMenuController : MonoBehaviour
 				tabs[1].interactable = true;
 				tabs[2].interactable = true;
 
+				((Image)tabs[0].targetGraphic).sprite = activeTabSprite;
+				((Image)tabs[1].targetGraphic).sprite = inactiveTabSprite;
+				((Image)tabs[2].targetGraphic).sprite = inactiveTabSprite;
+
 				ActiveTab = WeaponManager.LeftIdx;
 				break;
 
@@ -75,6 +81,10 @@ public class UpgradeMenuController : MonoBehaviour
 				tabs[1].interactable = false;
 				tabs[2].interactable = true;
 
+				((Image)tabs[0].targetGraphic).sprite = inactiveTabSprite;
+				((Image)tabs[1].targetGraphic).sprite = activeTabSprite;
+				((Image)tabs[2].targetGraphic).sprite = inactiveTabSprite;
+
 				ActiveTab = WeaponManager.MiddleIdx;
 				break;
 
@@ -84,6 +94,10 @@ public class UpgradeMenuController : MonoBehaviour
 				tabs[0].interactable = true;
 				tabs[1].interactable = true;
 				tabs[2].interactable = false;
+
+				((Image)tabs[0].targetGraphic).sprite = inactiveTabSprite;
+				((Image)tabs[1].targetGraphic).sprite = inactiveTabSprite;
+				((Image)tabs[2].targetGraphic).sprite = activeTabSprite;
 
 				ActiveTab = WeaponManager.RightIdx;
 				break;
@@ -148,6 +162,7 @@ public class UpgradeMenuController : MonoBehaviour
 		for (int i = 0; i < WeaponManager.EquippedPrefabs.Length; i++)
 		{
 			UpgradeNodeController root = Instantiate(rootNodePrefabs[WeaponManager.EquippedPrefabs[i]], scrollContent).GetComponent<UpgradeNodeController>();
+			((RectTransform)root.transform).anchoredPosition = Vector2.zero;
 
 			Debug.Log("Instantiated root node from equipped prefab " + WeaponManager.EquippedPrefabs[i]);
 

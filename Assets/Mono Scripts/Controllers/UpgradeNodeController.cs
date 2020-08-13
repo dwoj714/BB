@@ -120,7 +120,7 @@ public class UpgradeNodeController : MonoBehaviour
 			barPosCollapsed = barRect.anchoredPosition;
 
 			nodeSizeExpanded = nodeRect.sizeDelta + Vector2.up * descriptionRect.sizeDelta.y;
-			nodePosExpanded = nodeRect.anchoredPosition + Vector2.down * descriptionRect.sizeDelta.y / 2;
+			nodePosExpanded = nodeRect.anchoredPosition;// + Vector2.down * descriptionRect.sizeDelta.y / 2;
 			barSizeExpanded = barRect.sizeDelta - Vector2.right * ((RectTransform)upgradeButton.transform).sizeDelta.x;
 			barPosExpanded = barRect.anchoredPosition - Vector2.right * ((RectTransform)upgradeButton.transform).sizeDelta.x / 2;
 
@@ -368,6 +368,7 @@ public class UpgradeNodeController : MonoBehaviour
 *			
 *		Sticky:
 *			11: Auto detonate
+*			12: Detonator power
 *		
 *		Grav:
 *			11: Radius

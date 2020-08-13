@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mobile: 0
   source: {fileID: 6504262224847996187}
-  segments: 10
+  segments: 8
 --- !u!1 &6504262223572333651
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,8 +453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a69f9f90d41f1478a51f1d47917147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 100
-  rechargeRate: 3
+  maxEnergy: 80
+  rechargeRate: 2.5
   energy: 0
   chargeTime: 1.25
   shotEnergy: 10

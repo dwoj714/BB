@@ -42,6 +42,7 @@ public class InputManager : MonoBehaviour {
 			}
 
 			if (!mouseDetected && Input.touchCount > 0)
+			{
 				switch (Input.GetTouch(0).phase)
 				{
 					case TouchPhase.Began:
@@ -62,7 +63,7 @@ public class InputManager : MonoBehaviour {
 						break;
 
 				}
-			//}
+			}
 
 			if (Input.GetKeyDown(KeyCode.Escape))
 			{

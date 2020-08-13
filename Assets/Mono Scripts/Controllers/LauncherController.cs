@@ -232,7 +232,6 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	public void OnInputCancel()
 	{
-		Debug.LogWarning("OnInputCancel()");
 		CancelShot();
 		recharging = true;
 		OnInputReleased(Vector2.zero);
@@ -309,7 +308,6 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	public void CancelShot()
 	{
-		Debug.LogWarning("CancelShot()");
 		if (Shot)
 		{
 			//Destroy the shot object, refund the energy, and reset charge.
@@ -325,7 +323,6 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	public void OnGameStart()
 	{
-		Debug.Log(name + ": OnGameStart()");
 		for (int i = 0; i < upgradeLevels.Length; i++)
 		{
 			upgradeLevels[i] = 0;

@@ -4,6 +4,12 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_noise ("Noise Pattern", 2D) = "white" {}
+		_CrackTex("Crack Pattern", 2D) = "white" {}
+		_crack("Crack color", Color) = (1,1,1,1)
+		_tile("Crack Tiling", float) = 1
+		_threshold("Crack Start Threshold", Range(0.001, 1)) = 1
+		_reach("Pixel Reach", Range(0, 0.005)) = 0.005
+		_pow("Grad Power", float) = 4
 		_color1 ("Start Color", Color) = (1,1,1,1)
 		_color2 ("Damaged Color", Color) = (1,0,0,1)
 		_flash ("Flash color", Color) = (1,1,1,1)
@@ -46,6 +52,7 @@
 
 			sampler2D _MainTex;
 			sampler2D _noise;
+			sampler2D _CrackTex;
 
 			float4 _MainTex_ST;
 			float _health;
@@ -57,7 +64,13 @@
 			float _shakeInt;
 			float _shakeVar;
 			float _startTime;
-			
+			float _reach;
+			float _level;
+			float _tile;
+			float _pow;
+			float _threshold;
+			float4 _crack;
+
 			v2f vert (appdata v)
 			{
 				v2f o;
@@ -98,6 +111,50 @@
 				if (newHealth <= 0 && floor(_time * _flicker) % 2==0)
 				{
 					col = _flash;
+				}
+
+				_level = saturate(_threshold - _health) / _threshold;
+
+				//crack FX borrowed from BaseGlow shader
+				if (_level > 0)
+				{
+					float grad = sqrt((i.uv.r - 0.5f) * (i.uv.r - 0.5f) * 4 + (i.uv.g - 0.5f) * (i.uv.g - 0.5f) * 4);
+
+					_level -= pow(1 - grad, _pow);
+
+					float2 coord = (i.uv * _tile) - floor(i.uv * _tile);
+					float min = 1;
+
+					float r = tex2D(_CrackTex, coord + float2(_reach, 0)).r;
+					if (r < min)
+					{
+						min = r;
+					}
+
+					r = tex2D(_CrackTex, coord + float2(-_reach, 0)).r;
+					if (r < min)
+					{
+						min = r;
+					}
+
+					r = tex2D(_CrackTex, coord + float2(0, _reach)).r;
+					if (r < min)
+					{
+						min = r;
+					}
+
+					r = tex2D(_CrackTex, coord + float2(0, -_reach)).r;
+					if (r < min)
+					{
+						min = r;
+					}
+
+					fixed4 texCol = tex2D(_CrackTex, coord);
+					if (texCol.r > 1 - _level && min > 1 - _level)
+					{
+						//grad = pow(grad, _pow);
+						col = _crack;// * grad + col * (1 - grad);
+					}
 				}
 
 				return col;

@@ -115,7 +115,7 @@ MonoBehaviour:
   minSpeedBonus: 0.05
   lifeSpanBonus: 0
   fixedSpeed: 0
-  damageBonus: 0
+  damageBonus: 0.3333
   impulseBonus: 0.12
   radiusBonus: 0
 --- !u!58 &2283941518873556214
@@ -171,7 +171,7 @@ MonoBehaviour:
   minPushForce: 0
   maxPushForce: 90
   minExplosionDMG: 0
-  maxExplosionDMG: 0
+  maxExplosionDMG: 15
   explosionRadius: 1.2
   fuse: 1.1
   screenShake: 1

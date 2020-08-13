@@ -23,6 +23,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _CrackTex:
+        m_Texture: {fileID: 2800000, guid: f666b1051c1e46f4db2011b4bf197ce4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -80,11 +84,16 @@ Material:
     - _ccm: 1.4
     - _flicker: 10
     - _health: 1
+    - _level: 0
+    - _pow: 0.62
+    - _reach: 0.00288
     - _shakeInt: 20
     - _shakeVar: -10
     - _sigMult: 1
     - _sigPlus: 1
     - _startTime: 0
+    - _threshold: 1
+    - _tile: 0.45
     - _trans: 0.5
     - health: 1
     m_Colors:
@@ -93,4 +102,5 @@ Material:
     - _color: {r: 1, g: 0.99997807, b: 0, a: 1}
     - _color1: {r: 1, g: 1, b: 0, a: 1}
     - _color2: {r: 1, g: 0, b: 0, a: 1}
+    - _crack: {r: 0.9983551, g: 1, b: 0.6650944, a: 1}
     - _flash: {r: 1, g: 0, b: 0, a: 0.29411766}
