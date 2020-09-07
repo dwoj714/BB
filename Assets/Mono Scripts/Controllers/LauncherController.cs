@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 
 public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
@@ -274,6 +275,8 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	private void LaunchShot()
 	{
+		GameEventManager.EventTriggered(GameEvent.ShotFired);
+
 		if (Pull != Vector2.zero)
 		{
 			recharging = true;

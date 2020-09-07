@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxEnergy: 150
-  rechargeRate: 6.5
+  rechargeRate: 6.6
   energy: 0
   chargeTime: 1
   shotEnergy: 30

@@ -6,13 +6,16 @@ public class Detonator : MonoBehaviour {
 
 	public ExplosionInstance VFX;
 
-	//private ExplosionParameters defaultParameters;
-
+	
 	public float minPushForce, maxPushForce;
 	public float minExplosionDMG, maxExplosionDMG;
 	public float explosionRadius;
 	public float fuse = 0.5f;
 	public bool screenShake = true;
+
+	//increase damage/knockback proportionally with BombController's mass/health modifiers (if set to 1)
+	public float damageScaling = 0;
+	public float knockbackScaling = 0;
 
 	CameraController cam;
 
@@ -119,7 +122,8 @@ public class Detonator : MonoBehaviour {
 					//Add forces to colliders with rigidbodies
 					if (hitRb)
 					{
-						pushForce = (adjustedRadius - dst) / adjustedRadius * (forceRange) + minPushForce;
+						float pushScale = 1 + knockbackScaling * (BombController.massMod - 1);
+						pushForce = ((adjustedRadius - dst) / adjustedRadius * (forceRange) + minPushForce) * pushScale;
 						hitRb.AddForce(cd.normal * pushForce * (cd.distance < 0 ? 1 : -1), ForceMode2D.Impulse);
 					}
 
@@ -136,7 +140,8 @@ public class Detonator : MonoBehaviour {
 					//deal damage to colliders attached to HealthBars
 					if (hitHb)
 					{
-						damage = (adjustedRadius - dst) / adjustedRadius * (dmgRange) + minExplosionDMG;
+						float dmgScale = 1 + damageScaling * (BombController.healthMod - 1);
+						damage = ((adjustedRadius - dst) / adjustedRadius * (dmgRange) + minExplosionDMG) * dmgScale;
 						hitHb.TakeDamage(damage, gameObject);
 					}
 				}

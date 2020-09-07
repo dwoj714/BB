@@ -65,7 +65,7 @@ MonoBehaviour:
   dpsMin: 1
   dpsMax: 35
   parentCircle: {fileID: 58090401456260030}
-  damageScale: 0.15
+  damageScale: 0.2
   radiusScale: 0.2
   outerColors:
   - {r: 1, g: 0.4108197, b: 0, a: 0.32941177}

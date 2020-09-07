@@ -181,6 +181,8 @@ MonoBehaviour:
   minExplosionRadius: 1.85
   maxFuse: 1.2
   minFuse: 0.2
+  tileMin: 0.33
+  tileMax: 0.45
 --- !u!114 &2854137334990969632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +203,8 @@ MonoBehaviour:
   explosionRadius: 2
   fuse: 0.4
   screenShake: 1
+  damageScaling: 0.5
+  knockbackScaling: 0.5
   useMask: 1
   explosionMask:
     serializedVersion: 2

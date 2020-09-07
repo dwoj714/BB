@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 	//so things don't need to get a reference to this manager
 	public static GameManager main;
 
-	private void Start()
+	private void Awake()
 	{
 		PhysCircle.hitFX = hitFX;
 
@@ -79,9 +79,8 @@ public class GameManager : MonoBehaviour
 
 	public void StartGame()
 	{
-		BroadcastMessage("OnGameStart", SendMessageOptions.DontRequireReceiver);
 
-		spawner.OnGameStart();
+		GameEventManager.EventTriggered(GameEvent.GameStart);
 
 		gameInProgress = true;
 		inGameMenu.SetActive(true);

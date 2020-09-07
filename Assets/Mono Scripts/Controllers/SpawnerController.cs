@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnerController : MonoBehaviour {
+public class SpawnerController : GameEventListener
+{
 
 	[SerializeField] private VariableBomb blankPrefab;
 
@@ -22,7 +23,10 @@ public class SpawnerController : MonoBehaviour {
 	[Header("Valid ranges: min, max, and application chance")]
 	[SerializeField] private Vector3[] ranges;
 
-	
+	private void Start()
+	{
+		SubscribeTo(GameEvent.GameStart);
+	}
 
 	private void Update()
 	{
@@ -49,7 +53,7 @@ public class SpawnerController : MonoBehaviour {
 	{
 		VariableBomb bomb = Instantiate(blankPrefab).GetComponent<VariableBomb>();
 
-		//statVal determines the bomb's size, mass, and explosion
+		//statVal determines the bomb's size, mass, and explosion power (as determined in VariableBomb)
 		//rngPower is used to curve the result toward the lower end
 		float statVal = Mathf.Pow(Random.Range(0f, 1f), rngPower);
 		bomb.SetStats(statVal);
@@ -152,6 +156,16 @@ public class SpawnerController : MonoBehaviour {
 
 		spawnCount = 0;
 		valTotal = 0;
+	}
+
+	public override void Notify(GameEvent eventType)
+	{
+		switch (eventType)
+		{
+			case GameEvent.GameStart:
+				OnGameStart();
+				break;
+		}
 	}
 
 }

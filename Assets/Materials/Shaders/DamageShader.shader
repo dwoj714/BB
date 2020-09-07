@@ -8,7 +8,8 @@
 		_crack("Crack color", Color) = (1,1,1,1)
 		_tile("Crack Tiling", float) = 1
 		_threshold("Crack Start Threshold", Range(0.001, 1)) = 1
-		_reach("Pixel Reach", Range(0, 0.005)) = 0.005
+		reachMin("Pixel Reach Min", Range(0, 0.01)) = 0
+		reachMax("Pixel Reach Max", Range(0, 0.01)) = 0.005
 		_pow("Grad Power", float) = 4
 		_color1 ("Start Color", Color) = (1,1,1,1)
 		_color2 ("Damaged Color", Color) = (1,0,0,1)
@@ -71,6 +72,9 @@
 			float _threshold;
 			float4 _crack;
 
+			float reachMin = 0;
+			float reachMax = 0.005;
+
 			v2f vert (appdata v)
 			{
 				v2f o;
@@ -99,11 +103,9 @@
 			{
 				float _time = (_Time[1] - _startTime);
 				float4 _deltaColor = _color1 - _color2;
-				//Curves the health equation so they only appear mostly red if very low on health
+				//Curve the health equation so they only appear mostly red if very low on health
 				float newHealth = sqrt(_health * sqrt(_health));
 				fixed4 col;
-
-								
 
 				//Sets color based on health
 				col = _color2 + _deltaColor * newHealth;
@@ -124,6 +126,8 @@
 
 					float2 coord = (i.uv * _tile) - floor(i.uv * _tile);
 					float min = 1;
+
+					_reach = (reachMax - reachMin) * _health + reachMin;
 
 					float r = tex2D(_CrackTex, coord + float2(_reach, 0)).r;
 					if (r < min)

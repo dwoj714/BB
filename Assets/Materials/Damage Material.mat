@@ -83,19 +83,22 @@ Material:
     - _angle: 0
     - _ccm: 1.4
     - _flicker: 10
-    - _health: 1
+    - _health: 0.029
     - _level: 0
-    - _pow: 0.62
-    - _reach: 0.00288
+    - _minShow: 0.68
+    - _pow: 1.25
+    - _reach: 0.00194
     - _shakeInt: 20
     - _shakeVar: -10
     - _sigMult: 1
     - _sigPlus: 1
     - _startTime: 0
-    - _threshold: 1
+    - _threshold: 0.18
     - _tile: 0.45
     - _trans: 0.5
     - health: 1
+    - reachMax: 0.01
+    - reachMin: 0.00124
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

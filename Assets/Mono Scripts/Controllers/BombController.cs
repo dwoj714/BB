@@ -129,7 +129,7 @@ public class BombController : PhysCircle, IHealable
 		UpdateHealthVisuals();
 	}
 
-	public void UpdateHealthVisuals()
+	public virtual void UpdateHealthVisuals()
 	{
 		spr.material.SetFloat(healthID, hb.Health / hb.maxHealth);
 		spr.material.SetFloat(timeID, Time.time);
@@ -160,6 +160,9 @@ public class BombController : PhysCircle, IHealable
 		}
 
 		manager.AddScore(pointValue * comboMult);
+
+		GameEventManager.EventTriggered(GameEvent.BombDetonated);
+
 		Destroy(gameObject);
 	}
 

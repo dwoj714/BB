@@ -29,6 +29,9 @@ public class VariableBomb : BombController
 	[SerializeField] private float minExplosionRadius = 4;
 	[SerializeField] private float maxFuse = 1.2f;
 	[SerializeField] private float minFuse = 0.2f;
+	[Header("Shader Stuff")]
+	[SerializeField] private float tileMin = 0.3f;
+	[SerializeField] private float tileMax = 0.45f;
 
 	public void SetStats(float value)
 	{
@@ -44,6 +47,10 @@ public class VariableBomb : BombController
 		detonator.explosionRadius = minExplosionRadius + (maxExplosionRadius - minExplosionRadius) * value;
 		detonator.fuse = minFuse + (maxFuse - minFuse) * value;
 
+		float scaledTiling = (tileMax - tileMin) * value + tileMin;
+		spr.material.SetFloat("_tile", scaledTiling);
+
 		ApplyScaling();
 	}
+
 }

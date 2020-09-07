@@ -16,13 +16,24 @@ public class DifficultyManager : MonoBehaviour
 	}
 	private static float timer = 0;
 
+	public static DifficultyManager main;
+
+	public bool advance = true;
+
 	[SerializeField] private ProgressIndicatorController progressBar;
+
+	private void Start()
+	{
+		main = this;
+	}
 
 	public void Update()
 	{
 		if (GameManager.gameInProgress)
 		{
-			timer += Time.deltaTime;
+			
+			if(advance) timer += Time.deltaTime;
+
 			if(timer >= interval)
 			{
 				timer = 0;
