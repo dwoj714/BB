@@ -15,8 +15,6 @@ public class GameManager : MonoBehaviour
 		private set;
 	}
 
-	IRandomList lastSpawnPool;
-
 	[SerializeField] private GameEndSequencer gameOverMenu;
 	[SerializeField] private GameObject mainMenu, inGameMenu, pauseMenu, loadoutMenuWorld, swapButtons;
 	[SerializeField] private UpgradeMenuController upgradeMenu;
@@ -79,7 +77,6 @@ public class GameManager : MonoBehaviour
 
 	public void StartGame()
 	{
-
 		GameEventManager.EventTriggered(GameEvent.GameStart);
 
 		gameInProgress = true;

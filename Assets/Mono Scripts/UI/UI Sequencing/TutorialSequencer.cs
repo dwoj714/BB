@@ -25,14 +25,14 @@ public class TutorialSequencer : GameEventListener
         container.SetActive(true);
         if (!main) main = this;
         else Debug.LogWarning("More than one TutorialSequencer initialized!");
+
+        SubscribeTo(GameEvent.GameStart);
     }
 
     void OnGameStart()
 	{
         StartCoroutine(PlayTutorialSequence());
-
         SubscribeTo(GameEvent.ShotFired);
-
     }
 
     private IEnumerator PlayTutorialSequence()
