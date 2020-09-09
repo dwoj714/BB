@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
-[System.Serializable]
 public class GameManager : MonoBehaviour
 {
 
@@ -41,8 +39,17 @@ public class GameManager : MonoBehaviour
 
 	public static bool gameInProgress, frozen = false;
 
-	//so things don't need to get a reference to this manager
 	public static GameManager main;
+
+/////////////////// EVENT DECLARATIONS //////////////////////////////
+
+	public delegate void GameStartEventHandler(object source, EventArgs args);
+	public static event GameStartEventHandler GameStarted;
+
+	public delegate void GameEndEventHandler(object source, EventArgs args);
+	public static event GameEndEventHandler GameEnded;
+
+////////////////////// METHODS //////////////////////////////////////////
 
 	private void Awake()
 	{
@@ -77,7 +84,8 @@ public class GameManager : MonoBehaviour
 
 	public void StartGame()
 	{
-		GameEventManager.EventTriggered(GameEvent.GameStart);
+		// ?. means call this method if the object in question isn't null
+		GameStarted?.Invoke(this, EventArgs.Empty);
 
 		gameInProgress = true;
 		inGameMenu.SetActive(true);
@@ -215,6 +223,7 @@ public class GameManager : MonoBehaviour
 		inGameMenu.SetActive(false);
 		launcherBase.Charges = 0;
 		BroadcastMessage("OnGameEnd");
+
 
 		GoToMenu();
 	}

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-public class SpawnerController : GameEventListener
+public class SpawnerController : MonoBehaviour
 {
 
 	[SerializeField] private VariableBomb blankPrefab;
@@ -25,7 +25,7 @@ public class SpawnerController : GameEventListener
 
 	private void Start()
 	{
-		SubscribeTo(GameEvent.GameStart);
+		GameManager.GameStarted += OnGameStart;
 	}
 
 	private void Update()
@@ -55,11 +55,11 @@ public class SpawnerController : GameEventListener
 
 		//statVal determines the bomb's size, mass, and explosion power (as determined in VariableBomb)
 		//rngPower is used to curve the result toward the lower end
-		float statVal = Mathf.Pow(Random.Range(0f, 1f), rngPower);
+		float statVal = Mathf.Pow(UnityEngine.Random.Range(0f, 1f), rngPower);
 		bomb.SetStats(statVal);
 
 		//determine the horizontal spawn position of the bomb
-		float rng = Random.Range(-0.5f, 0.5f);
+		float rng = UnityEngine.Random.Range(-0.5f, 0.5f);
 		float range = 2 * Camera.main.orthographicSize * Camera.main.aspect - 2 * bomb.AdjustedRadius;
 		float xPos = rng * range;
 		Vector2 spawnPosition = Vector2.up * transform.position.y + Vector2.right * xPos;
@@ -94,9 +94,9 @@ public class SpawnerController : GameEventListener
 		for(int i = 0; i < pickVals.Length; i++)
 		{
 			//if the generated number is <= the pick chance, it generates a pickVal, which is within the elligibility range (x and y) of the enhancement
-			if (isValid[i] && Random.Range(0f, 1f) < ranges[i].z)
+			if (isValid[i] && UnityEngine.Random.Range(0f, 1f) < ranges[i].z)
 			{
-				pickVals[i] = Random.Range(ranges[i].x, ranges[i].y);
+				pickVals[i] = UnityEngine.Random.Range(ranges[i].x, ranges[i].y);
 				pickCount++;
 				//Debug.Log("pickVals - Adding " + pickVals[i]);
 			}
@@ -148,7 +148,7 @@ public class SpawnerController : GameEventListener
 		obj = Instantiate(bombEnhancers[chosenIDX], bomb.transform);
 	}
 
-	public void OnGameStart()
+	protected void OnGameStart(object o, EventArgs e)
 	{
 		//set timer to 80% of the time needed to spawn a bomb so there 
 		//isn't a long wait between game start and bomb appearance
@@ -156,16 +156,6 @@ public class SpawnerController : GameEventListener
 
 		spawnCount = 0;
 		valTotal = 0;
-	}
-
-	public override void Notify(GameEvent eventType)
-	{
-		switch (eventType)
-		{
-			case GameEvent.GameStart:
-				OnGameStart();
-				break;
-		}
 	}
 
 }

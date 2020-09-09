@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System;
 using UnityEngine;
 
 public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
@@ -156,6 +154,11 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		}
 	}
 
+////////////////////////////    EVENTS     ////////////////////////////
+
+	public delegate void ShotFiredEventHandler(object source, EventArgs args);
+	public static event ShotFiredEventHandler ShotFired;
+
 ////////////////////////////    METHODS    ////////////////////////////
 
 	private void Start()
@@ -275,7 +278,8 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	private void LaunchShot()
 	{
-		GameEventManager.EventTriggered(GameEvent.ShotFired);
+		//Notify event subscribers that a shot was fired
+		ShotFired?.Invoke(this, EventArgs.Empty);
 
 		if (Pull != Vector2.zero)
 		{

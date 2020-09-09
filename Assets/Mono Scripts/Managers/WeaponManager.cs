@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class WeaponManager : GameEventListener
+public class WeaponManager : MonoBehaviour
 {
 	[Header("Weapon prefabs")]
 	public List<GameObject> prefabs = new List<GameObject>();
@@ -69,10 +69,10 @@ public class WeaponManager : GameEventListener
 		if (!main) main = this;
 		else Debug.LogError("More than one WeaponManager spawned: " + name);
 
-		SubscribeTo(GameEvent.GameStart);
+		GameManager.GameStarted += OnGameStart;
 	}
 
-	void OnGameStart()
+	protected void OnGameStart(object o, EventArgs e)
 	{
 		foreach (LauncherController weapon in weapons)
 		{
@@ -264,16 +264,6 @@ public class WeaponManager : GameEventListener
 		}
 
 
-	}
-
-	public override void Notify(GameEvent eventType)
-	{
-		switch (eventType)
-		{
-			case GameEvent.GameStart:
-				OnGameStart();
-				break;
-		}
 	}
 
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class StatTracker : GameEventListener
+public class StatTracker : MonoBehaviour
 {
 
     public static StatTracker main;
@@ -25,35 +25,18 @@ public class StatTracker : GameEventListener
 
         if (!PlayerPrefs.HasKey("Bombs Detonated"))
             PlayerPrefs.SetInt("Bombs Detonated", 0);
+
+        GameManager.GameStarted += OnGameStart;
+
     }
 
-
-    public override void Notify(GameEvent eventType)
-	{
-		switch (eventType)
-		{
-            case GameEvent.GameStart:
-                OnGameStart();
-                break;
-            case GameEvent.GameEnd:
-                OnGameEnd();
-                break;
-            case GameEvent.ShotFired:
-                OnShotFired();
-                break;
-            case GameEvent.BombDetonated:
-                OnBombDetonated();
-                break;
-        }
-	}
-
-    private void OnGameStart()
+    protected void OnGameStart(object o, EventArgs e)
 	{
         shotsFired = 0;
         bombKills = 0;
 	}
 
-    private void OnGameEnd()
+    protected void OnGameEnd(object o, EventArgs e)
 	{
         int stat = PlayerPrefs.GetInt("Cumulative Score");
         stat += GameManager.score;
@@ -75,12 +58,12 @@ public class StatTracker : GameEventListener
         PlayerPrefs.Save();
 	}
 
-    private void OnShotFired()
+    protected void OnShotFired(object o, EventArgs e)
 	{
         shotsFired++;
 	}
 
-    private void OnBombDetonated()
+    protected void OnBombDetonated(object o, EventArgs e)
 	{
         bombKills++;
 	}

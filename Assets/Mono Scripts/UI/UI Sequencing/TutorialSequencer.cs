@@ -1,10 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
+using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class TutorialSequencer : GameEventListener
+public class TutorialSequencer : MonoBehaviour
 {
     public static TutorialSequencer main;
 
@@ -25,14 +23,14 @@ public class TutorialSequencer : GameEventListener
         container.SetActive(true);
         if (!main) main = this;
         else Debug.LogWarning("More than one TutorialSequencer initialized!");
-
-        SubscribeTo(GameEvent.GameStart);
+        GameManager.GameStarted += OnGameStart;
     }
 
-    void OnGameStart()
+    void OnGameStart(object o, EventArgs e)
 	{
+        Debug.Log("Event received from " + (o as MonoBehaviour).gameObject.name);
         StartCoroutine(PlayTutorialSequence());
-        SubscribeTo(GameEvent.ShotFired);
+        LauncherController.ShotFired += OnShotFired;
     }
 
     private IEnumerator PlayTutorialSequence()
@@ -68,17 +66,9 @@ public class TutorialSequencer : GameEventListener
         e.canFadeOut = true;
 	}
 
-    public override void Notify(GameEvent eventType)
+    protected void OnShotFired(object o, EventArgs e)
 	{
-		switch (eventType)
-		{
-            case GameEvent.ShotFired:
-                shotFired = true;
-                break;
-            case GameEvent.GameStart:
-                OnGameStart();
-                break;
-		}
+        shotFired = true;
 	}
 
 }

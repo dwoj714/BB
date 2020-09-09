@@ -1,4 +1,5 @@
-﻿ 
+﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Detonator))]
 public class BombController : PhysCircle, IHealable
 {
-	protected static GameManager manager;
 
 	[Header("Scoring")]
 	public int pointValue = 10;
@@ -45,6 +45,9 @@ public class BombController : PhysCircle, IHealable
 	//Do it once during Update, while this is false. (Set to true after calling UpdateHealthVisuals once.
 	private bool updatedHealth = false;
 
+	public delegate void BombDetonationEventHandler(object source, EventArgs args);
+	public static event BombDetonationEventHandler BombDetonated;
+
 	protected override void Awake()
 	{
 		base.Awake();
@@ -58,12 +61,6 @@ public class BombController : PhysCircle, IHealable
 
 	protected virtual void Start()
 	{
-		//Set the game manager if it wasn't done in the inspector
-		if (!manager)
-		{
-			manager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-		}
-
 		//instantiate the combo incrementer
 		incrementer = ScriptableObject.CreateInstance<ComboIncrement>();
 
@@ -159,9 +156,9 @@ public class BombController : PhysCircle, IHealable
 			}
 		}
 
-		manager.AddScore(pointValue * comboMult);
+		GameManager.main.AddScore(pointValue * comboMult);
 
-		GameEventManager.EventTriggered(GameEvent.BombDetonated);
+		BombDetonated?.Invoke(this, EventArgs.Empty);
 
 		Destroy(gameObject);
 	}
