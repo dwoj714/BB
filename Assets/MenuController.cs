@@ -1,55 +1,88 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class MenuController : MonoBehaviour
 {
-	public float rotateSpeed = 0.2f;
 
-	[SerializeField]
-	private float rotation = 0;
+	[SerializeField] private List<FadingMultiElement> menuGroups;
 
-	public float Rotation
+	private int currentPage = 0;
+
+	private bool inProgress = false;
+
+	private void Start()
 	{
-		get
+		Page1Instant();
+		GameManager.GameStarted += OnGameStart;
+	}
+
+	protected void OnGameStart(object o, EventArgs e)
+	{
+		Page1Instant();
+	}
+
+	private void Page1Instant()
+	{
+		foreach (FadingMultiElement e in menuGroups)
 		{
-			return rotation;
+			if (e == menuGroups[0])
+				e.ShowInstant();
+			else
+				e.HideInstant();
 		}
 
-		set
-		{
-			rotation = value;
-			while (rotation >= 360)
-				rotation -= 360;
+		currentPage = 0;
 
-			while (rotation < 0)
-				rotation += 360;
-		}
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+	public void PageUp()
 	{
-
-		//Transform's current euler angles, z axis
-		float ez = transform.eulerAngles.z;
-
-		while (rotation < 0)
-			rotation += 360;
-
-		while (rotation - ez > 180)
-			ez += 360;
-
-		while (ez - rotation > 180)
-			rotation += 360;
-
-		//Perform the rotation toward rotation
-		transform.eulerAngles = Vector3.forward * Mathf.Lerp(ez, rotation, rotateSpeed);
+		if (!inProgress) StartCoroutine(FadeUp());
 	}
 
-	public void AddRoation(float degrees)
+	public void PageDown()
 	{
-		Rotation += degrees;
+		if (!inProgress) StartCoroutine(FadeDown()) ;
 	}
+
+	private IEnumerator FadeUp()
+	{
+		inProgress = true;
+
+		menuGroups[currentPage].sweepDirection = FadingElement.LEFT;
+		StartCoroutine(menuGroups[currentPage].FadeOut());
+
+		//increment current page if we're not on the last page, otherwise loop to the first page
+		if (currentPage < menuGroups.Count - 1)
+			currentPage++;
+		else
+			currentPage = 0;
+
+		menuGroups[currentPage].sweepDirection = FadingElement.LEFT;
+		yield return menuGroups[currentPage].FadeIn();
+
+		inProgress = false;
+	}
+
+	private IEnumerator FadeDown()
+	{
+		inProgress = true;
+
+		menuGroups[currentPage].sweepDirection = FadingElement.RIGHT;
+		StartCoroutine(menuGroups[currentPage].FadeOut());
+
+		//decrement current page if we're not on the first page, otherwise loop to the last page
+		if (currentPage > 0)
+			currentPage--;
+		else
+			currentPage = menuGroups.Count - 1;
+
+		menuGroups[currentPage].sweepDirection = FadingElement.RIGHT;
+		yield return menuGroups[currentPage].FadeIn();
+
+		inProgress = false;
+	}
+
 }

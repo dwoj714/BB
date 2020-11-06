@@ -65,6 +65,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -76,6 +77,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -113,8 +115,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effect: {fileID: 11400000, guid: 955918a68bd99c64cb094aa2d6ca9d4a, type: 2}
   pulseMode: 2
-  radius: 1.4
-  delay: 1.25
+  radius: 2
+  delay: 2.5
   icon: {fileID: 21300000, guid: 841ac9ed270de7940b5366b803c78881, type: 3}
   iconColor: {r: 1, g: 0.27058825, b: 0.27058825, a: 1}
   iconLocalScale: {x: 0.66, y: 0.66, z: 0}

@@ -31,7 +31,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 	public static float minDragLength = 0.15f;
 	private static IGController indicator = null;
 
-//////////////////////////    UPGRADES STUFF    //////////////////////////
+//////////////////////////    UPGRADES STUFF    //////////////////
 	
 	[Header("Upgrades Per Level")]
 	[SerializeField] private float chargeBonus;
@@ -73,7 +73,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 	private float charge = 0;
 	private Vector2 clickPos, dragPos, oldDrag;
-	private AnimationDispatcher animator;
+	//private AnimationDispatcher animator;
 	private Color bgColor;
 	private SpriteRenderer iconSprite;
 	[HideInInspector]public CircleCollider2D col;
@@ -156,10 +156,21 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 ////////////////////////////    EVENTS     ////////////////////////////
 
-	public delegate void ShotFiredEventHandler(object source, EventArgs args);
-	public static event ShotFiredEventHandler ShotFired;
+	public delegate void StaticShotFiredEventHandler(object source, EventArgs args);
+	public static event StaticShotFiredEventHandler ShotFired;
 
-////////////////////////////    METHODS    ////////////////////////////
+	public delegate void ShotReadiedEventHandler(object source, ShotEventArgs args);
+	public event ShotReadiedEventHandler ShotReadied;
+
+	public delegate void ShotHeldEventHandler(object source, ShotEventArgs args);
+	public event ShotHeldEventHandler ShotHeld;
+
+	public delegate void ShotReleasedEventHandler(object source, ShotEventArgs args);
+	public event ShotReleasedEventHandler ShotReleased;
+
+	private ShotEventArgs args = new ShotEventArgs();
+
+	////////////////////////////    METHODS    ////////////////////////////
 
 	private void Start()
 	{
@@ -172,7 +183,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		indicator.ChargeFieldVisible = false;
 		InitEnergy();
 
-		animator = GetComponent<AnimationDispatcher>();
+		//animator = GetComponent<AnimationDispatcher>();
 
 		iconSprite = GetComponentInChildren<SpriteRenderer>();
 		bgColor = GetComponent<SpriteRenderer>().color;
@@ -245,11 +256,14 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 	private void ReadyShot()
 	{
 		//If the required energy can be spent...
-		if (!Armed && CanSpendEnergy(shotEnergy) && (!animator || animator.CancelAnimation()))
+		if (!Armed && CanSpendEnergy(shotEnergy))//(!animator || animator.CancelAnimation()))
 		{
 			//create a copy of ammo, position it at the center of the launcher
-			Shot = Instantiate(Ammo, transform.position, Quaternion.identity).GetComponent<Launchable>();
+			Shot = Instantiate(Ammo, transform.position + Vector3.up * transform.lossyScale.y / 2, Quaternion.identity).GetComponent<Launchable>();
+
 			Shot.launcherCollider = col;
+
+			Debug.Log("Base: " + Shot.launcherCollider + "\tShot: " + Shot.col);
 
 			recharging = false;
 			delayTimer = chargeTime;
@@ -261,18 +275,35 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 			{
 				item.UpgradeLevels = upgradeLevels;
 			}
+
+			if (launchWithAnimator)
+			{
+				args.shot = Shot;
+				args.direction = -Pull.normalized * InvertFactor;
+				args.power = 0;
+
+				ShotReadied?.Invoke(this, args);
+
+			}
+
 		}
 	}
 
 	private void AimShot()
 	{
-		if (animator != null && animator.enabled)
+		if (launchWithAnimator)//animator != null && animator.enabled)
 		{
-			Shot.transform.position = animator.ShotPosition;
+			//Shot.transform.position = animator.ShotPosition;
+
+			args.direction = -Pull.normalized * InvertFactor;
+			args.power = ShotPower;
+			ShotHeld?.Invoke(this, args);
+
 		}
 		else
 		{
-			Shot.rb.MovePosition((Vector2)transform.position + Pull / maxDragLength * InvertFactor);
+			Vector2 shotOffset = Pull.normalized * InvertFactor * (PullPercentage - 0.5f) * 2 * (transform.lossyScale.x / 2 - Shot.transform.lossyScale.x / 2);
+			Shot.rb.MovePosition((Vector2)transform.position + shotOffset);
 		}
 	}
 
@@ -291,14 +322,19 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 			{
 				Shot.Launch(-Pull.normalized * InvertFactor, ShotPower);
 
-				if (animator != null && animator.enabled)
+				/*if (animator != null && animator.enabled)
 				{
 					animator.OnShotLaunched();
-				}
+				}*/
 			}
 			else
 			{
-				animator.OnShotLaunched(Shot, -Pull.normalized * InvertFactor, ShotPower);
+				//animator.OnShotLaunched(Shot, -Pull.normalized * InvertFactor, ShotPower);
+
+				args.direction = -Pull.normalized * InvertFactor;
+				args.power = ShotPower;
+				ShotReleased?.Invoke(this, args);
+
 			}
 			SpendEnergy(shotEnergy);
 
@@ -350,4 +386,25 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		}
 	}
 
+}
+
+public class ShotEventArgs : EventArgs
+{
+	public ShotEventArgs()
+	{
+		shot = null;
+		direction = Vector2.zero;
+		power = 0;
+	}
+
+	public ShotEventArgs(Launchable shot, Vector2 direction, float power)
+	{
+		this.shot = shot;
+		this.direction = direction;
+		this.power = power;
+	}
+
+	public Launchable shot;
+	public Vector2 direction;
+	public float power;
 }

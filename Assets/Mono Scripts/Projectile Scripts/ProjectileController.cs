@@ -29,13 +29,18 @@ public class ProjectileController : Launchable
 
 	//Whether or not the projectile has left the launcher's circle collider
 	private bool escaped;
-	protected bool launched = false;
+	protected bool launched;
+	private SpriteRenderer sprite;
 	[HideInInspector] public float fixedSpeed;
 
 	protected override void Awake()
 	{
 		base.Awake();
 		if(gameObject.layer != 11) gameObject.layer = 10;
+
+		sprite = GetComponent<SpriteRenderer>();
+		sprite.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+
 
 		trail = GetComponentInChildren<TrailRenderer>();
 		if (deathFX)
@@ -49,11 +54,13 @@ public class ProjectileController : Launchable
 	{
 		launched = true;
 		rb.isKinematic = false;
-		rb.velocity = direction.normalized * SpeedAtPower(power);
+		rb.velocity = direction.normalized * LaunchSpeed(power);
 		if (hasFixedSpeed)
 		{
-			fixedSpeed = SpeedAtPower(power);
+			fixedSpeed = LaunchSpeed(power);
 		}
+
+		sprite.maskInteraction = SpriteMaskInteraction.None;
 
 		//Trigger VFX if available
 		if(vfx) vfx.ActivateFX();
@@ -81,7 +88,7 @@ public class ProjectileController : Launchable
 			rb.velocity = rb.velocity.normalized * fixedSpeed;
 		}
 
-		if (gameObject.layer != 11 && !escaped && col.Distance(launcherCollider).distance > 0)
+		if (gameObject.layer != 11 && !escaped && launcherCollider && col.Distance(launcherCollider).distance > 0)
 		{
 			escaped = true;
 			gameObject.layer = 9;
@@ -103,12 +110,10 @@ public class ProjectileController : Launchable
 		}
 	}
 
-	public float SpeedAtPower(float power)
+	/*public float SpeedAtPower(float power)
 	{
-		power = Mathf.Clamp01(power);
-		float vDiff = maxSpeed - minSpeed;
-		return vDiff * power + minSpeed;
-	}
+
+	}*/
 
 	public override int[] UpgradeLevels
 	{
@@ -128,7 +133,11 @@ public class ProjectileController : Launchable
 
 	public override float LaunchSpeed(float power)
 	{
-		return SpeedAtPower(power);
+		power = Mathf.Clamp01(power);
+		float vDiff = maxSpeed - minSpeed;
+		return vDiff * power + minSpeed;
+
+		//return SpeedAtPower(power);
 	}
 
 }

@@ -7,6 +7,8 @@ using UnityEngine.XR;
 public class FadingElement : MonoBehaviour
 {
 
+	[SerializeField] protected bool hideOnAwake = true;
+
 	protected Graphic graphic;
 	protected Color color, transparent;
 
@@ -20,7 +22,33 @@ public class FadingElement : MonoBehaviour
 
 	public bool canFadeOut = true;
 
-	protected virtual void Start()
+	public const float LEFT = 180f;
+	public const float RIGHT = 0f;
+	public const float UP = 90f;
+	public const float DOWN = 270f;
+
+	protected Vector2 FadeOutEndPoint
+	{
+		get
+		{
+			float x = Mathf.Cos(sweepDirection * Mathf.Deg2Rad) * sweepDistance;
+			float y = Mathf.Sin(sweepDirection * Mathf.Deg2Rad) * sweepDistance;
+			
+			return origin + (Vector2.right * x + Vector2.up * y);
+		}
+	}
+	protected Vector2 FadeInStartPoint
+	{
+		get
+		{
+			float x = Mathf.Cos(sweepDirection * Mathf.Deg2Rad) * sweepDistance;
+			float y = Mathf.Sin(sweepDirection * Mathf.Deg2Rad) * sweepDistance;
+
+			return origin - (Vector2.right * x + Vector2.up * y);
+		}
+	}
+
+	protected virtual void Awake()
 	{
 		rect = transform as RectTransform;
 		origin = rect.anchoredPosition;
@@ -28,7 +56,9 @@ public class FadingElement : MonoBehaviour
 		graphic = GetComponent<Graphic>();
 		color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, graphic.color.a);
 		transparent = new Color(color.r, color.g, color.b, 0);
-		graphic.color = transparent;
+
+		if(hideOnAwake)
+			graphic.color = transparent;
 
 	}
 
@@ -42,19 +72,15 @@ public class FadingElement : MonoBehaviour
 		yield return FadeSequence(pauseDuration, defaultFadeDuration);
 	}
 
-	public virtual IEnumerator FadeSequence(float pauseDuration, float fadeDuration)
+	public virtual IEnumerator FadeIn(float fadeDuration = -1)
 	{
+
+		if (fadeDuration < 0) fadeDuration = defaultFadeDuration;
+
 		graphic.color = transparent;
 
-		float x = Mathf.Cos(sweepDirection * Mathf.Deg2Rad) * sweepDistance;
-		float y = Mathf.Sin(sweepDirection * Mathf.Deg2Rad) * sweepDistance;
-		Vector2 delta = new Vector2(x, y);
-
-		Vector2 startPos = origin - delta;
-		Vector2 endPos = origin + delta;
-
-		float progress = 0;
 		float timer = 0;
+		float progress = 0;
 
 		//interpolate position and color to origin point and the graphic's normal color
 		while (timer < fadeDuration)
@@ -63,10 +89,38 @@ public class FadingElement : MonoBehaviour
 			progress = timer / fadeDuration;
 
 			graphic.color = Color.Lerp(transparent, color, progress);
-			rect.anchoredPosition = Vector2.Lerp(startPos, origin, Mathf.Sqrt(progress));
+			rect.anchoredPosition = Vector2.Lerp(FadeInStartPoint, origin, Mathf.Sqrt(progress));
 
 			yield return null;
 		}
+	}
+
+	public virtual IEnumerator FadeOut(float fadeDuration = -1)
+	{
+
+		if (fadeDuration < 0) fadeDuration = defaultFadeDuration;
+
+		graphic.color = color;
+
+		float timer = 0;
+		float progress = 0;
+
+		//interpolate position and color to fade-out point and fully transparent color
+		while (timer < fadeDuration)
+		{
+			timer = Mathf.Clamp(timer + Time.deltaTime, 0, fadeDuration);
+			progress = timer / fadeDuration;
+
+			graphic.color = Color.Lerp(color, transparent, progress);
+			rect.anchoredPosition = Vector2.Lerp(origin, FadeOutEndPoint, Mathf.Pow(progress, 2));
+
+			yield return null;
+		}
+	}
+
+	public virtual IEnumerator FadeSequence(float pauseDuration, float fadeDuration)
+	{
+		yield return FadeIn(fadeDuration);
 
 		//Pause for the specified time while text is fully visible
 		yield return new WaitForSeconds(pauseDuration);
@@ -74,18 +128,8 @@ public class FadingElement : MonoBehaviour
 		//Remain paused until canFadeOut is set to true (true by default)
 		while (!canFadeOut) yield return null;
 
-		//interpolate position and color to fade-out point and fully transparent color
-		timer = 0;
-		while (timer < fadeDuration)
-		{
-			timer = Mathf.Clamp(timer + Time.deltaTime, 0, fadeDuration);
-			progress = timer / fadeDuration;
-
-			graphic.color = Color.Lerp(color, transparent, progress);
-			rect.anchoredPosition = Vector2.Lerp(origin, endPos, Mathf.Pow(progress, 2));
-
-			yield return null;
-		}
+		yield return FadeOut(fadeDuration);
+		
 	}
 
 	public IEnumerator DelayedFadeSequence(float delay)
@@ -93,4 +137,18 @@ public class FadingElement : MonoBehaviour
 		yield return new WaitForSeconds(delay);
 		yield return FadeSequence();
 	}
+
+	public virtual void HideInstant()
+	{
+		StopAllCoroutines();
+		graphic.color = transparent;
+	}
+
+	public virtual void ShowInstant()
+	{
+		StopAllCoroutines();
+		graphic.color = color;
+		rect.anchoredPosition = origin;
+	}
+
 }

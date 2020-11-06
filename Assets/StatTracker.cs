@@ -14,19 +14,11 @@ public class StatTracker : MonoBehaviour
     {
         if (!main) main = this;
 
-        if (!PlayerPrefs.HasKey("Cumulative Score"))
-            PlayerPrefs.SetInt("Cumulative Score", 0);
-
-        if (!PlayerPrefs.HasKey("Shots Fired"))
-            PlayerPrefs.SetInt("Shots Fired", 0);
-
-        if (!PlayerPrefs.HasKey("Points Spent"))
-            PlayerPrefs.SetInt("Points Spent", 0);
-
-        if (!PlayerPrefs.HasKey("Bombs Detonated"))
-            PlayerPrefs.SetInt("Bombs Detonated", 0);
-
         GameManager.GameStarted += OnGameStart;
+        GameManager.GameEnded += OnGameEnd;
+
+        BombController.BombDetonated += OnBombDetonated;
+        LauncherController.ShotFired += OnShotFired;
 
     }
 
@@ -38,22 +30,28 @@ public class StatTracker : MonoBehaviour
 
     protected void OnGameEnd(object o, EventArgs e)
 	{
-        int stat = PlayerPrefs.GetInt("Cumulative Score");
+        Debug.Log("Saving Stats...");
+
+        int stat = PlayerPrefs.GetInt("Cumulative Score", 0);
         stat += GameManager.score;
         PlayerPrefs.SetInt("Cumulative Score", stat);
 
-        stat = PlayerPrefs.GetInt("Shots Fired");
+        stat = PlayerPrefs.GetInt("Shots Fired", 0);
         stat += shotsFired;
         PlayerPrefs.SetInt("Shots Fired", stat);
 
         //points spent calculated as the difference between score and remaining points
-        stat = PlayerPrefs.GetInt("Points Spent");
+        stat = PlayerPrefs.GetInt("Points Spent", 0);
         stat += GameManager.score - GameManager.Points;
         PlayerPrefs.SetInt("Points Spent", stat);
 
-        stat = PlayerPrefs.GetInt("Bombs Detonated");
+        stat = PlayerPrefs.GetInt("Bombs Detonated", 0);
         stat += bombKills;
         PlayerPrefs.SetInt("Bombs Detonated", stat);
+
+        stat = PlayerPrefs.GetInt("Games Played", 0);
+        stat++;
+        PlayerPrefs.SetInt("Games Played", stat);
 
         PlayerPrefs.Save();
 	}

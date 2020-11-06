@@ -87,6 +87,8 @@ public class BaseController : PhysCircle
 	{
 		level = Mathf.Clamp(level, 0, 3);
 
+		yield return null;
+
 		//Values for visuals pre-transition
 		float startCrack = spr.material.GetFloat(crackID);
 		float startReach = spr.material.GetFloat(reachID);

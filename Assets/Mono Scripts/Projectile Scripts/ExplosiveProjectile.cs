@@ -14,7 +14,8 @@ public abstract class ExplosiveProjectile : ProjectileController
 	protected override void Awake()
 	{
 		base.Awake();
-		detonator = GetComponent<Detonator>();
+		if(!detonator) detonator = GetComponent<Detonator>();
+		detonator.ExplosionEventHandler += OnExplosion;
 	}
 
 	protected virtual void OnExplosion()

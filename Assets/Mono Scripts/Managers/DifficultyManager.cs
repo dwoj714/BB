@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
@@ -25,6 +25,7 @@ public class DifficultyManager : MonoBehaviour
 	private void Start()
 	{
 		main = this;
+		GameManager.GameEnded += OnGameEnd;
 	}
 
 	public void Update()
@@ -50,7 +51,7 @@ public class DifficultyManager : MonoBehaviour
 			max += q;
 		}
 
-		float selection = Random.Range(0, max);
+		float selection = UnityEngine.Random.Range(0, max);
 		int chanceTotal = 0;
 		bool decided = false;
 
@@ -92,7 +93,7 @@ public class DifficultyManager : MonoBehaviour
 		}
 	}
 
-	private void OnGameEnd()
+	private void OnGameEnd(object o, EventArgs e)
 	{
 		timer = 0;
 		BombController.healthMod = 1;

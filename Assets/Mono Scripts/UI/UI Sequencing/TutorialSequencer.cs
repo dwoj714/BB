@@ -24,14 +24,19 @@ public class TutorialSequencer : MonoBehaviour
         if (!main) main = this;
         else Debug.LogWarning("More than one TutorialSequencer initialized!");
         GameManager.GameStarted += OnGameStart;
+        GameManager.GameEnded += OnGameEnd;
     }
 
     void OnGameStart(object o, EventArgs e)
 	{
-        Debug.Log("Event received from " + (o as MonoBehaviour).gameObject.name);
         StartCoroutine(PlayTutorialSequence());
         LauncherController.ShotFired += OnShotFired;
     }
+
+    void OnGameEnd(object o, EventArgs e)
+	{
+        StopEverything();
+	}
 
     private IEnumerator PlayTutorialSequence()
 	{
@@ -69,6 +74,16 @@ public class TutorialSequencer : MonoBehaviour
     protected void OnShotFired(object o, EventArgs e)
 	{
         shotFired = true;
+	}
+
+    private void StopEverything()
+	{
+        StopAllCoroutines();
+
+        foreach(FadingElement element in elements)
+		{
+            element.HideInstant();
+		}
 	}
 
 }

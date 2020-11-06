@@ -39,6 +39,9 @@ public class Detonator : MonoBehaviour {
 
 	[HideInInspector] public bool autoDeleteFX = true;
 
+	public delegate void Explosion();
+	public event Explosion ExplosionEventHandler;
+
 	public float FusePercent
 	{
 		get
@@ -158,7 +161,8 @@ public class Detonator : MonoBehaviour {
 				fx.Detonate();
 			}
 		}
-		SendMessage("OnExplosion");
+		SendMessage("OnExplosion", SendMessageOptions.DontRequireReceiver);
+		ExplosionEventHandler?.Invoke();
 	}
 
 	void OnDrawGizmos()

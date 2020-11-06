@@ -65,6 +65,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -76,6 +77,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -163,8 +165,7 @@ GameObject:
   - component: {fileID: 7692937485348567785}
   - component: {fileID: 7564071534628695995}
   - component: {fileID: 7532077785692828489}
-  - component: {fileID: 1669861222662271975}
-  - component: {fileID: 3692486043180279996}
+  - component: {fileID: 3920607023131545010}
   m_Layer: 11
   m_Name: Grav
   m_TagString: Projectile
@@ -201,6 +202,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -212,6 +214,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -223,7 +226,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 5322ea13d69bcbf4eb9a472b3b575049, type: 3}
   m_Color: {r: 0.20462047, g: 0.2042542, b: 0.509434, a: 1}
   m_FlipX: 0
@@ -233,7 +236,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
   m_SpriteSortPoint: 0
 --- !u!58 &7564071534628695995
 CircleCollider2D:
@@ -264,7 +267,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 80
-  m_LinearDrag: 0
+  m_LinearDrag: 0.5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -272,7 +275,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &1669861222662271975
+--- !u!114 &3920607023131545010
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,7 +284,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7508355541605256711}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcd8a904bdcd4f44da8cf381e8adfa86, type: 3}
+  m_Script: {fileID: 11500000, guid: f750609929bd51b42adc5dcccffe3a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   col: {fileID: 0}
@@ -289,11 +292,11 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  maxSpeed: 4.5
-  minSpeed: 0.5
+  maxSpeed: 8
+  minSpeed: 2
   hasFixedSpeed: 0
   lifespanMode: 0
-  lifespan: 30
+  lifespan: 22
   vfx: {fileID: 5477861917631321750}
   deathFX: {fileID: 0}
   massBonus: 0
@@ -301,15 +304,6 @@ MonoBehaviour:
   minSpeedBonus: 0
   lifeSpanBonus: 0
   fixedSpeed: 0
---- !u!114 &3692486043180279996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7508355541605256711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55952cb6c64defe4193c7f4bc12f3459, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  gravField: {fileID: 7508102011770884937}
+  expandDelay: 0.25
+  expandDuration: 2.5

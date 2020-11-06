@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	[SerializeField] private GameEndSequencer gameOverMenu;
-	[SerializeField] private GameObject mainMenu, inGameMenu, pauseMenu, loadoutMenuWorld, swapButtons;
+	[SerializeField] private GameObject mainMenu, inGameMenu, pauseMenu, loadoutMenuWorld, swapButtons, statsMenu;
 	[SerializeField] private UpgradeMenuController upgradeMenu;
 	//[SerializeField] private RotorController weaponWheel;
 	[SerializeField] private DescriptionDisplayController loadoutMenuScreen;
@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
 		inGameMenu.SetActive(false);
 		launcherBase.enabled = false;
 		spawner.enabled = false;
+		statsMenu.SetActive(false);
 
 		gameOverMenu.gameObject.SetActive(false);
 		gameOverMenu.HideAll();
@@ -209,7 +210,7 @@ public class GameManager : MonoBehaviour
 		swapButtons.SetActive(false);
 		inGameMenu.SetActive(false);
 
-		BroadcastMessage("OnGameEnd");
+		GameEnded?.Invoke(this, EventArgs.Empty);
 
 	}
 
@@ -222,8 +223,8 @@ public class GameManager : MonoBehaviour
 		swapButtons.SetActive(false);
 		inGameMenu.SetActive(false);
 		launcherBase.Charges = 0;
-		BroadcastMessage("OnGameEnd");
 
+		GameEnded?.Invoke(this, EventArgs.Empty);
 
 		GoToMenu();
 	}
@@ -317,21 +318,43 @@ public class GameManager : MonoBehaviour
 	{
 		switch (category)
 		{
-			case "unlocks":
-				PlayerPrefs.DeleteKey(category);
-				break;
 			case "scores":
 				PlayerPrefs.DeleteKey("Score1");
 				PlayerPrefs.DeleteKey("Score2");
 				PlayerPrefs.DeleteKey("Score3");
 				break;
-			case "bank":
-				PlayerPrefs.DeleteKey("bank");
-				break;
 			case "all":
 				PlayerPrefs.DeleteAll();
+				break;
+			default:
+				PlayerPrefs.DeleteKey(category);
 				break;
 		}
 		PlayerPrefs.Save();
 	}
 }
+
+/*	//maybe concretely manage game state using stuff like this
+public enum GameState
+{
+	MainMenu,
+	Loadout,
+	OptionsMenu,
+	InGame,
+	PauseMenu,
+	LoadoutMenu,
+	EndGame,
+	StatsScreen
+}
+
+public class GameStateTransition : EventArgs
+{
+	public GameState from, to;
+
+	public GameStateTransition(GameState from, GameState to)
+	{
+		this.from = from;
+		this.to = to;
+	}
+}
+*/

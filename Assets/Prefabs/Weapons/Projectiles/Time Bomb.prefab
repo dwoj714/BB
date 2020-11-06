@@ -46,6 +46,7 @@ TrailRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -57,6 +58,7 @@ TrailRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -186,6 +188,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -197,6 +200,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -218,7 +222,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
   m_SpriteSortPoint: 0
 --- !u!58 &7636135473768649037
 CircleCollider2D:
@@ -315,6 +319,8 @@ MonoBehaviour:
   explosionRadius: 2.2
   fuse: 5
   screenShake: 1
+  damageScaling: 0
+  knockbackScaling: 0
   useMask: 1
   explosionMask:
     serializedVersion: 2
@@ -329,11 +335,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7581863840435538347}
     m_Modifications:
-    - target: {fileID: 7001762384114032334, guid: da470c1d95a778746945ea6d4076a129,
-        type: 3}
-      propertyPath: m_Name
-      value: FuseMeter
-      objectReference: {fileID: 0}
     - target: {fileID: 6661826583120079844, guid: da470c1d95a778746945ea6d4076a129,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -388,6 +389,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001762384114032334, guid: da470c1d95a778746945ea6d4076a129,
+        type: 3}
+      propertyPath: m_Name
+      value: FuseMeter
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da470c1d95a778746945ea6d4076a129, type: 3}

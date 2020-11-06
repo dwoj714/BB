@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour {
@@ -17,6 +16,8 @@ public class InputManager : MonoBehaviour {
 		Debug.Log("Inputman set");
 		if (!main) main = this;
 		else Debug.LogError("More than one InputManager instantiated!");
+
+		GameManager.GameEnded += OnGameEnd;
 	}
 
 	void Update ()
@@ -74,7 +75,7 @@ public class InputManager : MonoBehaviour {
 		else inputPause = false;
 	}
 
-	void OnGameEnd()
+	void OnGameEnd(object o, EventArgs e)
 	{
 		reciever = null;
 	}

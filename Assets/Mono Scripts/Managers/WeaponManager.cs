@@ -86,11 +86,6 @@ public class WeaponManager : MonoBehaviour
 	//returns true if the given weapon index isn't locked
 	public bool SetWeaponSlot(int pfIdx,int i)
 	{
-		//return false if the given weapon index is locked
-		if(PlayerPrefs.GetString("unlocks", "UUULLLL")[pfIdx] == 'L')
-		{
-			return false;
-		}
 		StartCoroutine(SetWeaponSlotCo(pfIdx, i));
 		return true;
 	}

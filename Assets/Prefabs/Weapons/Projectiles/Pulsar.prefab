@@ -49,6 +49,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -60,6 +61,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -73,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 5322ea13d69bcbf4eb9a472b3b575049, type: 3}
-  m_Color: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 0.8666667}
+  m_Color: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -112,7 +114,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 0.95
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -134,12 +136,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VFX: {fileID: 5862043936073065119, guid: 966d0a14eded89140a0469ae6c369123, type: 3}
   minPushForce: 5
-  maxPushForce: 20
-  minExplosionDMG: 10
-  maxExplosionDMG: 15
+  maxPushForce: 18
+  minExplosionDMG: 5.5
+  maxExplosionDMG: 18
   explosionRadius: 0.9
   fuse: 0.5
   screenShake: 1
+  damageScaling: 0.2
+  knockbackScaling: 0
   useMask: 1
   explosionMask:
     serializedVersion: 2
@@ -164,22 +168,22 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  maxSpeed: 12
+  maxSpeed: 18
   minSpeed: 2
-  hasFixedSpeed: 1
+  hasFixedSpeed: 0
   lifespanMode: 1
   lifespan: Infinity
   vfx: {fileID: 0}
   deathFX: {fileID: 0}
-  massBonus: 0.15
-  maxSpeedBonus: 0.25
-  minSpeedBonus: 0.25
-  lifeSpanBonus: 0.25
+  massBonus: 0
+  maxSpeedBonus: 0
+  minSpeedBonus: 0
+  lifeSpanBonus: 0
   fixedSpeed: 0
-  damageBonus: 0.12
-  impulseBonus: 0.15
-  radiusBonus: 0.07
+  damageBonus: 0
+  impulseBonus: 0
+  radiusBonus: 0.08
   explosions: 24
-  minFuse: 0.05
-  maxFuse: 0.37
+  minFuse: 0.08
+  maxFuse: 0.27
   explosionCountBonus: 0.2
