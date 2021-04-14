@@ -54,6 +54,7 @@ public class BombController : PhysCircle, IHealable
 		rb = GetComponent<Rigidbody2D>();
 
 		detonator = GetComponent<Detonator>();
+		detonator.ExplosionEventHandler += OnExplosion;
 		spr = GetComponent<SpriteRenderer>();
 		text = GetComponentInChildren<Text>();
 		gravity = rb.gravityScale;
@@ -137,7 +138,7 @@ public class BombController : PhysCircle, IHealable
 			text.text = "";
 	}
 
-	void OnExplosion()
+	void OnExplosion(object source, EventArgs args)
 	{
 		//Drop an item from the loot pool if the gameObject has a loot pool attached
 		if (loot)

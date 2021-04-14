@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.XR;
 
-public class FadingElement : MonoBehaviour
+public class FadingElement : UIElement
 {
 
 	[SerializeField] protected bool hideOnAwake = true;

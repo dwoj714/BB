@@ -23,6 +23,34 @@ public class SpawnerController : MonoBehaviour
 	[Header("Valid ranges: min, max, and application chance")]
 	[SerializeField] private Vector3[] ranges;
 
+	public delegate void BombSpawnEventHandler(object source, EventArgs args);
+	public BombSpawnEventHandler BombSpawned;
+
+	private bool spawning = false;
+
+	public bool Spawning
+	{
+		get
+		{
+			return spawning;
+		}
+
+		set
+		{
+			spawning = value;
+			if (spawning)
+			{
+				//set timer to 80% of the time needed to spawn a bomb so there 
+				//isn't a long wait between game start and bomb appearance
+				timer = 0.8f * (1 / spawnRate);
+			}
+
+			Debug.Log("Spawning: " + spawning);
+
+		}
+	}
+
+
 	private void Start()
 	{
 		GameManager.GameStarted += OnGameStart;
@@ -30,11 +58,14 @@ public class SpawnerController : MonoBehaviour
 
 	private void Update()
 	{
-		//if it's time to do stuff...
-		if (TimeCheck())
+		if (spawning)
 		{
-			SpawnBomb();
-			avgStat = valTotal / spawnCount;
+			//if it's time to do stuff...
+			if (TimeCheck())
+			{
+				SpawnBomb();
+				avgStat = valTotal / spawnCount;
+			}
 		}
 	}
 
@@ -66,6 +97,9 @@ public class SpawnerController : MonoBehaviour
 		bomb.transform.position = spawnPosition;
 
 		spawnCount++;
+		Debug.Log("Attempting invoke");
+		BombSpawned?.Invoke(this, EventArgs.Empty);
+
 		valTotal += statVal;
 
 
@@ -146,14 +180,11 @@ public class SpawnerController : MonoBehaviour
 
 		//	Debug.Log("MAX: " + max + " Chosen IDX: " + chosenIDX);
 		obj = Instantiate(bombEnhancers[chosenIDX], bomb.transform);
+
 	}
 
 	protected void OnGameStart(object o, EventArgs e)
 	{
-		//set timer to 80% of the time needed to spawn a bomb so there 
-		//isn't a long wait between game start and bomb appearance
-		timer = 0.8f * (1 / spawnRate);
-
 		spawnCount = 0;
 		valTotal = 0;
 	}

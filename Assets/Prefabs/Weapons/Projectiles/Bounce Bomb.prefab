@@ -114,10 +114,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 9
-  m_LinearDrag: 0.1
+  m_Mass: 6
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
-  m_GravityScale: 0.7
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
@@ -140,7 +140,7 @@ MonoBehaviour:
   oldVelocity: {x: 0, y: 0}
   hb: {fileID: 0}
   launcherCollider: {fileID: 0}
-  maxSpeed: 16
+  maxSpeed: 20
   minSpeed: 8
   hasFixedSpeed: 0
   lifespanMode: 1
@@ -394,13 +394,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VFX: {fileID: 698324577287022185, guid: f158573b23f7dd44692610de1b72c305, type: 3}
   minPushForce: 10
-  maxPushForce: 40
+  maxPushForce: 55
   minExplosionDMG: 15
   maxExplosionDMG: 45
   explosionRadius: 1.35
   fuse: 0
   screenShake: 1
-  damageScaling: 0
+  damageScaling: 0.2
   knockbackScaling: 0
   useMask: 1
   explosionMask:

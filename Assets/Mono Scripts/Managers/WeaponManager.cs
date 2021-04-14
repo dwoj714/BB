@@ -58,18 +58,12 @@ public class WeaponManager : MonoBehaviour
 
 		LoadWeapons();
 
-		if (weapons[1] != null)
-		{
-			inputMan.reciever = weapons[1];
-		}
-		else
-		{
-			inputMan.reciever = weapons[0];
-		}
 		if (!main) main = this;
 		else Debug.LogError("More than one WeaponManager spawned: " + name);
 
 		GameManager.GameStarted += OnGameStart;
+		GameplayController.waveEvent += OnWaveEvent;
+		weaponRotor.RotationFinished += OnRotorFinishRotation;
 	}
 
 	protected void OnGameStart(object o, EventArgs e)
@@ -79,12 +73,23 @@ public class WeaponManager : MonoBehaviour
 			weapon.OnGameStart();
 		}
 
-		inputMan.reciever = weapons[MiddleIdx];
-		SetupIndicator();
+		TakeInputControl();
+	}
+
+	protected void OnWaveEvent(object o, WaveEventArgs args)
+	{
+		if (args.waveStart)
+		{
+			TakeInputControl();
+		}
+		else
+		{
+			ReleaseInputControl();
+		}
 	}
 
 	//returns true if the given weapon index isn't locked
-	public bool SetWeaponSlot(int pfIdx,int i)
+	public bool SetWeaponSlot(int pfIdx, int i)
 	{
 		StartCoroutine(SetWeaponSlotCo(pfIdx, i));
 		return true;
@@ -116,16 +121,6 @@ public class WeaponManager : MonoBehaviour
 			weapons[i] = recv;
 			EquippedPrefabs[i] = pfIdx;
 
-			string debugStr = "wut";
-			if (i == MiddleIdx)
-				debugStr = "Middle";
-			else if (i == LeftIdx)
-				debugStr = "Left";
-			else if (i == RightIdx)
-				debugStr = "Right";
-
-			Debug.Log("Weapons[" + i + "] (" + debugStr + ") prefab idx: " + pfIdx);
-
 			yield return null;
 
 			//if the reciever is a launcher controller, set its collider accordingly
@@ -151,8 +146,9 @@ public class WeaponManager : MonoBehaviour
 		//don't do anything while the game is paused
 		if (GameManager.frozen) return;
 
-		inputMan.reciever.OnInputCancel();
-
+		inputMan.reciever?.OnInputCancel();
+		//release input control while rotating. It is regained in OnRotorFinishRotation()
+		ReleaseInputControl();
 		weaponRotor.IncrementRotation(left);
 
 		switch (activeWeapon)
@@ -169,9 +165,6 @@ public class WeaponManager : MonoBehaviour
 				activeWeapon = left ? activeWeapon - 1 : 0;
 				break;
 		}
-		inputMan.reciever = weapons[activeWeapon];
-		SetupIndicator();
-
 	}
 
 	public static int MiddleIdx
@@ -186,7 +179,7 @@ public class WeaponManager : MonoBehaviour
 	{
 		get
 		{
-			if(activeWeapon == 0)
+			if (activeWeapon == 0)
 			{
 				return 2;
 			}
@@ -210,6 +203,28 @@ public class WeaponManager : MonoBehaviour
 				return activeWeapon + 1;
 			}
 		}
+	}
+
+	void OnRotorFinishRotation(object source, EventArgs args)
+	{
+		if (GameplayController.main.WaveInProgress)
+		{
+			TakeInputControl();
+		}
+	}
+
+	public void TakeInputControl()
+	{
+		SetupIndicator();
+		inputMan.reciever = weapons[MiddleIdx];
+	}
+
+	public void ReleaseInputControl()
+	{
+		//if(inputMan.reciever == weapons[MiddleIdx])
+		//{
+			inputMan.reciever = null;
+		//}
 	}
 
 	private void SetupIndicator()

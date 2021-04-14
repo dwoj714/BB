@@ -5,7 +5,6 @@ public class GameManager : MonoBehaviour
 {
 
 	BaseController launcherBase;
-	SpawnerController spawner;
 	CameraController camController;
 	public InputManager InputMan
 	{
@@ -58,14 +57,12 @@ public class GameManager : MonoBehaviour
 		Application.targetFrameRate = 60;
 
 		launcherBase = GameObject.Find("Base").GetComponent<BaseController>();
-		spawner = GameObject.Find("Spawner").GetComponent<SpawnerController>();
 		camController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 		InputMan = GetComponent<InputManager>();
 
 		mainMenu.SetActive(true);
 		inGameMenu.SetActive(false);
 		launcherBase.enabled = false;
-		spawner.enabled = false;
 		statsMenu.SetActive(false);
 
 		gameOverMenu.gameObject.SetActive(false);
@@ -79,6 +76,7 @@ public class GameManager : MonoBehaviour
 
 		pauseMenu.SetActive(false);
 		
+
 
 		main = this;
 	}
@@ -103,7 +101,6 @@ public class GameManager : MonoBehaviour
 		loadoutMenuWorld.SetActive(false);
 		loadoutMenuScreen.gameObject.SetActive(false);
 		launcherBase.enabled = true;
-		spawner.enabled = true;
 		PurgeGameplayObjects();
 		launcherBase.Restart();
 
@@ -206,7 +203,6 @@ public class GameManager : MonoBehaviour
 		PlayerPrefs.Save();
 
 		launcherBase.enabled = false;
-		spawner.enabled = false;
 		swapButtons.SetActive(false);
 		inGameMenu.SetActive(false);
 
@@ -219,7 +215,6 @@ public class GameManager : MonoBehaviour
 		InputMan.CancelInput();
 		gameInProgress = false;
 		launcherBase.enabled = false;
-		spawner.enabled = false;
 		swapButtons.SetActive(false);
 		inGameMenu.SetActive(false);
 		launcherBase.Charges = 0;
@@ -236,7 +231,7 @@ public class GameManager : MonoBehaviour
 
 	private void OnApplicationFocus(bool focus)
 	{
-		if (!frozen)
+		if (!frozen && !Application.isEditor)
 		{
 			TogglePauseMenu();
 		}

@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class RotorController : MonoBehaviour, IInputReciever
@@ -40,6 +40,10 @@ public class RotorController : MonoBehaviour, IInputReciever
 		get;
 		private set;
 	}
+
+	public delegate void RotationFinishedEventHandler(object source, EventArgs args);
+	public event RotationFinishedEventHandler RotationFinished;
+
 
 	private void Start()
 	{
@@ -135,6 +139,8 @@ public class RotorController : MonoBehaviour, IInputReciever
 
 			yield return null;
 		}
+
+		RotationFinished?.Invoke(this, EventArgs.Empty);
 
 	}
 

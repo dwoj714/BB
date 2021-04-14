@@ -1,5 +1,4 @@
-﻿ using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class Detonator : MonoBehaviour {
@@ -39,7 +38,7 @@ public class Detonator : MonoBehaviour {
 
 	[HideInInspector] public bool autoDeleteFX = true;
 
-	public delegate void Explosion();
+	public delegate void Explosion(object source, EventArgs args);
 	public event Explosion ExplosionEventHandler;
 
 	public float FusePercent
@@ -161,8 +160,8 @@ public class Detonator : MonoBehaviour {
 				fx.Detonate();
 			}
 		}
-		SendMessage("OnExplosion", SendMessageOptions.DontRequireReceiver);
-		ExplosionEventHandler?.Invoke();
+		//SendMessage("OnExplosion", SendMessageOptions.DontRequireReceiver);
+		ExplosionEventHandler?.Invoke(this, EventArgs.Empty);
 	}
 
 	void OnDrawGizmos()

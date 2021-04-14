@@ -24,8 +24,7 @@ public class InputManager : MonoBehaviour {
 	{
 		if (reciever != null && !(inputPause || inputHalt) && !GameManager.frozen)
 		{
-			//foreach (IInputReciever reciever in recievers)
-			//{
+
 			if (Input.GetMouseButtonDown(0))
 			{
 

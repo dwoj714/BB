@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class ExplosiveRicochet : ExplosiveProjectile
@@ -18,7 +17,7 @@ public class ExplosiveRicochet : ExplosiveProjectile
 		detonator.Explode();
 	}
 
-	protected override void OnExplosion()
+	protected override void OnExplosion(object source, EventArgs args)
 	{
 		explosions--;
 		if (explosions <= 0)

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Detonator))]
@@ -18,7 +17,8 @@ public abstract class ExplosiveProjectile : ProjectileController
 		detonator.ExplosionEventHandler += OnExplosion;
 	}
 
-	protected virtual void OnExplosion()
+	//Default behaviour, destroy on explosion
+	protected virtual void OnExplosion(object source, EventArgs args)
 	{
 		Destroy(gameObject);
 	}

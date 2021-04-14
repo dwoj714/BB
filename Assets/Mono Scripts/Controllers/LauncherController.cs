@@ -77,6 +77,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 	private Color bgColor;
 	private SpriteRenderer iconSprite;
 	[HideInInspector]public CircleCollider2D col;
+	private bool inputStarted;
 
 ////////////////////////////    PROPERTIES    ////////////////////////////
 
@@ -199,10 +200,17 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 	{  
 		clickPos = position;
 		indicator.fSprite.transform.position = position;
+		inputStarted = true;
 	}
 
 	public void OnInputHeld(Vector2 position)
 	{
+		//will be true if mouse input is held before this launcher is set to InputManagers receiver
+		if (!inputStarted)
+		{
+			OnInputStart(position);
+		}
+
 		oldDrag = dragPos;
 		dragPos = position;
 
@@ -243,6 +251,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 			LaunchShot();
 		}
 		indicator.ChargeFieldVisible = false;
+		inputStarted = false;
 	}
 
 	public void OnInputCancel()
@@ -251,6 +260,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 		recharging = true;
 		OnInputReleased(Vector2.zero);
 		indicator.ChargeFieldVisible = false;
+		inputStarted = false;
 	}
 
 	private void ReadyShot()
@@ -263,7 +273,7 @@ public class LauncherController : EnergyUser, IInputReciever, IUpgradeable
 
 			Shot.launcherCollider = col;
 
-			Debug.Log("Base: " + Shot.launcherCollider + "\tShot: " + Shot.col);
+			//Debug.Log("Base: " + Shot.launcherCollider + "\tShot: " + Shot.col);
 
 			recharging = false;
 			delayTimer = chargeTime;

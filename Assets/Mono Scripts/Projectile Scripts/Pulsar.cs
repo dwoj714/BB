@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class Pulsar : ExplosiveProjectile
@@ -40,7 +39,7 @@ public class Pulsar : ExplosiveProjectile
 		if (!detonator.sparked && launched) detonator.sparked = true;
 	}
 
-	protected override void OnExplosion()
+	protected override void OnExplosion(object source, EventArgs args)
 	{
 		explosions--;
 		if(explosions == 0)

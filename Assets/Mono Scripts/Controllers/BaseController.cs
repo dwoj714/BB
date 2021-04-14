@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class BaseController : PhysCircle
@@ -42,6 +42,7 @@ public class BaseController : PhysCircle
 	void Start()
 	{
 		detonator = GetComponent<Detonator>();
+		detonator.ExplosionEventHandler += OnExplosion;
 		rb.isKinematic = true;
 		spr = GetComponent<SpriteRenderer>();
 		Charges = totalCharges;
@@ -69,7 +70,7 @@ public class BaseController : PhysCircle
 		}
 	}
 
-	private void OnExplosion()
+	private void OnExplosion(object source, EventArgs args)
 	{
 		Charges--;
 		if(Charges <= 0)
@@ -83,40 +84,44 @@ public class BaseController : PhysCircle
 		Charges = totalCharges;
 	}
 
-	public IEnumerator CrackTransition(int level)
+	private IEnumerator CrackTransition(int level)
 	{
 		level = Mathf.Clamp(level, 0, 3);
 
 		yield return null;
 
-		//Values for visuals pre-transition
-		float startCrack = spr.material.GetFloat(crackID);
-		float startReach = spr.material.GetFloat(reachID);
-		Color startColor = spr.material.GetColor(colorID);
-
-		//Difference between post and pre-transition values
-		float crackDelta = crackLevels[level] - startCrack;
-		float reachDelta = reachLevels[level] - startReach;
-		Color colorDelta = colorLevels[level] - startColor;
-
-		float timer = 0;
-		float progression = 0;
-
-		while (timer <= transitionTime)
+		if (spr)
 		{
-			timer += Time.deltaTime;
-			progression = Mathf.Clamp01(timer / transitionTime);
+			//Values for visuals pre-transition
+			float startCrack = spr.material.GetFloat(crackID);
+			float startReach = spr.material.GetFloat(reachID);
+			Color startColor = spr.material.GetColor(colorID);
 
-			spr.material.SetFloat(crackID, startCrack + crackDelta * progression);
-			spr.material.SetFloat(reachID, startReach + reachDelta * progression);
-			spr.material.SetColor(colorID, startColor + colorDelta * progression);
+			//Difference between post and pre-transition values
+			float crackDelta = crackLevels[level] - startCrack;
+			float reachDelta = reachLevels[level] - startReach;
+			Color colorDelta = colorLevels[level] - startColor;
 
-			yield return null;
+
+			float timer = 0;
+			float progression = 0;
+
+			while (timer <= transitionTime)
+			{
+				timer += Time.deltaTime;
+				progression = Mathf.Clamp01(timer / transitionTime);
+
+				spr.material.SetFloat(crackID, startCrack + crackDelta * progression);
+				spr.material.SetFloat(reachID, startReach + reachDelta * progression);
+				spr.material.SetColor(colorID, startColor + colorDelta * progression);
+
+				yield return null;
+			}
+
+			//make sure reach and crack are exactly set to proper values
+			spr.material.SetFloat(crackID, crackLevels[level]);
+			spr.material.SetFloat(reachID, reachLevels[level]);
 		}
-
-		//make sure reach and crack are exactly set to proper values
-		spr.material.SetFloat(crackID, crackLevels[level]);
-		spr.material.SetFloat(reachID, reachLevels[level]);
 	}
 
 }

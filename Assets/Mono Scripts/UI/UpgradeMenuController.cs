@@ -150,10 +150,10 @@ public class UpgradeMenuController : MonoBehaviour
 		//destroy node chains that already exist before spawning new ones
 		for (int i = 0; i < 3; i++)
 		{
-			Debug.Log("Delete Attempt " + i + ": " + GetRootNode(i));
+			//Debug.Log("Delete Attempt " + i + ": " + GetRootNode(i));
 			if (GetRootNode(i) != null)
 			{
-				Debug.Log("Destroying " + GetRootNode(i).gameObject);
+				//Debug.Log("Destroying " + GetRootNode(i).gameObject);
 				Destroy(GetRootNode(i).gameObject);
 				nodeChains[i].Clear();
 			}
@@ -164,7 +164,7 @@ public class UpgradeMenuController : MonoBehaviour
 			UpgradeNodeController root = Instantiate(rootNodePrefabs[WeaponManager.EquippedPrefabs[i]], scrollContent).GetComponent<UpgradeNodeController>();
 			((RectTransform)root.transform).anchoredPosition = Vector2.zero;
 
-			Debug.Log("Instantiated root node from equipped prefab " + WeaponManager.EquippedPrefabs[i]);
+			//Debug.Log("Instantiated root node from equipped prefab " + WeaponManager.EquippedPrefabs[i]);
 
 			FillChainDownward(root, nodeChains[i]);
 
